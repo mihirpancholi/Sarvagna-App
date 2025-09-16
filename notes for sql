@@ -1,0 +1,4 @@
+
+
+gosthi_report_submission - FK - pravakta_sevak_id
+gosthi_pravachan_detail - FK - pravachan_sevak_id
