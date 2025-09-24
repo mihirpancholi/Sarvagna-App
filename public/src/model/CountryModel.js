@@ -1,13 +1,13 @@
-// models/casteModel.js
+// models/CountryModel.js
 const pool = require("../config/db");
 
-class Caste {
+class Country {
   // Create
-  static async addCaste(caste_name, created_id) {
+  static async add(country_name, dialing_code, created_id) {
     const [result] = await pool.execute(
       `INSERT INTO country_master (
-       country_name, country_code, currency_code, dialing_code, created_id) VALUES (?, ?, ?, ?, ?)`,
-      [country_name, country_code, currency_code, dialing_code, created_id]
+       country_name, dialing_code, created_id) VALUES (?, ?, ?)`,
+      [country_name, dialing_code, created_id]
     );
     return result.insertId;
   }
@@ -27,29 +27,36 @@ class Caste {
   // Read by ID
   static async getById(id) {
     const [rows] = await pool.execute(
-      `SELECT * FROM country_master WHERE caste_id = ? AND is_deleted = 'N'`,
+      `SELECT * FROM country_master WHERE country_id = ? AND is_deleted = 'N'`,
       [id]
     );
     return rows[0];
   }
 
   // Update
-  static async updateCaste(id, caste_name) {
+  static async updateCountry(id, country_name, dialing_code, updated_id) {
     const [result] = await pool.execute(
-      `UPDATE country_master SET caste_name = ? WHERE caste_id = ?`,
-      [caste_name, id]
+      `UPDATE country_master SET country_name = ?, dialing_code = ?,  updated_id = ?  WHERE country_id = ?`,
+      [country_name, dialing_code, updated_id, id]
     );
     return result;
   }
 
   // Soft delete
-  static async deleteCaste(id) {
-    const [result] = await pool.execute(
-      `UPDATE country_master SET is_deleted = 'Y' WHERE caste_id = ?`,
-      [id]
-    );
-    return result;
-  }
+static async deleteCountry(country_id, deleted_id) {
+  const [result] = await pool.execute(
+    `UPDATE country_master 
+     SET is_deleted = 'Y', 
+         deleted_at = NOW(), 
+         deleted_id = ? 
+     WHERE country_id = ? 
+       AND is_deleted = 'N'`, 
+    [deleted_id, country_id]
+  );
+  return result;
 }
 
-module.exports = Caste;
+
+}
+
+module.exports = Country;

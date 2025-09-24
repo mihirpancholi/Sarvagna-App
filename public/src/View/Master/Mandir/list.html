@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mandir List</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin: 2px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    .btn-add { background-color: #2196F3; color: white; }
+    .btn-update { background-color: #4CAF50; color: white; }
+    .btn-delete { background-color: #f44336; color: white; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 20px;
+      width: 400px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Mandir List</h1>
+  <button class="btn btn-add" onclick="openAddModal()">+ Add Mandir</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>Zone</th>
+        <th>Country</th>
+        <th>Mandir Type</th>
+        <th>Mandir Name</th>
+        <th>Created by</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="mandir-table-body"></tbody>
+  </table>
+
+  <!-- Add Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <h3>Add New Mandir</h3>
+      <form id="addForm">
+
+      <label for="addZone">Zone:</label>
+      <select id="addZone" required></select>
+      <br><br>
+
+      <label for="addCountry">Country:</label>
+      <select id="addCountry" required></select>
+      <br><br>
+
+      <label for="addMandirType">Mandir</label>
+      <select name="addMandirType">
+        <option value="Shikharbadh">Shikharbadh</option>
+        <option value="Hari Mandir">Hari Mandir</option>
+      </select>  <br><br>
+
+        <label for="addMandirName">Mandir Name:</label>
+        <input type="text" id="addMandirName" required>
+        <br><br>
+        <button type="submit" class="btn btn-add">Add</button>
+        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Modal -->
+<!-- Update Modal -->
+<div id="updateModal" class="modal">
+  <div class="modal-content">
+    <h3>Update Mandir</h3>
+    <form id="updateForm">
+      <input type="hidden" id="updateMandirId">
+
+      <label for="updateZone">Zone:</label>
+      <select id="updateZone" required></select>
+      <br><br>
+
+      <label for="updateCountry">Country:</label>
+      <select id="updateCountry" required></select>
+      <br><br>
+
+      <label for="updateMandirType">Mandir Type:</label>
+      <select id="updateMandirType" required>
+        <option value="Shikharbadh">Shikharbadh</option>
+        <option value="Hari Mandir">Hari Mandir</option>
+      </select>
+      <br><br>
+
+      <label for="updateMandirName">Mandir Name:</label>
+      <input type="text" id="updateMandirName" required>
+      <br><br>
+
+      <button type="submit" class="btn btn-update">Save</button>
+      <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+    </form>
+  </div>
+</div>
+
+
+  <script>
+    // Fetch mandir list
+    function loadMandirs() {
+      fetch('/mandir/list')
+        .then(res => res.json())
+        .then(data => {
+          const tableBody = document.getElementById('mandir-table-body');
+          tableBody.innerHTML = '';
+          data.forEach((mandir, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${mandir.zone_name}</td>
+              <td>${mandir.country_name}</td>
+              <td>${mandir.mandir_type}</td>
+              <td>${mandir.mandir_name}</td>
+              <td>${mandir.full_name}</td>
+              <td>
+                <button class="btn btn-update" onclick="openUpdateModal(${mandir.mandir_id}, ${mandir.zone_id}, ${mandir.country_id}, '${mandir.mandir_type}', '${mandir.mandir_name}')">Update</button>
+                <button class="btn btn-delete" onclick="deleteMandir(${mandir.mandir_id})">Delete</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        });
+    }
+
+        // Fetch country list
+function loadCountries(selectId, selectedValue = null) {
+  fetch('/country/list') // ✅ you must already have /country/list API
+    .then(res => res.json())
+    .then(countries => {
+      const select = document.getElementById(selectId);
+      select.innerHTML = '<option value="">-- Select Country --</option>';
+      countries.forEach(country => {
+        const option = document.createElement('option');
+        option.value = country.country_id;
+        option.textContent = country.country_name;
+        if (selectedValue && selectedValue == country.country_id) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+    });
+}
+
+function loadZone(selectId, selectedValue = null) {
+  fetch('/zone/list') // ✅ you must already have /country/list API
+    .then(res => res.json())
+    .then(zones => {
+      const select = document.getElementById(selectId);
+      select.innerHTML = '<option value="">-- Select Zone --</option>';
+      zones.forEach(zone => {
+        const option = document.createElement('option');
+        option.value = zone.zone_id;
+        option.textContent = zone.zone_name;
+        if (selectedValue && selectedValue == zone.zone_id) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+    });
+}
+
+    // --- Add Modal ---
+    function openAddModal() {
+      loadCountries('addCountry'); 
+      loadZone('addZone');
+      document.getElementById('addModal').style.display = 'block';
+    }
+    function closeAddModal() {
+      document.getElementById('addModal').style.display = 'none';
+    }
+    document.getElementById('addForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const mandir_name = document.getElementById('addMandirName').value;
+      const country_id = document.getElementById('addCountry').value;
+      const zone_id = document.getElementById('addZone').value;
+      const mandir_type = document.querySelector('select[name="addMandirType"]').value;
+
+      fetch('/mandir/addMandir', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ zone_id, country_id, mandir_type, mandir_name })
+      })
+      .then(res => res.json())
+      .then(result => {
+        closeAddModal();
+        loadMandirs();
+                window.location.reload(); // 🔄 refresh whole page
+
+      });
+    });
+
+    // --- Update Modal ---
+    function openUpdateModal(id, zone_id, country_id, mandir_type, mandir_name) {
+  document.getElementById('updateMandirId').value = id;
+  document.getElementById('updateMandirName').value = mandir_name;
+
+  // Load dropdowns with selected values
+  loadCountries('updateCountry', country_id);
+  loadZone('updateZone', zone_id);
+
+  // Set mandir type
+  document.getElementById('updateMandirType').value = mandir_type;
+
+  document.getElementById('updateModal').style.display = 'block';
+}
+
+    function closeUpdateModal() {
+      document.getElementById('updateModal').style.display = 'none';
+    }
+    
+    document.getElementById('updateForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const id = document.getElementById('updateMandirId').value;
+  const mandir_name = document.getElementById('updateMandirName').value;
+  const zone_id = document.getElementById('updateZone').value;
+  const country_id = document.getElementById('updateCountry').value;
+  const mandir_type = document.getElementById('updateMandirType').value;
+
+  fetch(`/mandir/update/${id}`, {
+    method: 'POST', // or PUT if your backend expects
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mandir_name, zone_id, country_id, mandir_type })
+  })
+  .then(res => res.json())
+  .then(result => {
+    closeUpdateModal();
+    loadMandirs();
+    window.location.reload(); // 🔄 refresh
+  });
+});
+
+
+    // --- Delete ---
+    function deleteMandir(id) {
+      if (confirm("Are you sure you want to delete this mandir?")) {
+        fetch(`/mandir/delete/${id}`, { method: 'DELETE' }) // keep POST if backend expects it
+          .then(res => res.json())
+          .then(result => {
+            alert(result.message);
+            loadMandirs();
+                    window.location.reload(); // 🔄 refresh whole page
+
+          });
+      }
+    }
+
+    // Initial load
+    loadMandirs();
+  </script>
+
+</body>
+</html>

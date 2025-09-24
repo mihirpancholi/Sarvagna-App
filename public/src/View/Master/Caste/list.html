@@ -136,6 +136,8 @@
       .then(result => {
         closeAddModal();
         loadCastes();
+                window.location.reload(); // 🔄 refresh whole page
+
       });
     });
 
@@ -162,6 +164,8 @@
       .then(result => {
         closeUpdateModal();
         loadCastes();
+                window.location.reload(); // 🔄 refresh whole page
+
       });
     });
 
@@ -173,6 +177,8 @@
           .then(result => {
             alert(result.message);
             loadCastes();
+                    window.location.reload(); // 🔄 refresh whole page
+
           });
       }
     }

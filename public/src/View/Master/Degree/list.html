@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Degree List</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin: 2px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    .btn-add { background-color: #2196F3; color: white; }
+    .btn-update { background-color: #4CAF50; color: white; }
+    .btn-delete { background-color: #f44336; color: white; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 20px;
+      width: 400px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Degree List</h1>
+  <button class="btn btn-add" onclick="openAddModal()">+ Add Degree</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>Degree Name</th>
+        <th>Created by</th> 
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="country-table-body"></tbody>
+  </table>
+
+  <!-- Add Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <h3>Add New Degree</h3>
+      <form id="addForm">
+        <label for="addDegreeName">Degree Name:</label>
+        <input type="text" id="addDegreeName" required>
+        <br><br>
+
+        <button type="submit" class="btn btn-add">Add</button>
+        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Modal -->
+  <div id="updateModal" class="modal">
+    <div class="modal-content">
+      <h3>Update Degree</h3>
+      <form id="updateForm">
+        <input type="hidden" id="updateDegreeId">
+        <label for="updateDegreeName">Degree Name:</label>
+        <input type="text" id="updateDegreeName" required>
+        <br><br>
+        <button type="submit" class="btn btn-update">Save</button>
+        <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Fetch country list
+    function loadDegree() {
+      fetch('/degree/list')
+        .then(res => res.json())
+        .then(data => {
+          const tableBody = document.getElementById('country-table-body');
+          tableBody.innerHTML = '';
+          data.forEach((degree, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${degree.degree}</td>
+              <td>${degree.full_name}</td>
+              <td>
+                <button class="btn btn-update" onclick="openUpdateModal(${degree.degree_id}, '${degree.degree}')">Update</button>
+                <button class="btn btn-delete" onclick="deleteDegree(${degree.degree_id})">Delete</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+
+          });
+        });
+    }
+
+    // --- Add Modal ---
+    function openAddModal() {
+      document.getElementById('addModal').style.display = 'block';
+    }
+    function closeAddModal() {
+      document.getElementById('addModal').style.display = 'none';
+    }
+    document.getElementById('addForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const degree = document.getElementById('addDegreeName').value;
+
+      fetch('/degree/addDegree', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ degree })
+      })
+      .then(res => res.json())
+      .then(result => {
+        closeAddModal();
+        loadDegree();
+        window.location.reload(); // 🔄 refresh whole page
+      });
+    });
+
+    // --- Update Modal ---
+    function openUpdateModal(id, degree) {
+      document.getElementById('updateDegreeId').value = id;
+      document.getElementById('updateDegreeName').value = degree;
+      document.getElementById('updateModal').style.display = 'block';
+    }
+    function closeUpdateModal() {
+      document.getElementById('updateModal').style.display = 'none';
+    }
+    
+    document.getElementById('updateForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const id = document.getElementById('updateDegreeId').value;
+      const degree = document.getElementById('updateDegreeName').value;
+
+      fetch(`/degree/update/${id}`, {
+        method: 'POST', // keep POST if your backend expects it
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ degree })
+      })
+      .then(res => res.json())
+      .then(result => {
+        closeUpdateModal();
+        loadDegree();
+        window.location.reload(); // 🔄 refresh whole page
+      });
+    });
+
+    // --- Delete ---
+    function deleteDegree(id) {
+      if (confirm("Are you sure you want to delete this degree?")) {
+        fetch(`/degree/delete/${id}`, { method: 'DELETE' }) // keep POST if backend expects it
+          .then(res => res.json())
+          .then(result => {
+            alert(result.message);
+            loadDegree();
+            window.location.reload(); // 🔄 refresh whole page
+
+          });
+      }
+    }
+
+    // Initial load
+    loadDegree();
+  </script>
+
+</body>
+</html>

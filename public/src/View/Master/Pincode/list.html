@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pincode List</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin: 2px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    .btn-add { background-color: #2196F3; color: white; }
+    .btn-update { background-color: #4CAF50; color: white; }
+    .btn-delete { background-color: #f44336; color: white; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 20px;
+      width: 400px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Pincode List</h1>
+  <button class="btn btn-add" onclick="openAddModal()">+ Add Pincode</button>
+  <table>
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>City</th>
+        <th>Pincode</th>
+        <th>Created by</th> 
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="Pincode-table-body"></tbody>
+  </table>
+
+  <!-- Add Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <h3>Add New Pincode</h3>
+      <form id="addForm">
+        <label for="addCity">City:</label>
+        <select id="addCity" required></select>
+        <br><br>
+
+        <label for="addPincodeName">Pincode:</label>
+        <input type="text" id="addPincodeName" required>
+        <br><br>
+
+        <button type="submit" class="btn btn-add">Add</button>
+        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Modal -->
+  <div id="updateModal" class="modal">
+    <div class="modal-content">
+      <h3>Update Pincode</h3>
+      <form id="updateForm">
+        <input type="hidden" id="updatePincodeId">
+
+        <label for="updateCity">City:</label>
+        <select id="updateCity" required></select>
+        <br><br>
+
+        <label for="updatePincodeName">Pincode Name:</label>
+        <input type="text" id="updatePincodeName" required>
+        <br><br>
+
+        <button type="submit" class="btn btn-update">Save</button>
+        <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  // Load Pincodes
+  function loadPincode() {
+    fetch('/pincode/list')
+      .then(res => res.json())
+      .then(data => {
+        const tableBody = document.getElementById('Pincode-table-body');
+        tableBody.innerHTML = '';
+        data.forEach((cityArea, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${cityArea.city_name || ''}</td>
+            <td>${cityArea.pincode || ''}</td>
+            <td>${cityArea.full_name || ''}</td>
+            <td>
+              <button class="btn btn-update" onclick="openUpdateModal('${cityArea.pin_id}','${cityArea.city_id}','${cityArea.pincode}')">
+                Update
+              </button>
+              <button class="btn btn-delete" onclick="deletePincode(${cityArea.pin_id})">
+                Delete
+              </button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      });
+  }
+
+  // Load cities for dropdown
+  function loadCities(selectId, selectedId = null) {
+    fetch('/City/list')
+      .then(res => res.json())
+      .then(data => {
+        const select = document.getElementById(selectId);
+        select.innerHTML = '<option value="">-- Select City --</option>';
+        data.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.city_id;
+          opt.textContent = c.city_name;
+          if (selectedId && selectedId == c.city_id) opt.selected = true;
+          select.appendChild(opt);
+        });
+      });
+  }
+
+  // --- Add Modal ---
+  function openAddModal() {
+    loadCities('addCity');
+    document.getElementById('addModal').style.display = 'block';
+  }
+  function closeAddModal() {
+    document.getElementById('addModal').style.display = 'none';
+  }
+  document.getElementById('addForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const pincode = document.getElementById('addPincodeName').value;
+    const city_id = document.getElementById('addCity').value;
+
+    fetch('/pincode/addPincode', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pincode, city_id })
+    })
+    .then(res => res.json())
+    .then(result => {
+      closeAddModal();
+      loadPincode();
+          window.location.reload(); // 🔄 refresh whole page
+
+    });
+  });
+
+  // --- Update Modal ---
+  function openUpdateModal(id) {
+    fetch(`/pincode/${id}`)   // ✅ fetch record details from backend
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('updatePincodeId').value = data.pin_id;
+        document.getElementById('updatePincodeName').value = data.pincode;
+        loadCities('updateCity', data.city_id);  // ✅ auto-select correct city
+        document.getElementById('updateModal').style.display = 'block';
+      })
+      .catch(err => console.error("Failed to load pincode:", err));
+  }
+  function closeUpdateModal() {
+    document.getElementById('updateModal').style.display = 'none';
+  }
+  document.getElementById('updateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('updatePincodeId').value;
+    const pincode = document.getElementById('updatePincodeName').value;
+    const city_id = document.getElementById('updateCity').value;
+
+    fetch(`/pincode/update/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ city_id, pincode })
+    })
+    .then(res => res.json())
+    .then(result => {
+      closeUpdateModal();
+      loadPincode();
+          window.location.reload(); // 🔄 refresh whole page
+
+    });
+  });
+
+  // --- Delete ---
+  function deletePincode(id) {
+    if (confirm("Are you sure you want to delete this Pincode?")) {
+      fetch(`/pincode/delete/${id}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(result => {
+          alert(result.message);
+          loadPincode();
+              window.location.reload(); // 🔄 refresh whole page
+
+        });
+    }
+  }
+
+  // Initial load
+  loadPincode();
+</script>
+
+</body>
+</html>

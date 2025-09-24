@@ -1,6 +1,6 @@
 // controller/countryController.js
 const path = require("path");
-const Caste = require("../model/countryModel");
+const Country = require("../model/countryModel");
 const viewsPath = path.join(__dirname, "..", "view");
 
 // Show country list page
@@ -11,19 +11,19 @@ exports.getCountryIndex = (req, res) => {
 // API - fetch country list
 exports.getCountriesData = async (req, res) => {
   try {
-    const rows = await Caste.getAll();
+    const rows = await Country.getAll();
     res.json(rows);
   } catch (err) {
     console.error("Error fetching country list:", err);
-    res.status(500).json({ message: "Error fetching caste list" });
+    res.status(500).json({ message: "Error fetching Country list" });
   }
 };
 
 // Add country (modal submit)
 exports.postCountry = async (req, res) => {
   try {
-    const { country_name, country_code, currency_code, dialing_code, created_id } = req.body;
-    const id = await Caste.addCaste(country_name, country_code, currency_code, dialing_code, created_id || 1); // default to 1 if missing
+    const { country_name, dialing_code, created_id } = req.body;
+    const id = await Country.add(country_name, dialing_code, created_id || 1); // default to 1 if missing
     res.json({ success: true, message: "Country added successfully", id });
   } catch (err) {
     console.error("Error adding country:", err);
@@ -35,7 +35,7 @@ exports.postCountry = async (req, res) => {
 exports.getCountryById = async (req, res) => {
   try {
     const { id } = req.params;
-    const country = await Caste.getById(id);
+    const country = await Country.getById(id);
     if (!country) return res.status(404).json({ message: "Country not found" });
     res.json(country);
   } catch (err) {
@@ -48,8 +48,9 @@ exports.getCountryById = async (req, res) => {
 exports.updateCountry = async (req, res) => {
   try {
     const { id } = req.params;
-    const { country_name } = req.body;
-    await Caste.updateCaste(id, country_name);
+    const updated_id = 1; 
+    const { country_name, dialing_code } = req.body;
+    await Country.updateCountry(id, country_name, dialing_code, updated_id);
     res.json({ success: true, message: "Country updated successfully" });
   } catch (err) {
     console.error("Error updating country:", err);
@@ -61,7 +62,8 @@ exports.updateCountry = async (req, res) => {
 exports.deleteCountry = async (req, res) => {
   try {
     const { id } = req.params;
-    await Caste.deleteCaste(id);
+    const deleted_id = 1; 
+    await Country.deleteCountry(id, deleted_id);
     res.json({ success: true, message: "Country deleted successfully" });
   } catch (err) {
     console.error("Error deleting country:", err);

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sant Nirdeshak List</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin: 2px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    .btn-add { background-color: #2196F3; color: white; }
+    .btn-update { background-color: #4CAF50; color: white; }
+    .btn-delete { background-color: #f44336; color: white; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 20px;
+      width: 400px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Sant Nirdeshak List</h1>
+  <button class="btn btn-add" onclick="openAddModal()">+ Add Sant Nirdeshak</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>Type</th>
+        <th>Designation</th>
+        <th>Created by</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="blood-group-table-body"></tbody>
+  </table>
+
+  <!-- Add Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <h3>Add New Sant Karyakar Designation</h3>
+      <form id="addForm">
+        <label for="addtype">Type</label>
+        <input type="radio" id="addtype" name="type" value="S" > Sant
+        <input type="radio" id="addtype" name="type" value="K"> Karyakar
+        <br><br>
+        <label for="adddesignation">Designation:</label>
+        <input type="text" id="adddesignation" required>
+        <br><br>
+       
+        <button type="submit" class="btn btn-add">Add</button>
+        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Modal -->
+  <!-- Update Modal -->
+<div id="updateModal" class="modal">
+  <div class="modal-content">
+    <h3>Update Sant Nirdeshak</h3>
+    <form id="updateForm">
+      <input type="hidden" id="updateSantKaryakarDesignationid">
+
+        <label for="updatetype">Type</label>
+<input type="radio" id="updateTypeS" name="updateType" value="S"> Sant
+<input type="radio" id="updateTypeK" name="updateType" value="K"> Karyakar
+        <br><br>
+        <label for="updateDesignation">Designation:</label>
+        <input type="text" id="updateDesignation" required>
+        <br><br>
+
+      <button type="submit" class="btn btn-update">Save</button>
+      <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+    </form>
+  </div>
+</div>
+
+
+  <script>
+    // Fetch Sant Karyakar Designation list
+    function loadSantKaryakarDesignation() {
+      fetch('/sant_karyakar_designation/list')
+        .then(res => res.json())
+        .then(data => {
+          const tableBody = document.getElementById('blood-group-table-body');
+          tableBody.innerHTML = '';
+          data.forEach((santkaryakar, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${index + 1}</td>
+  <td>${santkaryakar.type === 'S' ? 'Sant' : santkaryakar.type === 'K' ? 'Karyakar' : ''}</td>
+              <td>${santkaryakar.designation}</td>
+              <td>${santkaryakar.full_name}</td>
+              <td>
+  <button class="btn btn-update" 
+      onclick="openUpdateModal(
+        ${santkaryakar.sant_karyakar_designation_id}, 
+        '${santkaryakar.type}', 
+        '${santkaryakar.designation}'
+      )">Update</button>
+                <button class="btn btn-delete" onclick="deleteSantKaryakarDesignation(${santkaryakar.sant_karyakar_designation_id})">Delete</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        });
+    }
+
+    // --- Add Modal ---
+    function openAddModal() {
+      document.getElementById('addModal').style.display = 'block';
+    }
+    function closeAddModal() {
+      document.getElementById('addModal').style.display = 'none';
+    }
+    document.getElementById('addForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const type = document.querySelector('input[name="type"]:checked').value;
+      const designation = document.getElementById('adddesignation').value;
+
+      fetch('/sant_karyakar_designation/addSantKaryakarDesignation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, designation })
+      })
+      .then(res => res.json())
+      .then(result => {
+        closeAddModal();
+        loadSantKaryakarDesignation();
+        window.location.reload(); // 🔄 refresh whole page
+
+      });
+    });
+
+    // --- Update Modal ---
+function openUpdateModal(id, type, designation) {
+  document.getElementById('updateSantKaryakarDesignationid').value = id;
+  document.querySelector(`input[name="updateType"][value="${type}"]`).checked = true;
+  document.getElementById('updateDesignation').value = designation;
+  document.getElementById('updateModal').style.display = 'block';
+}
+
+    function closeUpdateModal() {
+      document.getElementById('updateModal').style.display = 'none';
+    }
+    document.getElementById('updateForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const id = document.getElementById('updateSantKaryakarDesignationid').value;
+  const type = document.querySelector('input[name="updateType"]:checked').value;
+  const designation = document.getElementById('updateDesignation').value;
+
+  fetch(`/sant_karyakar_designation/update/${id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, designation })
+  })
+  .then(res => res.json())
+  .then(result => {
+    closeUpdateModal();
+    loadSantKaryakarDesignation();
+  });
+});
+
+
+    // --- Delete ---
+    function deleteSantKaryakarDesignation(id) {
+      if (confirm("Are you sure you want to delete this Sant Karyakar Designation?")) {
+        fetch(`/sant_karyakar_designation/delete/${id}`, { method: 'DELETE' }) // keep POST if backend expects it
+          .then(res => res.json())
+          .then(result => {
+            alert(result.message);
+            loadSantKaryakarDesignation();
+            window.location.reload(); // 🔄 refresh whole page
+
+          });
+      }
+    }
+
+    // Initial load
+    loadSantKaryakarDesignation();
+  </script>
+
+</body>
+</html>

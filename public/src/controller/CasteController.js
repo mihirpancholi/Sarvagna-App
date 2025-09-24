@@ -48,8 +48,9 @@ exports.getCasteById = async (req, res) => {
 exports.updateCaste = async (req, res) => {
   try {
     const { id } = req.params;
+    const updated_id = 1; // This should be the ID of the user making the update
     const { caste_name } = req.body;
-    await Caste.updateCaste(id, caste_name);
+    await Caste.updateCaste(id, caste_name, updated_id);
     res.json({ success: true, message: "Caste updated successfully" });
   } catch (err) {
     console.error("Error updating caste:", err);
@@ -61,7 +62,8 @@ exports.updateCaste = async (req, res) => {
 exports.deleteCaste = async (req, res) => {
   try {
     const { id } = req.params;
-    await Caste.deleteCaste(id);
+    const deleted_id = 1; 
+    await Caste.deleteCaste(id, deleted_id);
     res.json({ success: true, message: "Caste deleted successfully" });
   } catch (err) {
     console.error("Error deleting caste:", err);

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CityArea List</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin: 2px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    .btn-add { background-color: #2196F3; color: white; }
+    .btn-update { background-color: #4CAF50; color: white; }
+    .btn-delete { background-color: #f44336; color: white; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 20px;
+      width: 400px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>City Area List</h1>
+  <button class="btn btn-add" onclick="openAddModal()">+ Add CityArea</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>S.No.</th>
+        <th>City</th>
+        <th>Area</th>
+        <th>Created by</th> 
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="CityArea-table-body"></tbody>
+  </table>
+
+  <!-- Add Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <h3>Add New CityArea</h3>
+      <form id="addForm">
+        <label for="addCity">City:</label>
+        <select id="addCity" required></select>
+        <br><br>
+
+        <label for="addCityAreaName">CityArea Name:</label>
+        <input type="text" id="addCityAreaName" required>
+        <br><br>
+
+        <button type="submit" class="btn btn-add">Add</button>
+        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Modal -->
+  <div id="updateModal" class="modal">
+    <div class="modal-content">
+      <h3>Update CityArea</h3>
+      <form id="updateForm">
+        <input type="hidden" id="updateCityAreaId">
+
+        <label for="updateCity">City:</label>
+        <select id="updateCity" required></select>
+        <br><br>
+
+        <label for="updateCityAreaName">CityArea Name:</label>
+        <input type="text" id="updateCityAreaName" required>
+        <br><br>
+
+        <button type="submit" class="btn btn-update">Save</button>
+        <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  // Load CityAreas
+  function loadCityArea() {
+    fetch('/CityArea/list')
+      .then(res => res.json())
+      .then(data => {
+        const tableBody = document.getElementById('CityArea-table-body');
+        tableBody.innerHTML = '';
+        data.forEach((cityArea, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${cityArea.city_name || ''}</td>
+            <td>${cityArea.area_name || ''}</td>
+            <td>${cityArea.full_name || ''}</td>
+            <td>
+              <button class="btn btn-update" onclick="openUpdateModal(${cityArea.city_area_id})">
+                Update
+              </button>
+              <button class="btn btn-delete" onclick="deleteCityArea(${cityArea.city_area_id})">
+                Delete
+              </button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      });
+  }
+
+  // Load cities for dropdown
+  function loadCities(selectId, selectedId = null) {
+    fetch('/City/list')
+      .then(res => res.json())
+      .then(data => {
+        const select = document.getElementById(selectId);
+        select.innerHTML = '<option value="">-- Select City --</option>';
+        data.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.city_id;
+          opt.textContent = c.city_name;
+          if (selectedId && selectedId == c.city_id) opt.selected = true;
+          select.appendChild(opt);
+        });
+      });
+  }
+
+  // --- Add Modal ---
+  function openAddModal() {
+    loadCities('addCity');
+    document.getElementById('addModal').style.display = 'block';
+  }
+  function closeAddModal() {
+    document.getElementById('addModal').style.display = 'none';
+  }
+  document.getElementById('addForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const area_name = document.getElementById('addCityAreaName').value;
+    const city_id = document.getElementById('addCity').value;
+
+    fetch('/CityArea/addCityArea', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ area_name, city_id })
+    })
+    .then(res => res.json())
+    .then(result => {
+      closeAddModal();
+      loadCityArea();
+          window.location.reload(); // 🔄 refresh whole page
+
+    });
+  });
+
+  // --- Update Modal ---
+  function openUpdateModal(id) {
+    fetch(`/CityArea/${id}`)   // ✅ fetch record details from backend
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('updateCityAreaId').value = data.city_area_id;
+        document.getElementById('updateCityAreaName').value = data.area_name;
+        loadCities('updateCity', data.city_id);  // ✅ auto-select correct city
+        document.getElementById('updateModal').style.display = 'block';
+      })
+      .catch(err => console.error("Failed to load city area:", err));
+  }
+  function closeUpdateModal() {
+    document.getElementById('updateModal').style.display = 'none';
+  }
+  document.getElementById('updateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('updateCityAreaId').value;
+    const area_name = document.getElementById('updateCityAreaName').value;
+    const city_id = document.getElementById('updateCity').value;
+
+    fetch(`/CityArea/update/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ city_id, area_name })
+    })
+    .then(res => res.json())
+    .then(result => {
+      closeUpdateModal();
+      loadCityArea();
+          window.location.reload(); // 🔄 refresh whole page
+
+    });
+  });
+
+  // --- Delete ---
+  function deleteCityArea(id) {
+    if (confirm("Are you sure you want to delete this CityArea?")) {
+      fetch(`/CityArea/delete/${id}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(result => {
+          alert(result.message);
+          loadCityArea();
+              window.location.reload(); // 🔄 refresh whole page
+
+        });
+    }
+  }
+
+  // Initial load
+  loadCityArea();
+</script>
+
+</body>
+</html>

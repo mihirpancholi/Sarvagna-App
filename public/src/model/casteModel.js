@@ -33,22 +33,29 @@ class Caste {
   }
 
   // Update
-  static async updateCaste(id, caste_name) {
+  static async updateCaste(id, caste_name, updated_id) {
     const [result] = await pool.execute(
-      `UPDATE caste_master SET caste_name = ? WHERE caste_id = ?`,
-      [caste_name, id]
+      `UPDATE caste_master SET caste_name = ?, updated_id = ?, updated_at = NOW() WHERE caste_id = ?`,
+      [caste_name, updated_id, id]
     );
     return result;
   }
 
   // Soft delete
-  static async deleteCaste(id) {
-    const [result] = await pool.execute(
-      `UPDATE caste_master SET is_deleted = 'Y' WHERE caste_id = ?`,
-      [id]
-    );
-    return result;
-  }
+static async deleteCaste(caste_id, deleted_id) {
+  const [result] = await pool.execute(
+    `UPDATE caste_master 
+     SET is_deleted = 'Y', 
+         deleted_at = NOW(), 
+         deleted_id = ? 
+     WHERE caste_id = ? 
+       AND is_deleted = 'N'`, 
+    [deleted_id, caste_id]
+  );
+  return result;
+}
+
+
 }
 
 module.exports = Caste;

@@ -56,7 +56,8 @@
       <tr>
         <th>S.No.</th>
         <th>Country Name</th>
-        <th>Created by</th>
+        <th>Country Code</th>
+        <th>Created by</th> 
         <th>Actions</th>
       </tr>
     </thead>
@@ -72,14 +73,6 @@
         <input type="text" id="addCountryName" required>
         <br><br>
 
-        <label for="addCountryCode">Country Code:</label>
-        <input type="text" id="addCountryCode" required>
-        <br><br>
-
-        <label for="addCurrencyCode">Currency Code:</label>
-        <input type="text" id="addCurrencyCode" required>
-        <br><br>
-
         <label for="addDialingCode">Dialing Code:</label>
         <input type="text" id="addDialingCode" required>
         <br><br>
@@ -93,11 +86,14 @@
   <!-- Update Modal -->
   <div id="updateModal" class="modal">
     <div class="modal-content">
-      <h3>Update Caste</h3>
+      <h3>Update Country</h3>
       <form id="updateForm">
         <input type="hidden" id="updateCountryId">
         <label for="updateCountryName">Country Name:</label>
         <input type="text" id="updateCountryName" required>
+        <br><br>
+        <label for="updateDialingCode">Dialing Code:</label>
+        <input type="text" id="updateDialingCode" required>
         <br><br>
         <button type="submit" class="btn btn-update">Save</button>
         <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
@@ -108,7 +104,7 @@
   <script>
     // Fetch country list
     function loadCountries() {
-      fetch('/countryController/list')
+      fetch('/country/list')
         .then(res => res.json())
         .then(data => {
           const tableBody = document.getElementById('country-table-body');
@@ -118,9 +114,10 @@
             row.innerHTML = `
               <td>${index + 1}</td>
               <td>${country.country_name}</td>
+              <td>${country.dialing_code}</td>
               <td>${country.full_name}</td>
               <td>
-                <button class="btn btn-update" onclick="openUpdateModal(${country.country_id}, '${country.country_name}')">Update</button>
+                <button class="btn btn-update" onclick="openUpdateModal(${country.country_id}, '${country.country_name}', '${country.dialing_code}')">Update</button>
                 <button class="btn btn-delete" onclick="deleteCountry(${country.country_id})">Delete</button>
               </td>
             `;
@@ -139,57 +136,61 @@
     document.getElementById('addForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const country_name = document.getElementById('addCountryName').value;
-        const country_code = document.getElementById('addCountryCode').value;
-        const currency_code = document.getElementById('addCurrencyCode').value;
-        const dialing_code = document.getElementById('addDialingCode').value;
+      const dialing_code = document.getElementById('addDialingCode').value;
 
-
-      fetch('/countryController/addCountry', {
+      fetch('/country/addCountry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ country_name, country_code, currency_code, dialing_code })
+        body: JSON.stringify({ country_name, dialing_code })
       })
       .then(res => res.json())
       .then(result => {
         closeAddModal();
-        loadCastes();
+        loadCountries();
+        window.location.reload(); // 🔄 refresh whole page
       });
     });
 
     // --- Update Modal ---
-    function openUpdateModal(id, name) {
-      document.getElementById('updateCasteId').value = id;
-      document.getElementById('updateCasteName').value = name;
+    function openUpdateModal(id, country_name, dialing_code) {
+      document.getElementById('updateCountryId').value = id;
+      document.getElementById('updateCountryName').value = country_name;
+      document.getElementById('updateDialingCode').value = dialing_code;
       document.getElementById('updateModal').style.display = 'block';
     }
     function closeUpdateModal() {
       document.getElementById('updateModal').style.display = 'none';
     }
+    
     document.getElementById('updateForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const id = document.getElementById('updateCasteId').value;
+      const id = document.getElementById('updateCountryId').value;
       const country_name = document.getElementById('updateCountryName').value;
+      const dialing_code = document.getElementById('updateDialingCode').value;
 
-      fetch(`/countryController/update/${id}`, {
+      fetch(`/country/update/${id}`, {
         method: 'POST', // keep POST if your backend expects it
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ country_name })
+        body: JSON.stringify({ country_name, dialing_code })
       })
       .then(res => res.json())
       .then(result => {
         closeUpdateModal();
         loadCountries();
+        window.location.reload(); // 🔄 refresh whole page
       });
     });
 
     // --- Delete ---
     function deleteCountry(id) {
       if (confirm("Are you sure you want to delete this country?")) {
-        fetch(`/countryController/delete/${id}`, { method: 'DELETE' }) // keep POST if backend expects it
+        fetch(`/country/delete/${id}`, { method: 'DELETE' }) // keep POST if backend expects it
           .then(res => res.json())
           .then(result => {
             alert(result.message);
             loadCountries();
+            window.location.reload(); // 🔄 refresh whole page
+
           });
       }
     }

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const casteController = require("../controller/casteController");
+const casteController = require("../controller/CasteController");
 
 // List page
 router.get("/", casteController.getCasteIndex);
