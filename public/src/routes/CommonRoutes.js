@@ -6,5 +6,12 @@ router.get("/getstatebyid", CommonController.getState);
 router.get("/getdistrictbyid", CommonController.getDistrict);
 router.get("/gettalukabyid", CommonController.getTaluka);
 router.get("/getmandirbyzone", CommonController.getMandir);
+router.get("/getcityareabycity", CommonController.getCityArea);
+router.get("/getpincodebycity", CommonController.getPincode);
+router.get("/getcitydetails", CommonController.getCityDetails);
+router.get("/getkshetradetails", CommonController.getKshetraDetails);
+router.get("/getSevakByBatch", CommonController.getSevakByBatch);
+router.get("/getsatsangdesignation", CommonController.getSatsangDesignation);
+
 
 module.exports = router;

@@ -49,3 +49,70 @@ exports.getMandir = async (req, res) => {
     res.status(500).json({ message: "Error fetching Mandir list" });
   }
 };
+
+exports.getCityArea = async (req, res) => {
+  try {
+    const { city_id } = req.query;
+    const rows = await Model.getCityAreaByCity(city_id);
+    res.json(rows); // send array of city areas
+  } catch (err) {
+    console.error("Error fetching City Area list:", err);
+    res.status(500).json({ message: "Error fetching City Area list" });
+  }
+};
+
+exports.getPincode = async (req, res) => {
+  try {
+    const { city_id } = req.query;
+    const rows = await Model.getPincodeByCity(city_id);
+    res.json(rows); // send array of pincodes
+  } catch (err) {
+    console.error("Error fetching Pincode list:", err);
+    res.status(500).json({ message: "Error fetching Pincode list" });
+  }
+};
+
+exports.getCityDetails = async (req, res) => {
+  try {
+    const { city_id } = req.query;
+    const rows = await Model.getCityDetails(city_id);
+    res.json(rows); // send array of city details
+  } catch (err) {
+    console.error("Error fetching City details:", err);
+    res.status(500).json({ message: "Error fetching City details" });
+  }
+};
+
+
+exports.getKshetraDetails = async (req, res) => {
+  try {
+    const { kshetra_id } = req.query;
+    const rows = await Model.getKshetraDetailsbyID(kshetra_id);
+    res.json(rows); // send array of kshetra details
+  } catch (err) {
+    console.error("Error fetching Kshetra details:", err);
+    res.status(500).json({ message: "Error fetching Kshetra details" });
+  }
+};
+
+exports.getSevakByBatch = async (req, res) => {
+  try {
+    const { batch_id } = req.query;
+    const rows = await Model.getSevakListByBatch(batch_id);
+    res.json(rows); // send array of sevaks
+  } catch (err) {
+    console.error("Error fetching Sevaks:", err);
+    res.status(500).json({ message: "Error fetching Sevaks" });
+  }
+};
+
+exports.getSatsangDesignation = async (req, res) => {
+  try {
+    const { satsang_activity_id } = req.query;
+    const rows = await Model.getSatsangDesignationbyActivity(satsang_activity_id);
+    res.json(rows); // send array of sevaks
+  } catch (err) {
+    console.error("Error fetching Sevaks:", err);
+    res.status(500).json({ message: "Error fetching Sevaks" });
+  }
+};

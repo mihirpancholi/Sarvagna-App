@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sevak Registration</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <h2>Sevak Registration</h2>
+
+    <form id="sevakForm">
+        <fieldset>
+            <!-- Sevak Number + YTK ID -->
+            <label>Sevak No:</label>
+            <input type="text" id="sevak_no" onkeyup="generateYtkID()">
+            <span id="is_sevak_duplicate" style="display:none;color:red;">Duplicate Sevak No!</span>
+            <br>
+
+            <label>Talim Batch:</label>
+            <select id="addbatch"></select>
+            <br>
+
+            <label>YTK ID:</label>
+            <input type="text" id="ytk_id" readonly>
+            <br><br>
+
+            <label>First Name:</label>
+            <input type="text" id="first_name" name="first_name"><br>
+
+            <label>Last Name:</label>
+            <input type="text" id="last_name" name="last_name"><br>
+
+            <label>Middle Name:</label>
+            <input type="text" id="middle_name" name="middle_name"><br>
+
+            <label>Birth Date:</label>
+            <input type="date" id="birth_date" name="birth_date"><br>
+
+            <label>Caste:</label>
+            <select id="addcaste" name="caste_id"></select><br>
+
+            <label>Category:</label>
+            <select id="addcategory" name="category_id"></select><br>
+
+            <label>Blood Group:</label>
+            <select id="addbloodgroup" name="blood_group_id"></select><br>
+
+            <label>Gender:</label>
+            <select id="addgender" name="gender">
+                <option value="">-- Select --</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select><br>
+
+            <label>Marital Status:</label>
+            <select id="addmaritalstatus" name="marital_status_id"></select><br>
+
+            <div id="maritalStatusDate">
+                <label for="marital_status_id" id="engagedDate">
+                    Engaged Date :
+                </label>
+                <label for="marital_status_id" id="marriedDate">
+                    Marriage Date :
+                </label>
+                <input type="text" class="form-control datepicker" id="marital_date" name="marital_date" autocomplete="off">
+
+            </div><br>
+
+
+            <label>Sevak Photo:</label>
+            <input type="file" id="sevak_photo" name="sevak_photo"><br>
+
+            <label>Latest Photo:</label>
+            <input type="file" id="latest_photo" name="latest_photo"><br>
+
+            <!-- City Section (Current Address) -->
+            <h3>Current Address</h3>
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address1"><br>
+
+            <label>City:</label>
+            <select id="addcity"></select><br>
+
+            <label>City Area:</label>
+            <select id="addcityarea"></select><br>
+
+            <label>Pincode:</label>
+            <select id="addpincode"></select><br>
+
+            <label>Taluka:</label>
+            <input type="text" id="taluka_name" readonly>
+            <input type="hidden" id="taluka_id"><br>
+
+            <label>District:</label>
+            <input type="text" id="district_name" readonly>
+            <input type="hidden" id="district_id"><br>
+
+            <label>State:</label>
+            <input type="text" id="state_name" readonly>
+            <input type="hidden" id="state_id"><br>
+
+            <label>Country:</label>
+            <input type="text" id="country_name" readonly>
+            <input type="hidden" id="country_id"><br><br>
+            <br><br>
+            <!-- Permanent Address -->
+            <label><input type="checkbox" id="is_perm_add"> Is PERMANENT ADDRESS same
+                as CURRENT ADDRESS</label>
+            <div id="permanent_address">
+                <h3>Permanent Address</h3>
+                <label for="per_address">Address</label>
+                <input type="text" id="per_address" name="per_address1"><br>
+
+                <label>City:</label>
+                <select id="per_city"></select><br>
+
+                <label>City Area:</label>
+                <select id="per_city_area"></select><br>
+
+                <label>Pincode:</label>
+                <select id="per_pincode"></select><br>
+
+                <label>Taluka:</label>
+                <input type="text" id="per_taluka_name" readonly>
+                <input type="hidden" id="per_taluka_id"><br>
+
+                <label>District:</label>
+                <input type="text" id="per_district_name" readonly>
+                <input type="hidden" id="per_district_id"><br>
+
+                <label>State:</label>
+                <input type="text" id="per_state_name" readonly>
+                <input type="hidden" id="per_state_id"><br>
+
+                <label>Country:</label>
+                <input type="text" id="per_country_name" readonly>
+                <input type="hidden" id="per_country_id"><br><br>
+            </div>
+
+            <br><br>
+
+            <!-- Talim Address -->
+            <label><input type="checkbox" id="is_talim_add"> Is TALIM ADDRESS same as
+                CURRENT ADDRESS</label>
+            <div id="talim_address">
+                <h3>Talim Address</h3>
+                <label for="talim_address">Address</label>
+                <input type="text" id="talim_address" name="talim_address1"><br>
+                <label>City:</label>
+                <select id="talim_city"></select><br>
+
+                <label>City Area:</label>
+                <select id="talim_city_area"></select><br>
+
+                <label>Pincode:</label>
+                <select id="talim_pincode"></select><br>
+
+                <label>Taluka:</label>
+                <input type="text" id="talim_taluka_name" readonly>
+                <input type="hidden" id="talim_taluka_id"><br>
+
+                <label>District:</label>
+                <input type="text" id="talim_district_name" readonly>
+                <input type="hidden" id="talim_district_id"><br>
+
+                <label>State:</label>
+                <input type="text" id="talim_state_name" readonly>
+                <input type="hidden" id="talim_state_id"><br>
+
+                <label>Country:</label>
+                <input type="text" id="talim_country_name" readonly>
+                <input type="hidden" id="talim_country_id"><br><br>
+            </div>
+            <hr>
+            <!-- Kshetra Section -->
+            <h3>Kshetra Details</h3>
+
+            <div class="current_kshetra_info">
+
+
+                <label>Current Kshetra:</label>
+                <select id="current_kshetra"></select><br>
+                <label>Sant Nirdeshak:</label>
+                <input type="text" id="current_sant_nirdeshak" readonly>
+                <input type="hidden" id="current_sant_nirdeshak_id"><br>
+                <label>Nirdeshak:</label>
+                <input type="text" id="current_nirdeshak" readonly>
+                <input type="hidden" id="current_nirdeshak_id"><br>
+                <label>Mandir:</label>
+                <input type="text" id="current_mandir" readonly>
+                <input type="hidden" id="current_mandir_id"><br>
+                <label>Mandir Type:</label>
+                <input type="text" id="current_mandir_type" readonly><br><br>
+            </div>
+
+            <label>Permanent Kshetra:</label>
+            <select id="kshetra"></select><br>
+            <label>Sant Nirdeshak:</label>
+            <input type="text" id="sant_nirdeshak" readonly>
+            <input type="hidden" id="sant_nirdeshak_id"><br>
+            <label>Nirdeshak:</label>
+            <input type="text" id="nirdeshak" readonly>
+            <input type="hidden" id="nirdeshak_id"><br>
+            <label>Mandir:</label>
+            <input type="text" id="mandir" readonly>
+            <input type="hidden" id="mandir_id"><br>
+            <label>Mandir Type:</label>
+            <input type="text" id="mandir_type" readonly><br><br>
+
+            <label>Talim Kshetra:</label>
+            <select id="talim_kshetra"></select><br>
+            <label>Sant Nirdeshak:</label>
+            <input type="text" id="talim_sant_nirdeshak" readonly>
+            <input type="hidden" id="talim_sant_nirdeshak_id"><br>
+            <label>Nirdeshak:</label>
+            <input type="text" id="talim_nirdeshak" readonly>
+            <input type="hidden" id="talim_nirdeshak_id"><br>
+            <label>Mandir:</label>
+            <input type="text" id="talim_mandir" readonly>
+            <input type="hidden" id="talim_mandir_id"><br>
+            <label>Mandir Type:</label>
+            <input type="text" id="talim_mandir_type" readonly><br><br>
+
+
+
+            <div class="satsangi_referee">
+                <hr>
+                <!-- Satsangi Referee Section -->
+                <h3>Satsangi Referee</h3>
+
+                <label>
+                    <input type="checkbox" id="ytk_sevak_satsangi" name="ytk_sevak_satsangi">
+                    <span>YTK Sevak</span>
+                </label>
+
+                <div id="ytk_sevak_fields" style="display:none; margin-top:10px;">
+                    <label for="satsangi_batch_id">Batch :</label>
+                    <select name="satsangi_batch_id" id="satsangi_batch_id"></select> <br>
+
+                    <label for="satsangi_sevak_id">Sevak :</label>
+                    <select name="satsangi_sevak_id" id="satsangi_sevak_id"></select> <br>
+                </div>
+
+                <div id="ref_fields" style="margin-top:10px;">
+                    <label for="sat_ref_name">Name :</label>
+                    <input type="text" class="form-control" name="sat_ref_name" id="sat_ref_name" placeholder="Name"> <br>
+
+                    <label for="sat_ref_city_id">City/Village :</label>
+                    <select name="sat_ref_city_id" id="sat_ref_city_id"></select> <br>
+
+                    <label for="sat_ref_mobile">Mobile No : </label>
+                    <select class="form-control" name="sat_ref_mobile_country_code" id="sat_ref_mobile_country_code"></select>
+
+                    <input type="number" class="form-control" name="sat_ref_mobile" id="sat_ref_mobile" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
+                </div>
+
+            </div>
+
+            <div class="inspired_by">
+                <hr>
+                <!-- Inspired By Section -->
+                <h3>Inspired By</h3>
+
+                <label>
+                    <input type="checkbox" id="ytk_sevak_inspired" name="ytk_sevak_inspired">
+                    <span>YTK Sevak</span>
+                </label>
+
+                <div id="ytk_inspired_fields" style="display:none; margin-top:10px;">
+                    <label for="inpired_batch_id">Batch :</label>
+                    <select name="inpired_batch_id" id="inpired_batch_id"></select> <br>
+
+                    <label for="inspired_sevak_id">Sevak :</label>
+                    <select name="inspired_sevak_id" id="inspired_sevak_id"></select> <br>
+                </div>
+
+                <div id="ins_ref_fields" style="margin-top:10px;">
+                    <label for="ins_by_name">Name :</label>
+                    <input type="text" class="form-control" name="ins_by_name" id="ins_by_name" placeholder="Name"> <br>
+
+                    <label for="ins_by_city_id">City/Village :</label>
+                    <select name="ins_by_city_id" id="ins_by_city_id"></select> <br>
+
+                    <label for="ins_by_mobile">Mobile No : </label>
+                    <select class="form-control" name="ins_by_country_code" id="ins_by_country_code"></select>
+
+                    <input type="number" class="form-control" name="ins_by_mobile" id="ins_by_mobile" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
+                </div>
+
+            </div>
+
+        </fieldset>
+        <hr> <!-- step 2 -->
+
+        <h4 class="form-section">Education</h4>
+
+        <div class="education_section">
+
+            <input type="hidden" id="current_table_row_education">
+            <table class="table table-bordered table-striped" id="educationInvoice">
+                <thead>
+                    <tr>
+                        <th>Degree</th>
+                        <th>Specialization</th>
+                        <th>Remark</th>
+                        <th><i class="fa fa-flash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td class="m-0 p-0">
+                            <select name="degree_id[]" id="adddegree" required></select>
+                        </td>
+                        <td class="m-0 p-0">
+                            <select class="form-control" name="specialization_id[]" id="addspecialization"></select>
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="text" style="padding: 1px" name="edu_remark[]" class="form-control">
+                        </td>
+                        <td class="m-0 p-0 text-center"></td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success btn-block pull-right" onclick="insertEducation()"><i class="fa fa-plus-circle"></i>
+                Add New Education
+            </button>
+
+            <h4 class="form-section"><i class="fa fa-user"></i>
+                Employment</h4>
+            <input type="hidden" id="current_table_row_employment">
+            <table class="table table-bordered table-striped" id="employmentInvoice">
+                <thead>
+                    <tr>
+                        <th>Employment Type</th>
+                        <th>Detail</th>
+                        <th>Post/Designation</th>
+                        <th>Remark</th>
+                        <th><i class="fa fa-flash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td class="m-0 p-0">
+                            <select class="form-control" name="employment_id[]" id="employment_ids">
+                                <option value="">Select Employment
+                                    Type
+                                </option>
+                            </select>
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="text" class="form-control" name="emp_detail[]" id="emp_details" style="padding: 1px">
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="text" class="form-control" name="post_designation[]" id="post_designations" style="padding: 1px">
+                        </td>
+                        <td class="m-0 p-0"><input type="text" name="emp_remark[]" id="emp_remarks" class="form-control" style="padding: 1px">
+                        </td>
+                        <td class="m-0 p-0 text-center"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success btn-block addEmpBtn" onclick="insertEmployment()"><i class="fa fa-plus-circle"></i>
+                Add New Employment
+            </button>
+            <br />
+        </div>
+
+        <!-- Step 3 -->
+
+        <h4 class="form-section">Family Detail</h4>
+        <div class="family_details">
+            <input type="hidden" id="current_table_row_family">
+            <table class="table table-bordered table-striped" id="familyInvoice">
+                <thead>
+                    <tr>
+                        <th>Relationship</th>
+                        <th width="30%">Name</th>
+                        <th colspan="2">Mobile</th>
+                        <th width="20%">Email</th>
+                        <th>Occupation</th>
+                        <th><i class="fa fa-flash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="m-0 p-0">
+                            <select class="form-control" name="relationship_id[]" id="relationship_ids">
+                                <option value="">Select Relationship</option>
+                            </select>
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="text" class="form-control" name="family_name[]" id="family_names">
+                        </td>
+                        <td class="m-0 p-0" width="15%">
+                            <select class="form-control" name="family_country_code[]" id="family_country_code">
+                                <option value="">---</option>
+                            </select>
+
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="number" class="form-control number" name="family_mobile[]" id="family_mobile" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter Your 10 Dogit Mobile Number.">
+                            <span id="spnError" style="color: Red; display: none">*Valid
+                                characters: Numbers and space.</span>
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="email" class="form-control" name="family_email[]" id="family_emails" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="text" class="form-control" name="family_occupation[]" id="family_occupations">
+                        </td>
+                        <td class="m-0 p-0 text-center">
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success btn-block btnAddFamily" onclick="insertFamily()"><i class="fa fa-plus-circle"></i>Add New Member</button>
+        </div>
+        <br />
+
+        <!-- Step 4 -->
+        <h4 class="form-section">Contact</h4>
+
+        <div class="contact">
+            <label for="contact_mobile1">Mobile 1 :</label>
+            <select class="form-control" name="mobile1_country_code" id="mobile1_country_code"></select>
+            <input type="number" class="form-control" name="contact_mobile1" id="contact_mobile1" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 1">
+            <br><br>
+
+            <label for="contact_mobile2">Mobile 2 :</label>
+            <select class="form-control" name="mobile2_country_code" id="mobile2_country_code"></select>
+            <input type="number" class="form-control" name="contact_mobile2" id="contact_mobile2" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 2">
+            <br><br>
+
+            <label for="contact_phone_1">Office Phone 1 :</label>
+            <input type="text" class="form-control NoSpace" name="contact_phone_1" id="contact_phone_1" placeholder="Office Phone 1">
+            <br><br>
+
+            <label for="contact_phone_2">Office Phone 2 :</label>
+            <input type="text" class="form-control NoSpace" name="contact_phone_2" id="contact_phone_2" placeholder="Office Phone 2">
+            <br><br>
+
+            <label for="contact_res_phone1">Residence Phone 1 :</label>
+            <input type="text" class="form-control NoSpace" name="contact_res_phone1" id="contact_res_phone1" placeholder="Residence Phone 1">
+            <br><br>
+
+            <label for="contact_res_phone2">Residence Phone 2 :</label>
+            <input type="text" class="form-control NoSpace" name="contact_res_phone2" id="contact_res_phone2" placeholder="Residence Phone 2">
+            <br><br>
+
+            <label for="contact_per_mail">Personal Email :</label>
+            <input type="email" class="form-control" name="contact_per_mail" placeholder="Personal Email" id="contact_per_mail">
+            <br><br>
+
+            <label for="contact_bus_mail">Business Email :</label>
+            <input type="email" class="form-control" name="contact_bus_mail" id="contact_bus_mail" placeholder="Business Email">
+            <br><br>
+
+            <label for="contact_whatsapp_no">Whatsapp No :</label>
+            <label for="contact_whatsapp_no">
+                <input type="checkbox" name="sameprimaryno" id="sameprimaryno">Same as Parimary
+                No</label>
+            <br><br>
+
+            <select class="form-control" name="whatsapp_country_code" id="whatsapp_country_code"></select>
+            <input type="number" class="form-control" placeholder="Whatsapp No" name="contact_whatsapp_no" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" id="contact_whatsapp_no">
+            <br><br>
+        </div>
+
+        <!-- step 5 satsang details -->
+        <fieldset>
+            <h4 class="form-section">Satsang Network</h4>
+
+            <div class="satsang_network">
+                <label for="satasangi_since">Satasangi Since</label>
+                <input type="hidden" name="hidden_satasangi_since" id="hidden_satasangi_since">
+                <select class="form-control" name="satasangi_since" id="satasangi_since"></select>
+                <br>
+
+                <label for="satsang_remark">Remarks</label>
+                <textarea class="form-control" name="satsang_remark" placeholder="Remark" id="satsang_remark"></textarea>
+                <br>
+                <label for="other_achievement">Goshthi Group</label>
+                <select class="form-control chosen-select" name="gosthi_group_id" id="addgosthi"></select>
+                <br>
+                <label for="achievement_remarks">Goshthi Status</label>
+                <select class="form-control chosen-select" name="gosthi_group_status">
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </select> <br>
+
+                <label for="goshthi_status_remark">Goshthi Status Remarks</label>
+                <textarea class="form-control" name="goshthi_status_remark" placeholder="Goshthi Status Remarks" id="goshthi_status_remark"></textarea>
+                <br>
+            </div>
+
+            <hr>
+
+            <h4 class="form-section">Satsang Seva</h4>
+            <div class="satsang_seva">
+                <input type="hidden" id="current_table_row_satsang">
+                <table class="table table-bordered table-striped" id="satsangInvoice">
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Designation</th>
+                            <th>Details</th>
+                            <th><i class="fa fa-flash"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="m-0 p-0">
+                                <select class="form-control" id="satsang_activity_id" name="satsang_activity_id[]"></select>
+                            </td>
+                            <td class="m-0 p-0">
+                                <select class="form-control" id="satsang_designation_id" name="satsang_designation_id[]"></select>
+                            </td>
+                            <td class="m-0 p-0"><input type="text" name="seva_details[]" class="form-control">
+                            </td>
+                            <td class="m-0 p-0 text-center">
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-success btn-block" onclick="insertSatsang()"><i class="fa fa-plus-circle"></i>Add New Satsang Seva</button>
+
+            </div>
+            <br />
+        </fieldset>
+
+
+
+    </form>
+
+    <script>
+        // ----------------- Load Batches -----------------
+        function loadBatches(selectId) {
+            fetch('/talim_batch/list')
+                .then(res => res.json())
+                .then(batches => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Batch --</option>';
+                    batches.forEach(batch => {
+                        const option = document.createElement('option');
+                        option.value = batch.talim_batch_id;
+                        option.textContent = batch.talim_year + ' - ' + batch.talim_batch;
+                        select.appendChild(option);
+                    });
+                });
+        }
+        loadBatches('addbatch');
+
+        // When Talim Batch changes, regenerate YTK ID
+        document.getElementById('addbatch').addEventListener('change', function() {
+            generateYtkID();
+        });
+
+        // ----------------- Generate YTK ID -----------------
+        function generateYtkID() {
+            const sevak_no = document.getElementById("sevak_no").value;
+            const talim_batch_id = document.getElementById("addbatch").value;
+            if (!sevak_no || !talim_batch_id) return;
+
+            fetch("/SevakRegistration/generateYtkID", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        sevak_no,
+                        talim_batch_id,
+                        sevak_id: 0
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("ytk_id").value = data.ytk_id || "";
+                    if (data.is_sevak_duplicate === "Y") {
+                        document.getElementById("is_sevak_duplicate").style.display = "block";
+                        document.getElementById("sevak_no").classList.add("border-danger");
+                    } else {
+                        document.getElementById("is_sevak_duplicate").style.display = "none";
+                        document.getElementById("sevak_no").classList.remove("border-danger");
+                    }
+                });
+        }
+
+
+        // ----------------- Load Selects -----------------
+        function loadSelect(url, selectId, textKey, valueKey) {
+            fetch(url)
+                .then(res => res.json())
+                .then(items => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = `<option value="">-- Select --</option>`;
+                    items.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item[valueKey];
+                        option.textContent = item[textKey];
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        loadSelect('/city/list', 'addcity', 'city_name', 'city_id');
+        loadSelect('/city/list', 'per_city', 'city_name', 'city_id');
+        loadSelect('/city/list', 'talim_city', 'city_name', 'city_id');
+        loadSelect('/kshetra/list', 'current_kshetra', 'kshetra_name', 'kshetra_id');
+        loadSelect('/kshetra/list', 'kshetra', 'kshetra_name', 'kshetra_id');
+        loadSelect('/kshetra/list', 'talim_kshetra', 'kshetra_name', 'kshetra_id');
+        loadSelect('/kshetra/list', 'talim_kshetra', 'kshetra_name', 'kshetra_id');
+        loadSelect('/city/list', 'sat_ref_city_id', 'city_name', 'city_id');
+        loadSelect('/degree/list', 'adddegree', 'degree', 'degree_id');
+        loadSelect('/specialization/list', 'addspecialization', 'specialization', 'specialization_id');
+        loadSelect('/employment/list', 'employment_ids', 'employment_name', 'employment_id');
+        loadSelect('/relationship/list', 'relationship_ids', 'relationship_name', 'relationship_id');
+        loadSelect('/caste/list', 'addcaste', 'caste_name', 'caste_id');
+        loadSelect('/category/list', 'addcategory', 'category_name', 'category_id');
+        loadSelect('/blood_group/list', 'addbloodgroup', 'blood_group_name', 'blood_group_id');
+        loadSelect('/marital_status/list', 'addmaritalstatus', 'marital_status_name', 'marital_status_id');
+        // loadSelect('/gosthi/list', 'addgosthi', 'gosthi_name', 'gosthi_id');
+        loadSelect('/satsang_activity/list', 'satsang_activity_id', 'satsang_activity_name', 'satsang_activity_id');
+
+        function loadCountryCode(selectId) {
+            fetch('/country/list')
+                .then(res => res.json())
+                .then(countries => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select country code --</option>';
+                    countries.forEach(country => {
+                        const option = document.createElement('option');
+                        option.value = country.dialing_code;
+                        option.textContent = country.country_name + ' - ' + country.dialing_code;
+                        select.appendChild(option);
+                    });
+                });
+        }
+        loadCountryCode('sat_ref_mobile_country_code');
+        loadCountryCode('family_country_code');
+        loadCountryCode('mobile1_country_code');
+        loadCountryCode('mobile2_country_code');
+        loadCountryCode('whatsapp_country_code');
+
+        // ---------------- Load Talim Batch for satsangi referee ----------------
+        function loadsatsangi_batch_id(selectId, selectedValue = null) {
+            fetch('/talim_batch/list')
+                .then(res => res.json())
+                .then(batches => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Batch --</option>';
+
+                    batches.forEach(batch => {
+                        const option = document.createElement('option');
+                        option.value = batch.talim_batch_id;
+                        option.textContent = `${batch.talim_year} - ${batch.talim_batch}`;
+
+                        if (selectedValue && selectedValue == batch.talim_batch_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+                })
+                .catch(err => console.error("Error loading Talim Batch:", err));
+        }
+        loadsatsangi_batch_id('satsangi_batch_id');
+
+        document.getElementById('satsangi_batch_id').addEventListener('change', function() {
+            const batchId = this.value;
+            getSatsangiSevak(batchId, 'satsangi_sevak_id');
+        });
+
+        function getSatsangiSevak(talim_batch_id, selectId, selectedValue = null, callback = null) {
+            if (!talim_batch_id) {
+                document.getElementById(selectId).innerHTML = '<option value="">-- Select Sevak --</option>';
+                return;
+            }
+
+            fetch(`/common/getSevakByBatch?batch_id=${talim_batch_id}`)
+                .then(res => res.json())
+                .then(sevaks => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Sevak --</option>';
+
+                    sevaks.forEach(s => {
+                        const option = document.createElement('option');
+                        option.value = s.sevak_id;
+                        option.textContent = s.first_name + " " + s.last_name;
+
+                        if (selectedValue && selectedValue == s.sevak_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+
+                    if (typeof callback === "function") callback();
+                })
+                .catch(err => console.error("Error loading Sevaks:", err));
+        }
+
+        // ---------------- Load Talim Batch for inspired referee ----------------
+        function loadinpired_batch_id(selectId, selectedValue = null) {
+            fetch('/talim_batch/list')
+                .then(res => res.json())
+                .then(batches => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Batch --</option>';
+
+                    batches.forEach(batch => {
+                        const option = document.createElement('option');
+                        option.value = batch.talim_batch_id;
+                        option.textContent = `${batch.talim_year} - ${batch.talim_batch}`;
+
+                        if (selectedValue && selectedValue == batch.talim_batch_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+                })
+                .catch(err => console.error("Error loading Talim Batch:", err));
+        }
+        loadinpired_batch_id('inpired_batch_id');
+
+        document.getElementById('inpired_batch_id').addEventListener('change', function() {
+            const batchId = this.value;
+            getinspiredSevak(batchId, 'inspired_sevak_id');
+        });
+
+        function getinspiredSevak(talim_batch_id, selectId, selectedValue = null, callback = null) {
+            if (!talim_batch_id) {
+                document.getElementById(selectId).innerHTML = '<option value="">-- Select Sevak --</option>';
+                return;
+            }
+
+            fetch(`/common/getSevakByBatch?batch_id=${talim_batch_id}`)
+                .then(res => res.json())
+                .then(sevaks => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Sevak --</option>';
+
+                    sevaks.forEach(s => {
+                        const option = document.createElement('option');
+                        option.value = s.sevak_id;
+                        option.textContent = s.first_name + " " + s.last_name;
+
+                        if (selectedValue && selectedValue == s.sevak_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+
+                    if (typeof callback === "function") callback();
+                })
+                .catch(err => console.error("Error loading Sevaks:", err));
+        }
+
+
+        function getinspiredSevak(talim_batch_id, selectId, selectedValue = null, callback = null) {
+            if (!talim_batch_id) {
+                document.getElementById(selectId).innerHTML = '<option value="">-- Select Sevak --</option>';
+                return;
+            }
+
+            fetch(`/common/getSevakByBatch?batch_id=${talim_batch_id}`)
+                .then(res => res.json())
+                .then(sevaks => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Sevak --</option>';
+
+                    sevaks.forEach(s => {
+                        const option = document.createElement('option');
+                        option.value = s.sevak_id;
+                        option.textContent = s.first_name + " " + s.last_name;
+
+                        if (selectedValue && selectedValue == s.sevak_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+
+                    if (typeof callback === "function") callback();
+                })
+                .catch(err => console.error("Error loading Sevaks:", err));
+        }
+
+
+        // ----------------- City Change -----------------
+        function handleCityChange(cityId, areaSelectId, pincodeSelectId, prefix = '') {
+            if (!cityId) return;
+
+            // Areas
+            fetch(`/common/getcityareabycity?city_id=${cityId}`)
+                .then(res => res.json())
+                .then(cityAreas => {
+                    const areaSelect = document.getElementById(areaSelectId);
+                    areaSelect.innerHTML = '<option value="">-- Select City Area --</option>';
+                    cityAreas.forEach(ca => {
+                        const option = document.createElement('option');
+                        option.value = ca.city_area_id;
+                        option.textContent = ca.area_name;
+                        areaSelect.appendChild(option);
+                    });
+                });
+
+            // Pincode
+            fetch(`/common/getpincodebycity?city_id=${cityId}`)
+                .then(res => res.json())
+                .then(pincodes => {
+                    const pincodeSelect = document.getElementById(pincodeSelectId);
+                    pincodeSelect.innerHTML = '<option value="">-- Select Pincode --</option>';
+                    pincodes.forEach(pin => {
+                        const option = document.createElement('option');
+                        option.value = pin.pin_id;
+                        option.textContent = pin.pincode;
+                        pincodeSelect.appendChild(option);
+                    });
+                });
+
+            // Taluka/District/State/Country
+            fetch(`/common/getcitydetails?city_id=${cityId}`)
+                .then(res => res.json())
+                .then(details => {
+                    if (!details || details.length === 0) return;
+                    const d = details[0];
+
+                    document.getElementById(prefix + 'taluka_name').value = d.taluka_name || "";
+                    document.getElementById(prefix + 'taluka_id').value = d.taluka_id || "";
+
+                    document.getElementById(prefix + 'district_name').value = d.district_name || "";
+                    document.getElementById(prefix + 'district_id').value = d.district_id || "";
+
+                    document.getElementById(prefix + 'state_name').value = d.state_name || "";
+                    document.getElementById(prefix + 'state_id').value = d.state_id || "";
+
+                    document.getElementById(prefix + 'country_name').value = d.country_name || "";
+                    document.getElementById(prefix + 'country_id').value = d.country_id || "";
+                });
+        }
+
+        document.getElementById('addcity').addEventListener('change', () =>
+            handleCityChange(document.getElementById('addcity').value, 'addcityarea', 'addpincode', '')
+        );
+        document.getElementById('per_city').addEventListener('change', () =>
+            handleCityChange(document.getElementById('per_city').value, 'per_city_area', 'per_pincode', 'per_')
+        );
+        document.getElementById('talim_city').addEventListener('change', () =>
+            handleCityChange(document.getElementById('talim_city').value, 'talim_city_area', 'talim_pincode', 'talim_')
+        );
+
+        // ----------------- Kshetra Change -----------------
+        function handleKshetraChange(selectId, prefix = '') {
+            const kshetraSelect = document.getElementById(selectId);
+            kshetraSelect.addEventListener('change', function() {
+                const kshetra_id = this.value;
+                if (!kshetra_id) return;
+
+                fetch(`/common/getkshetradetails?kshetra_id=${kshetra_id}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data || data.length === 0) return;
+                        const k = data[0];
+
+                        document.getElementById(prefix + 'sant_nirdeshak').value = k.sant_nirdeshak_name || "";
+                        document.getElementById(prefix + 'sant_nirdeshak_id').value = k.sant_nirdeshak_id || "";
+
+                        document.getElementById(prefix + 'nirdeshak').value = k.nirdeshak_name || "";
+                        document.getElementById(prefix + 'nirdeshak_id').value = k.nirdeshak_id || "";
+
+                        document.getElementById(prefix + 'mandir').value = k.mandir_name || "";
+                        document.getElementById(prefix + 'mandir_id').value = k.mandir_id || "";
+
+                        document.getElementById(prefix + 'mandir_type').value = k.mandir_type || "";
+                    });
+            });
+        }
+
+        handleKshetraChange('current_kshetra', 'current_');
+        handleKshetraChange('kshetra', '');
+        handleKshetraChange('talim_kshetra', 'talim_');
+
+        // ----------------- Checkbox Logic -----------------
+        $('#is_perm_add').change(function() {
+            if (this.checked) {
+                $('#permanent_address').hide();
+            } else {
+                $('#permanent_address').show();
+            }
+        }).prop('checked', true).trigger('change');
+
+        $('#is_talim_add').change(function() {
+            if (this.checked) {
+                $('#talim_address').hide();
+            } else {
+                $('#talim_address').show();
+            }
+        }).prop('checked', true).trigger('change');
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const ytkCheckbox = document.getElementById("ytk_sevak_satsangi");
+            const ytkFields = document.getElementById("ytk_sevak_fields");
+            const refFields = document.getElementById("ref_fields");
+
+            function toggleFields() {
+                if (ytkCheckbox.checked) {
+                    ytkFields.style.display = "block";
+                    refFields.style.display = "none";
+                } else {
+                    ytkFields.style.display = "none";
+                    refFields.style.display = "block";
+                }
+            }
+            // Bind change event
+            ytkCheckbox.addEventListener("change", toggleFields);
+            // Run once on page load (in case editing an existing record)
+            toggleFields();
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const ytkCheckbox1 = document.getElementById("ytk_sevak_inspired");
+            const ytkFields = document.getElementById("ytk_inspired_fields");
+            const refFields = document.getElementById("ins_ref_fields");
+
+            function toggleFields() {
+                if (ytkCheckbox1.checked) {
+                    ytkFields.style.display = "block";
+                    refFields.style.display = "none";
+                } else {
+                    ytkFields.style.display = "none";
+                    refFields.style.display = "block";
+                }
+            }
+            // Bind change event
+            ytkCheckbox1.addEventListener("change", toggleFields);
+            // Run once on page load (in case editing an existing record)
+            toggleFields();
+        });
+
+        // ---------------- Education ----------------
+        function insertEducation() {
+            let current_table_row_education = parseInt($('#current_table_row_education').val() || 0);
+
+            current_table_row_education++;
+            let table = document.getElementById("educationInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+
+            cell1.innerHTML = `<select class="form-control" name="degree_id[]" id="degree_id_${current_table_row_education}" required>
+                                <option value="">-- Select Degree --</option>
+                            </select>`;
+            cell2.innerHTML = `<select class="form-control" name="specialization_id[]" id="specialization_id_${current_table_row_education}">
+                                <option value="">-- Select Specialization --</option>
+                            </select>`;
+            cell3.innerHTML = `<input type="text" name="edu_remark[]" class="form-control" style="padding:1px">`;
+            cell4.innerHTML = `<a href="#" onclick="DeleteEducationRow(this, event)"><i class="fa fa-trash-o"></i> Delete</a>
+`;
+
+            $('#current_table_row_education').val(current_table_row_education);
+
+            // Reload dropdowns dynamically
+            loadSelect('/degree/list', `degree_id_${current_table_row_education}`, 'degree', 'degree_id');
+            loadSelect('/specialization/list', `specialization_id_${current_table_row_education}`, 'specialization', 'specialization_id');
+        }
+
+        function DeleteEducationRow(r, e) {
+            e.preventDefault(); // stop page from jumping
+            let i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("educationInvoice").deleteRow(i);
+        }
+
+        // ---------------- Employment ----------------
+        function insertEmployment() {
+            let current_table_row_employment = parseInt($('#current_table_row_employment').val() || 0);
+            current_table_row_employment++;
+
+            let table = document.getElementById("employmentInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+            let cell5 = row.insertCell(4);
+
+            cell1.innerHTML = `<select class="form-control" name="employment_id[]" id="employment_id_${current_table_row_employment}">
+                          <option value="">Select Employment Type</option>
+                       </select>`;
+            cell2.innerHTML = `<input type="text" class="form-control" name="emp_detail[]" style="padding:1px">`;
+            cell3.innerHTML = `<input type="text" class="form-control" name="post_designation[]" style="padding:1px">`;
+            cell4.innerHTML = `<input type="text" class="form-control" name="emp_remark[]" style="padding:1px">`;
+            cell5.innerHTML = `<a href="#" onclick="DeleteEmploymentRow(this, event)"><i class="fa fa-trash-o"></i> Delete</a>`;
+
+            $('#current_table_row_employment').val(current_table_row_employment);
+
+            // reload employment select
+            loadSelect('/employment/list', `employment_id_${current_table_row_employment}`, 'employment_name', 'employment_id');
+        }
+
+        function DeleteEmploymentRow(r, e) {
+            e.preventDefault();
+            let i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("employmentInvoice").deleteRow(i);
+        }
+
+        function insertFamily() {
+            let current_table_row_family = parseInt($('#current_table_row_family').val() || 0);
+            current_table_row_family++;
+
+            let table = document.getElementById("familyInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+            let cell5 = row.insertCell(4);
+            let cell6 = row.insertCell(5);
+            let cell7 = row.insertCell(6);
+
+            cell1.innerHTML = `<select class="form-control" name="relationship_id[]" id="relationship_id_${current_table_row_family}">
+                          <option value="">Select Relationship</option>
+                       </select>`;
+            cell2.innerHTML = `<input type="text" class="form-control" name="family_name[]">`;
+            cell3.innerHTML = `<select class="form-control" name="family_country_code[]" id="family_country_code_${current_table_row_family}">
+                          <option value="">---</option>
+                       </select>`;
+            cell4.innerHTML = `<input type="number" class="form-control number" name="family_mobile[]" maxlength="10" minlength="10" title="Please Enter 10 Digit Mobile No">`;
+            cell5.innerHTML = `<input type="email" class="form-control" name="family_email[]" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">`;
+            cell6.innerHTML = `<input type="text" class="form-control" name="family_occupation[]">`;
+            cell7.innerHTML = `<a href="#" onclick="DeleteFamilyRow(this, event)"><i class="fa fa-trash-o"></i> Delete</a>`;
+
+            $('#current_table_row_family').val(current_table_row_family);
+
+            // reload relationship + country code
+            loadSelect('/relationship/list', `relationship_id_${current_table_row_family}`, 'relationship_name', 'relationship_id');
+            loadCountryCode(`family_country_code_${current_table_row_family}`);
+        }
+
+        function DeleteFamilyRow(r, e) {
+            e.preventDefault();
+            let i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("familyInvoice").deleteRow(i);
+        }
+
+        // ---------------- Satsang Seva ----------------
+        function insertSatsang() {
+            let current_table_row_satsang = parseInt($('#current_table_row_satsang').val() || 0);
+            current_table_row_satsang++;
+
+            let table = document.getElementById("satsangInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+
+            // Activity dropdown
+            cell1.innerHTML = `<select class="form-control" name="satsang_activity_id[]" id="satsang_activity_id_${current_table_row_satsang}">
+                            <option value="">-- Select Activity --</option>
+                       </select>`;
+
+            // Designation dropdown
+            cell2.innerHTML = `<select class="form-control" id="satsang_designation_id_${current_table_row_satsang}" name="satsang_designation_id[]">
+                            <option value="">-- Select Designation --</option>
+                       </select>`;
+
+            // Details input
+            cell3.innerHTML = `<input type="text" class="form-control" name="seva_details[]" style="padding:1px">`;
+
+            // Delete link
+            cell4.innerHTML = `<a href="#" onclick="DeleteSatsangRow(this, event)"><i class="fa fa-trash-o"></i> Delete</a>`;
+
+            $('#current_table_row_satsang').val(current_table_row_satsang);
+
+            // Load activities dynamically
+            loadSelect('/satsang_activity/list', `satsang_activity_id_${current_table_row_satsang}`, 'satsang_activity_name', 'activity_id');
+
+            // Add event listener for this specific activity dropdown
+            document.getElementById(`satsang_activity_id_${current_table_row_satsang}`)
+                .addEventListener('change', function() {
+                    const satsang_activity_id = this.value;
+                    getSatsangDesignation(satsang_activity_id, `satsang_designation_id_${current_table_row_satsang}`);
+                });
+        }
+
+        function DeleteSatsangRow(r, e) {
+            e.preventDefault(); // prevent page jump
+            let i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("satsangInvoice").deleteRow(i);
+        }
+
+
+        document.getElementById('satsang_activity_id').addEventListener('change', function() {
+            const satsang_activity_id = this.value;
+            getSatsangDesignation(satsang_activity_id, 'satsangi_sevak_id');
+        });
+
+        // Load Satsang Designation for Satsang Activity
+
+        document.getElementById('satsang_activity_id').addEventListener('change', function() {
+            const satsang_activity_id = this.value;
+            getSatsangDesignation(satsang_activity_id, 'satsang_designation_id');
+        });
+
+        function getSatsangDesignation(satsang_activity_id, selectId, selectedValue = null, callback = null) {
+            if (!satsang_activity_id) {
+                document.getElementById(selectId).innerHTML = '<option value="">-- Select Designation --</option>';
+                return;
+            }
+
+            fetch(`/common/getSatsangDesignation?satsang_activity_id=${satsang_activity_id}`)
+                .then(res => res.json())
+                .then(designations => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Designation --</option>';
+
+                    designations.forEach(d => {
+                        const option = document.createElement('option');
+                        option.value = d.satsang_designation_id;
+                        option.textContent = d.satsang_designation_name;
+
+                        if (selectedValue && selectedValue == d.satsang_designation_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+
+                    if (typeof callback === "function") callback();
+                })
+                .catch(err => console.error("Error loading Designations:", err));
+        }
+
+
+        $(document).ready(function() {
+            $('#sameprimaryno').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#whatsapp_country_code').val($('#mobile1_country_code').val());
+                    $('#contact_whatsapp_no').val($('#contact_mobile1').val());
+                } else {
+                    $('#whatsapp_country_code').val('');
+                    $('#contact_whatsapp_no').val('');
+                }
+            });
+        });
+
+        $('#maritalStatusDate').hide();
+
+        $('#addmaritalstatus').on('change', function() {
+            const val = $(this).val();
+
+            if (val === "3") { // Engaged
+                $('#maritalStatusDate').show();
+                $('#marital_date').prop('required', true);
+                $('#engagedDate').show();
+                $('#marriedDate').hide();
+            } else if (val === "2") { // Married
+                $('#maritalStatusDate').show();
+                $('#marital_date').prop('required', true);
+                $('#marriedDate').show();
+                $('#engagedDate').hide();
+            } else { // Single, Divorced, etc.
+                $('#maritalStatusDate, #engagedDate, #marriedDate').hide();
+                $('#marital_date').prop('required', false);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

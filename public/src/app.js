@@ -128,6 +128,13 @@ app.use("/sant_karyakar_designation", SantKaryakarDesignationRoutes);
 const GosthiTypeRoutes = require("./routes/GosthiTypeRoutes.js");
 app.use("/gosthi_type", GosthiTypeRoutes);
 
+
+
+
+// Mount sevak registration routes
+const SevakRegistrationRoutes = require("./routes/SevakRegistrationRoutes.js");
+app.use("/SevakRegistration", SevakRegistrationRoutes);
+
 // Root route
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "view", "dashboard.html"));
