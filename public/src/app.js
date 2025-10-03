@@ -128,7 +128,9 @@ app.use("/sant_karyakar_designation", SantKaryakarDesignationRoutes);
 const GosthiTypeRoutes = require("./routes/GosthiTypeRoutes.js");
 app.use("/gosthi_type", GosthiTypeRoutes);
 
-
+// Mount gosthi group routes
+const GosthiGroupRoutes = require("./routes/GosthiGroupRoutes.js");
+app.use("/gosthigroup", GosthiGroupRoutes);
 
 
 // Mount sevak registration routes

@@ -35,6 +35,30 @@ static async getAll() {
     return rows[0]; // single row
   }
 
+
+
+
+  // adding sevak master
+     static async checkDuplicateSevak(talim_batch_id, sevak_no) {
+    const [rows] = await pool.execute(
+      "SELECT * FROM sevak_master WHERE talim_batch_id = ? AND sevak_no = ? AND is_deleted = 'N'",
+      [talim_batch_id, sevak_no]
+    );
+    return rows;
+  }
+
+  static async insert(table, data) {
+    const [result] = await pool.execute(`INSERT INTO ${table} SET ?`, [data]);
+    return result.insertId;
+  }
+
+  static async insertMultiple(table, records) {
+    for (let record of records) {
+      await pool.execute(`INSERT INTO ${table} SET ?`, [record]);
+    }
+  }
+
+
   
 
 

@@ -8,9 +8,14 @@ gosthi_pravachan_detail - FK - pravachan_sevak_id
 
 
 THINGS I NEED TO DO ASAP
-- In sevak registration satsangi since dropdown
-- satsang designation in satsang seva it will show in the first one but when i add another 
-  activity it wont show in the other one
+
+************SEVAK REGISTRATION************
+- shikhar_mandir_id
+-withIndiaDiv and  withoutIndiaDiv
+
+permamnent address same as current address
+talim address same as current address
+
 
 1) in sevak_master there is batch_id where does it link to?
 2) what is the use of batch_code_master table

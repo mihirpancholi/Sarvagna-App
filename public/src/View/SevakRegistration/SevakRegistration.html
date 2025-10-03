@@ -20,7 +20,7 @@
             <br>
 
             <label>Talim Batch:</label>
-            <select id="addbatch"></select>
+            <select id="addbatch" name="talim_batch_id"></select>
             <br>
 
             <label>YTK ID:</label>
@@ -65,7 +65,7 @@
                 <label for="marital_status_id" id="marriedDate">
                     Marriage Date :
                 </label>
-                <input type="text" class="form-control datepicker" id="marital_date" name="marital_date" autocomplete="off">
+                <input type="date" id="marital_date" name="marital_date" autocomplete="off">
 
             </div><br>
 
@@ -82,32 +82,66 @@
             <input type="text" id="address" name="address1"><br>
 
             <label>City:</label>
-            <select id="addcity"></select><br>
+            <select id="addcity" name="city_id"></select><br>
 
             <label>City Area:</label>
-            <select id="addcityarea"></select><br>
+            <select id="addcityarea" name="city_area_id"></select><br>
 
             <label>Pincode:</label>
-            <select id="addpincode"></select><br>
+            <select id="addpincode" name="pincode"></select><br>
 
             <label>Taluka:</label>
             <input type="text" id="taluka_name" readonly>
-            <input type="hidden" id="taluka_id"><br>
+            <input type="hidden" id="taluka_id" name="taluka_id"><br>
 
             <label>District:</label>
             <input type="text" id="district_name" readonly>
-            <input type="hidden" id="district_id"><br>
+            <input type="hidden" id="district_id" name="district_id"><br>
 
             <label>State:</label>
             <input type="text" id="state_name" readonly>
-            <input type="hidden" id="state_id"><br>
+            <input type="hidden" id="state_id" name="state_id"><br>
 
             <label>Country:</label>
             <input type="text" id="country_name" readonly>
-            <input type="hidden" id="country_id"><br><br>
+            <input type="hidden" id="country_id" name="country_id"><br><br>
+
+
+            <!-- Mandir Section () -->
+            <div id="withoutIndiaDiv">
+                <label for="current_kshetra_id">
+                    Shikharbaddh Mandir:
+                </label>
+                <select class="form-control" name="shikhar_mandir_id" id="shikhar_mandir_id">
+                    <option value="">Select Shikharbaddh Mandir</option>
+                </select>
+                <label for="hari_mandir_id">Hari Mandir :</label>
+                <select class="form-control" name="hari_mandir_id" id="hari_mandir_id">
+                    <option value="">Select Hari Mandir</option>
+                </select>
+                <label for="satsang_mandal_name">Satsang Mandal Name :</label>
+                <input type="text" class="form-control" name="satsang_mandal_name" id="satsang_mandal_name">
+            </div>
             <br><br>
+
+            <div class="current_kshetra_info" id="withIndiaDiv">
+                <label>Current Kshetra:</label>
+                <select id="current_kshetra" name="current_kshetra_id"></select><br>
+                <label>Sant Nirdeshak:</label>
+                <input type="text" id="current_sant_nirdeshak" readonly>
+                <input type="hidden" id="current_sant_nirdeshak_id" name="current_sant_nirdeshak_id"><br>
+                <label>Nirdeshak:</label>
+                <input type="text" id="current_nirdeshak" readonly>
+                <input type="hidden" id="current_nirdeshak_id" name="current_nirdeshak"><br>
+                <label>Mandir:</label>
+                <input type="text" id="current_mandir" readonly>
+                <input type="hidden" id="current_mandir_id" name="current_mandir"><br>
+                <label>Mandir Type:</label>
+                <input type="text" id="current_mandir_type" name="current_mandir_type" readonly><br><br>
+            </div>
+
             <!-- Permanent Address -->
-            <label><input type="checkbox" id="is_perm_add"> Is PERMANENT ADDRESS same
+            <label><input type="checkbox" id="is_perm_add" name="is_perm_add"> Is PERMANENT ADDRESS same
                 as CURRENT ADDRESS</label>
             <div id="permanent_address">
                 <h3>Permanent Address</h3>
@@ -115,115 +149,103 @@
                 <input type="text" id="per_address" name="per_address1"><br>
 
                 <label>City:</label>
-                <select id="per_city"></select><br>
+                <select id="per_city" name="per_city_id"></select><br>
 
                 <label>City Area:</label>
-                <select id="per_city_area"></select><br>
+                <select id="per_city_area" name="per_city_area_id"></select><br>
 
                 <label>Pincode:</label>
-                <select id="per_pincode"></select><br>
+                <select id="per_pincode" name="per_pincode"></select><br>
 
                 <label>Taluka:</label>
                 <input type="text" id="per_taluka_name" readonly>
-                <input type="hidden" id="per_taluka_id"><br>
+                <input type="hidden" id="per_taluka_id" name="per_taluka_id"><br>
 
                 <label>District:</label>
                 <input type="text" id="per_district_name" readonly>
-                <input type="hidden" id="per_district_id"><br>
+                <input type="hidden" id="per_district_id" name="per_district_id"><br>
 
                 <label>State:</label>
                 <input type="text" id="per_state_name" readonly>
-                <input type="hidden" id="per_state_id"><br>
+                <input type="hidden" id="per_state_id" name="per_state_id"><br>
 
                 <label>Country:</label>
                 <input type="text" id="per_country_name" readonly>
-                <input type="hidden" id="per_country_id"><br><br>
+                <input type="hidden" id="per_country_id" name="per_country_id"><br><br>
             </div>
 
             <br><br>
 
             <!-- Talim Address -->
-            <label><input type="checkbox" id="is_talim_add"> Is TALIM ADDRESS same as
-                CURRENT ADDRESS</label>
+            <label><input type="checkbox" id="is_talim_add" name="is_talim_add"> Is TALIM ADDRESS same as CURRENT ADDRESS</label>
             <div id="talim_address">
                 <h3>Talim Address</h3>
                 <label for="talim_address">Address</label>
                 <input type="text" id="talim_address" name="talim_address1"><br>
                 <label>City:</label>
-                <select id="talim_city"></select><br>
+                <select id="talim_city" name="talim_city_id"></select><br>
 
                 <label>City Area:</label>
-                <select id="talim_city_area"></select><br>
+                <select id="talim_city_area" name="talim_city_area_id"></select><br>
 
                 <label>Pincode:</label>
-                <select id="talim_pincode"></select><br>
+                <select id="talim_pincode" name="talim_pincode"></select><br>
 
                 <label>Taluka:</label>
                 <input type="text" id="talim_taluka_name" readonly>
-                <input type="hidden" id="talim_taluka_id"><br>
+                <input type="hidden" id="talim_taluka_id" name="talim_taluka_id"><br>
 
                 <label>District:</label>
                 <input type="text" id="talim_district_name" readonly>
-                <input type="hidden" id="talim_district_id"><br>
+                <input type="hidden" id="talim_district_id" name="talim_district_id"><br>
 
                 <label>State:</label>
                 <input type="text" id="talim_state_name" readonly>
-                <input type="hidden" id="talim_state_id"><br>
+                <input type="hidden" id="talim_state_id" name="talim_state_id"><br>
 
                 <label>Country:</label>
                 <input type="text" id="talim_country_name" readonly>
-                <input type="hidden" id="talim_country_id"><br><br>
+                <input type="hidden" id="talim_country_id" name="talim_country_id"><br><br>
             </div>
             <hr>
+
             <!-- Kshetra Section -->
             <h3>Kshetra Details</h3>
 
-            <div class="current_kshetra_info">
-
-
-                <label>Current Kshetra:</label>
-                <select id="current_kshetra"></select><br>
+            <div id="permanent_kshetra_info">
+                form submitted from <br>
+                <label>Permanent Kshetra:</label>
+                <select id="kshetra" name="kshetra_id"></select><br>
                 <label>Sant Nirdeshak:</label>
-                <input type="text" id="current_sant_nirdeshak" readonly>
-                <input type="hidden" id="current_sant_nirdeshak_id"><br>
+                <input type="text" id="sant_nirdeshak" readonly>
+                <input type="hidden" id="sant_nirdeshak_id" name="sant_nirdeshak"><br>
                 <label>Nirdeshak:</label>
-                <input type="text" id="current_nirdeshak" readonly>
-                <input type="hidden" id="current_nirdeshak_id"><br>
+                <input type="text" id="nirdeshak" readonly>
+                <input type="hidden" id="nirdeshak_id" name="nirdeshak"><br>
                 <label>Mandir:</label>
-                <input type="text" id="current_mandir" readonly>
-                <input type="hidden" id="current_mandir_id"><br>
+                <input type="text" id="mandir" readonly>
+                <input type="hidden" id="mandir_id" name="mandir"><br>
                 <label>Mandir Type:</label>
-                <input type="text" id="current_mandir_type" readonly><br><br>
+                <input type="text" id="mandir_type" readonly name="mandir_type"><br><br>
+
             </div>
 
-            <label>Permanent Kshetra:</label>
-            <select id="kshetra"></select><br>
-            <label>Sant Nirdeshak:</label>
-            <input type="text" id="sant_nirdeshak" readonly>
-            <input type="hidden" id="sant_nirdeshak_id"><br>
-            <label>Nirdeshak:</label>
-            <input type="text" id="nirdeshak" readonly>
-            <input type="hidden" id="nirdeshak_id"><br>
-            <label>Mandir:</label>
-            <input type="text" id="mandir" readonly>
-            <input type="hidden" id="mandir_id"><br>
-            <label>Mandir Type:</label>
-            <input type="text" id="mandir_type" readonly><br><br>
+            <div id="talim_kshetra_info">
 
-            <label>Talim Kshetra:</label>
-            <select id="talim_kshetra"></select><br>
-            <label>Sant Nirdeshak:</label>
-            <input type="text" id="talim_sant_nirdeshak" readonly>
-            <input type="hidden" id="talim_sant_nirdeshak_id"><br>
-            <label>Nirdeshak:</label>
-            <input type="text" id="talim_nirdeshak" readonly>
-            <input type="hidden" id="talim_nirdeshak_id"><br>
-            <label>Mandir:</label>
-            <input type="text" id="talim_mandir" readonly>
-            <input type="hidden" id="talim_mandir_id"><br>
-            <label>Mandir Type:</label>
-            <input type="text" id="talim_mandir_type" readonly><br><br>
-
+                <label>Talim Kshetra:</label>
+                <select id="talim_kshetra" name="talim_kshetra_id"></select><br>
+                <label>Sant Nirdeshak:</label>
+                <input type="text" id="talim_sant_nirdeshak" readonly>
+                <input type="hidden" id="talim_sant_nirdeshak_id" name="talim_sant_nirdeshak"><br>
+                <label>Nirdeshak:</label>
+                <input type="text" id="talim_nirdeshak" readonly>
+                <input type="hidden" id="talim_nirdeshak_id" name="talim_nirdeshak"><br>
+                <label>Mandir:</label>
+                <input type="text" id="talim_mandir" readonly>
+                <input type="hidden" id="talim_mandir_id" name="talim_mandir"><br>
+                <label>Mandir Type:</label>
+                <input type="text" id="talim_mandir_type" name="talim_mandir_type" readonly><br><br>
+            </div>
 
 
             <div class="satsangi_referee">
@@ -246,15 +268,15 @@
 
                 <div id="ref_fields" style="margin-top:10px;">
                     <label for="sat_ref_name">Name :</label>
-                    <input type="text" class="form-control" name="sat_ref_name" id="sat_ref_name" placeholder="Name"> <br>
+                    <input type="text" name="sat_ref_name" id="sat_ref_name" placeholder="Name"> <br>
 
                     <label for="sat_ref_city_id">City/Village :</label>
                     <select name="sat_ref_city_id" id="sat_ref_city_id"></select> <br>
 
                     <label for="sat_ref_mobile">Mobile No : </label>
-                    <select class="form-control" name="sat_ref_mobile_country_code" id="sat_ref_mobile_country_code"></select>
+                    <select name="sat_ref_mobile_country_code" id="sat_ref_mobile_country_code"></select>
 
-                    <input type="number" class="form-control" name="sat_ref_mobile" id="sat_ref_mobile" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
+                    <input type="number" name="sat_ref_mobile" id="sat_ref_mobile" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
                 </div>
 
             </div>
@@ -279,274 +301,655 @@
 
                 <div id="ins_ref_fields" style="margin-top:10px;">
                     <label for="ins_by_name">Name :</label>
-                    <input type="text" class="form-control" name="ins_by_name" id="ins_by_name" placeholder="Name"> <br>
+                    <input type="text" name="ins_by_name" id="ins_by_name" placeholder="Name"> <br>
 
                     <label for="ins_by_city_id">City/Village :</label>
                     <select name="ins_by_city_id" id="ins_by_city_id"></select> <br>
 
                     <label for="ins_by_mobile">Mobile No : </label>
-                    <select class="form-control" name="ins_by_country_code" id="ins_by_country_code"></select>
+                    <select name="ins_by_country_code" id="ins_by_country_code"></select>
 
-                    <input type="number" class="form-control" name="ins_by_mobile" id="ins_by_mobile" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
+                    <input type="number" name="ins_by_mobile" id="ins_by_mobile" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
                 </div>
 
             </div>
 
         </fieldset>
-        <hr> <!-- step 2 -->
+        <hr>
+        <button type="submit" value="Submit" name="submit">Submit</button>
 
-        <h4 class="form-section">Education</h4>
 
-        <div class="education_section">
+    </form>
+    <!-- step 2 -->
 
-            <input type="hidden" id="current_table_row_education">
-            <table class="table table-bordered table-striped" id="educationInvoice">
-                <thead>
-                    <tr>
-                        <th>Degree</th>
-                        <th>Specialization</th>
-                        <th>Remark</th>
-                        <th><i class="fa fa-flash"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
+    <h4>Education</h4>
 
-                    <tr>
-                        <td class="m-0 p-0">
-                            <select name="degree_id[]" id="adddegree" required></select>
-                        </td>
-                        <td class="m-0 p-0">
-                            <select class="form-control" name="specialization_id[]" id="addspecialization"></select>
-                        </td>
-                        <td class="m-0 p-0">
-                            <input type="text" style="padding: 1px" name="edu_remark[]" class="form-control">
-                        </td>
-                        <td class="m-0 p-0 text-center"></td>
+    <div class="education_section">
 
-                    </tr>
+        <input type="hidden" id="current_table_row_education">
+        <table class="table table-bordered table-striped" id="educationInvoice">
+            <thead>
+                <tr>
+                    <th>Degree</th>
+                    <th>Specialization</th>
+                    <th>Remark</th>
+                    <th><i class="fa fa-flash"></i></th>
+                </tr>
+            </thead>
+            <tbody>
 
-                </tbody>
-            </table>
+                <tr>
+                    <td class="m-0 p-0">
+                        <select name="degree_id[]" id="adddegree" required></select>
+                    </td>
+                    <td class="m-0 p-0">
+                        <select name="specialization_id[]" id="addspecialization"></select>
+                    </td>
+                    <td class="m-0 p-0">
+                        <input type="text" name="edu_remark[]">
+                    </td>
+                    <td class="m-0 p-0 text-center"></td>
 
-            <button type="button" class="btn btn-success btn-block pull-right" onclick="insertEducation()"><i class="fa fa-plus-circle"></i>
-                Add New Education
-            </button>
+                </tr>
 
-            <h4 class="form-section"><i class="fa fa-user"></i>
-                Employment</h4>
-            <input type="hidden" id="current_table_row_employment">
-            <table class="table table-bordered table-striped" id="employmentInvoice">
-                <thead>
-                    <tr>
-                        <th>Employment Type</th>
-                        <th>Detail</th>
-                        <th>Post/Designation</th>
-                        <th>Remark</th>
-                        <th><i class="fa fa-flash"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
+            </tbody>
+        </table>
 
-                    <tr>
-                        <td class="m-0 p-0">
-                            <select class="form-control" name="employment_id[]" id="employment_ids">
-                                <option value="">Select Employment
-                                    Type
-                                </option>
-                            </select>
-                        </td>
-                        <td class="m-0 p-0">
-                            <input type="text" class="form-control" name="emp_detail[]" id="emp_details" style="padding: 1px">
-                        </td>
-                        <td class="m-0 p-0">
-                            <input type="text" class="form-control" name="post_designation[]" id="post_designations" style="padding: 1px">
-                        </td>
-                        <td class="m-0 p-0"><input type="text" name="emp_remark[]" id="emp_remarks" class="form-control" style="padding: 1px">
-                        </td>
-                        <td class="m-0 p-0 text-center"></td>
-                    </tr>
-                </tbody>
-            </table>
+        <button type="button" class="btn btn-success btn-block pull-right" onclick="insertEducation()"><i class="fa fa-plus-circle"></i>
+            Add New Education
+        </button>
 
-            <button type="button" class="btn btn-success btn-block addEmpBtn" onclick="insertEmployment()"><i class="fa fa-plus-circle"></i>
-                Add New Employment
-            </button>
-            <br />
+        <h4><i class="fa fa-user"></i>
+            Employment</h4>
+        <input type="hidden" id="current_table_row_employment">
+        <table class="table table-bordered table-striped" id="employmentInvoice">
+            <thead>
+                <tr>
+                    <th>Employment Type</th>
+                    <th>Detail</th>
+                    <th>Post/Designation</th>
+                    <th>Remark</th>
+                    <th><i class="fa fa-flash"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="m-0 p-0">
+                        <select name="employment_id[]" id="employment_ids">
+                            <option value="">Select Employment
+                                Type
+                            </option>
+                        </select>
+                    </td>
+                    <td class="m-0 p-0">
+                        <input type="text" name="emp_detail[]" id="emp_details">
+                    </td>
+                    <td class="m-0 p-0">
+                        <input type="text" name="post_designation[]" id="post_designations">
+                    </td>
+                    <td class="m-0 p-0"><input type="text" name="emp_remark[]" id="emp_remarks">
+                    </td>
+                    <td class="m-0 p-0 text-center"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="button" class="btn btn-success btn-block addEmpBtn" onclick="insertEmployment()"><i class="fa fa-plus-circle"></i>
+            Add New Employment
+        </button>
+        <br />
+    </div>
+
+    <!-- Step 3 -->
+
+    <h4>Family Detail</h4>
+    <div class="family_details">
+        <input type="hidden" id="current_table_row_family">
+        <table class="table table-bordered table-striped" id="familyInvoice">
+            <thead>
+                <tr>
+                    <th>Relationship</th>
+                    <th width="30%">Name</th>
+                    <th colspan="2">Mobile</th>
+                    <th width="20%">Email</th>
+                    <th>Occupation</th>
+                    <th><i class="fa fa-flash"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="m-0 p-0">
+                        <select name="relationship_id[]" id="relationship_ids">
+                            <option value="">Select Relationship</option>
+                        </select>
+                    </td>
+                    <td class="m-0 p-0">
+                        <input type="text" name="family_name[]" id="family_names">
+                    </td>
+                    <td class="m-0 p-0" width="15%">
+                        <select name="family_country_code[]" id="family_country_code">
+                            <option value="">---</option>
+                        </select>
+
+                    </td>
+                    <td class="m-0 p-0">
+                        <input type="number" name="family_mobile[]" id="family_mobile" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter Your 10 Dogit Mobile Number.">
+                        <span id="spnError" style="color: Red; display: none">*Valid
+                            characters: Numbers and space.</span>
+                    </td>
+                    <td class="m-0 p-0">
+                        <input type="email" name="family_email[]" id="family_emails" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                    </td>
+                    <td class="m-0 p-0">
+                        <input type="text" name="family_occupation[]" id="family_occupations">
+                    </td>
+                    <td class="m-0 p-0 text-center">
+
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <button type="button" class="btn btn-success btn-block btnAddFamily" onclick="insertFamily()"><i class="fa fa-plus-circle"></i>Add New Member</button>
+    </div>
+    <br />
+
+    <!-- Step 4 -->
+    <h4>Contact</h4>
+
+    <div class="contact">
+        <label for="contact_mobile1">Mobile 1 :</label>
+        <select name="mobile1_country_code" id="mobile1_country_code"></select>
+        <input type="number" name="contact_mobile1" id="contact_mobile1" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 1">
+        <br><br>
+
+        <label for="contact_mobile2">Mobile 2 :</label>
+        <select name="mobile2_country_code" id="mobile2_country_code"></select>
+        <input type="number" name="contact_mobile2" id="contact_mobile2" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 2">
+        <br><br>
+
+        <label for="contact_phone_1">Office Phone 1 :</label>
+        <input type="text" name="contact_phone_1" id="contact_phone_1" placeholder="Office Phone 1">
+        <br><br>
+
+        <label for="contact_phone_2">Office Phone 2 :</label>
+        <input type="text" name="contact_phone_2" id="contact_phone_2" placeholder="Office Phone 2">
+        <br><br>
+
+        <label for="contact_res_phone1">Residence Phone 1 :</label>
+        <input type="text" name="contact_res_phone1" id="contact_res_phone1" placeholder="Residence Phone 1">
+        <br><br>
+
+        <label for="contact_res_phone2">Residence Phone 2 :</label>
+        <input type="text" name="contact_res_phone2" id="contact_res_phone2" placeholder="Residence Phone 2">
+        <br><br>
+
+        <label for="contact_per_mail">Personal Email :</label>
+        <input type="email" name="contact_per_mail" placeholder="Personal Email" id="contact_per_mail">
+        <br><br>
+
+        <label for="contact_bus_mail">Business Email :</label>
+        <input type="email" name="contact_bus_mail" id="contact_bus_mail" placeholder="Business Email">
+        <br><br>
+
+        <label for="contact_whatsapp_no">Whatsapp No :</label>
+        <label for="contact_whatsapp_no">
+            <input type="checkbox" name="sameprimaryno" id="sameprimaryno">Same as Parimary
+            No</label>
+        <br><br>
+
+        <select name="whatsapp_country_code" id="whatsapp_country_code"></select>
+        <input type="number" placeholder="Whatsapp No" name="contact_whatsapp_no" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" id="contact_whatsapp_no">
+        <br><br>
+    </div>
+
+    <!-- step 5 satsang details -->
+    <fieldset>
+        <h4>Satsang Network</h4>
+
+        <div class="satsang_network">
+            <label for="satasangi_since">Satasangi Since</label>
+            <input type="hidden" name="hidden_satasangi_since" id="hidden_satasangi_since">
+            <select name="satasangi_since" id="satasangi_since"></select>
+            <br>
+
+            <label for="satsang_remark">Remarks</label>
+            <textarea name="satsang_remark" placeholder="Remark" id="satsang_remark"></textarea>
+            <br>
+            <label for="other_achievement">Goshthi Group</label>
+            <select name="gosthi_group_id" id="addgosthi"></select>
+            <br>
+            <label for="achievement_remarks">Goshthi Status</label>
+            <select name="gosthi_group_status">
+                <option value="Y">Y</option>
+                <option value="N">N</option>
+            </select> <br>
+
+            <label for="goshthi_status_remark">Goshthi Status Remarks</label>
+            <textarea name="goshthi_status_remark" placeholder="Goshthi Status Remarks" id="goshthi_status_remark"></textarea>
+            <br>
         </div>
 
-        <!-- Step 3 -->
+        <hr>
 
-        <h4 class="form-section">Family Detail</h4>
-        <div class="family_details">
-            <input type="hidden" id="current_table_row_family">
-            <table class="table table-bordered table-striped" id="familyInvoice">
+        <h4>Satsang Seva</h4>
+        <div class="satsang_seva">
+            <input type="hidden" id="current_table_row_satsang">
+            <table class="table table-bordered table-striped" id="satsangInvoice">
                 <thead>
                     <tr>
-                        <th>Relationship</th>
-                        <th width="30%">Name</th>
-                        <th colspan="2">Mobile</th>
-                        <th width="20%">Email</th>
-                        <th>Occupation</th>
+                        <th>Activity</th>
+                        <th>Designation</th>
+                        <th>Details</th>
                         <th><i class="fa fa-flash"></i></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td class="m-0 p-0">
-                            <select class="form-control" name="relationship_id[]" id="relationship_ids">
-                                <option value="">Select Relationship</option>
-                            </select>
+                            <select id="satsang_activity_id" name="satsang_activity_id[]"></select>
                         </td>
                         <td class="m-0 p-0">
-                            <input type="text" class="form-control" name="family_name[]" id="family_names">
+                            <select id="satsang_designation_id" name="satsang_designation_id[]"></select>
                         </td>
-                        <td class="m-0 p-0" width="15%">
-                            <select class="form-control" name="family_country_code[]" id="family_country_code">
-                                <option value="">---</option>
-                            </select>
-
-                        </td>
-                        <td class="m-0 p-0">
-                            <input type="number" class="form-control number" name="family_mobile[]" id="family_mobile" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter Your 10 Dogit Mobile Number.">
-                            <span id="spnError" style="color: Red; display: none">*Valid
-                                characters: Numbers and space.</span>
-                        </td>
-                        <td class="m-0 p-0">
-                            <input type="email" class="form-control" name="family_email[]" id="family_emails" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                        </td>
-                        <td class="m-0 p-0">
-                            <input type="text" class="form-control" name="family_occupation[]" id="family_occupations">
+                        <td class="m-0 p-0"><input type="text" name="seva_details[]">
                         </td>
                         <td class="m-0 p-0 text-center">
 
                         </td>
                     </tr>
-
                 </tbody>
             </table>
 
-            <button type="button" class="btn btn-success btn-block btnAddFamily" onclick="insertFamily()"><i class="fa fa-plus-circle"></i>Add New Member</button>
+            <button type="button" class="btn btn-success btn-block" onclick="insertSatsang()"><i class="fa fa-plus-circle"></i>Add New Satsang Seva</button>
+
         </div>
         <br />
+    </fieldset>
 
-        <!-- Step 4 -->
-        <h4 class="form-section">Contact</h4>
+    <br>
 
-        <div class="contact">
-            <label for="contact_mobile1">Mobile 1 :</label>
-            <select class="form-control" name="mobile1_country_code" id="mobile1_country_code"></select>
-            <input type="number" class="form-control" name="contact_mobile1" id="contact_mobile1" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 1">
-            <br><br>
+    <fieldset>
+        <h4>Talent</h4>
+        <div id="talent_section">
+            <input type="hidden" id="current_table_row_talent">
+            <table class="table table-bordered table-striped" id="talentInvoice">
+                <thead>
+                    <tr>
+                        <th>Talent</th>
+                        <th>Grade</th>
+                        <th>Detail</th>
+                        <th><i class="fa fa-flash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="m-0 p-0">
+                            <select name="talent_id[]" id="talent_id">
+                                <option value="">Select Talent</option>
+                            </select>
+                        </td>
+                        <td class="m-0 p-0">
+                            <select name="grade_id[]" id="grade_id">
+                                <option value="">Select Grade</option>
+                            </select>
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="text" name="talent_detail[]">
+                        </td>
+                        <td class="m-0 p-0 text-center"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-success btn-block" onclick="InsertTalent()"><i class="fa fa-plus-circle"></i>Add New Talent</button>
 
-            <label for="contact_mobile2">Mobile 2 :</label>
-            <select class="form-control" name="mobile2_country_code" id="mobile2_country_code"></select>
-            <input type="number" class="form-control" name="contact_mobile2" id="contact_mobile2" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 2">
-            <br><br>
+            <br />
 
-            <label for="contact_phone_1">Office Phone 1 :</label>
-            <input type="text" class="form-control NoSpace" name="contact_phone_1" id="contact_phone_1" placeholder="Office Phone 1">
-            <br><br>
-
-            <label for="contact_phone_2">Office Phone 2 :</label>
-            <input type="text" class="form-control NoSpace" name="contact_phone_2" id="contact_phone_2" placeholder="Office Phone 2">
-            <br><br>
-
-            <label for="contact_res_phone1">Residence Phone 1 :</label>
-            <input type="text" class="form-control NoSpace" name="contact_res_phone1" id="contact_res_phone1" placeholder="Residence Phone 1">
-            <br><br>
-
-            <label for="contact_res_phone2">Residence Phone 2 :</label>
-            <input type="text" class="form-control NoSpace" name="contact_res_phone2" id="contact_res_phone2" placeholder="Residence Phone 2">
-            <br><br>
-
-            <label for="contact_per_mail">Personal Email :</label>
-            <input type="email" class="form-control" name="contact_per_mail" placeholder="Personal Email" id="contact_per_mail">
-            <br><br>
-
-            <label for="contact_bus_mail">Business Email :</label>
-            <input type="email" class="form-control" name="contact_bus_mail" id="contact_bus_mail" placeholder="Business Email">
-            <br><br>
-
-            <label for="contact_whatsapp_no">Whatsapp No :</label>
-            <label for="contact_whatsapp_no">
-                <input type="checkbox" name="sameprimaryno" id="sameprimaryno">Same as Parimary
-                No</label>
-            <br><br>
-
-            <select class="form-control" name="whatsapp_country_code" id="whatsapp_country_code"></select>
-            <input type="number" class="form-control" placeholder="Whatsapp No" name="contact_whatsapp_no" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" id="contact_whatsapp_no">
-            <br><br>
+            <h4>Achievement</h4>
+            <label for="other_achievement">Other Achievement :</label>
+            <textarea name="other_achievement" id="other_achievement" placeholder="Other Achivement" rows="1"></textarea>
+            <br>
+            <label for="achievement_remarks">Remarks :</label>
+            <textarea name="achievement_remarks" id="achievement_remarks" placeholder="Remarks" rows="1"></textarea>
         </div>
 
-        <!-- step 5 satsang details -->
-        <fieldset>
-            <h4 class="form-section">Satsang Network</h4>
+        <h4> Sevak Status</h4>
 
-            <div class="satsang_network">
-                <label for="satasangi_since">Satasangi Since</label>
-                <input type="hidden" name="hidden_satasangi_since" id="hidden_satasangi_since">
-                <select class="form-control" name="satasangi_since" id="satasangi_since"></select>
-                <br>
+        <!-- only for Admin -->
 
-                <label for="satsang_remark">Remarks</label>
-                <textarea class="form-control" name="satsang_remark" placeholder="Remark" id="satsang_remark"></textarea>
-                <br>
-                <label for="other_achievement">Goshthi Group</label>
-                <select class="form-control chosen-select" name="gosthi_group_id" id="addgosthi"></select>
-                <br>
-                <label for="achievement_remarks">Goshthi Status</label>
-                <select class="form-control chosen-select" name="gosthi_group_status">
-                    <option value="Y">Y</option>
-                    <option value="N">N</option>
-                </select> <br>
+        <div>
+            <button type="button" class="btn btn-success btn-block">
+                <input type="checkbox" name="certified" id="certified"> P-Certified
+            </button>
+            <button type="button" class="btn btn-success btn-block">
+                <input type="checkbox" onclick="notCompleteDiv()" name="not_complete" id="not_complete"> A-Not Complete
+            </button>
+            <button type="button" class="btn btn-success btn-block">
+                <input type="checkbox" onclick="temporaryDiv()" name="temporary" id="temporary"> T-Temporary
+            </button>
+            <button type="button" class="btn btn-success btn-block">
+                <input type="checkbox" onclick="expiredDiv()" name="expired" id="expired">E-Expired
+            </button>
+            <button type="button" class="btn btn-success btn-block">
+                <input type="checkbox" onclick="santInBapsDiv()" name="sant_in_baps" id="sant_in_baps">S-Sant in BAPS
+            </button>
+            <br>
+        </div>
+        <br>
+        <!-- only for Admin -->
 
-                <label for="goshthi_status_remark">Goshthi Status Remarks</label>
-                <textarea class="form-control" name="goshthi_status_remark" placeholder="Goshthi Status Remarks" id="goshthi_status_remark"></textarea>
-                <br>
-            </div>
+        <div id="not_complete_div">
+            <label for="status">Not Complete :</label>
+            <input type="date" id="not_complete_date" title="Select Not Complete" placeholder="dd-mm-yyy (Not Complete Date)" autocomplete="off" name="not_complete_date">
 
-            <hr>
+            <label for="status">Not Complete Remark:</label>
+            <input type="text" id="not_complete_remark" name="not_complete_remark">
+        </div>
+        <!-- only for Admin -->
 
-            <h4 class="form-section">Satsang Seva</h4>
-            <div class="satsang_seva">
-                <input type="hidden" id="current_table_row_satsang">
-                <table class="table table-bordered table-striped" id="satsangInvoice">
-                    <thead>
-                        <tr>
-                            <th>Activity</th>
-                            <th>Designation</th>
-                            <th>Details</th>
-                            <th><i class="fa fa-flash"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="m-0 p-0">
-                                <select class="form-control" id="satsang_activity_id" name="satsang_activity_id[]"></select>
-                            </td>
-                            <td class="m-0 p-0">
-                                <select class="form-control" id="satsang_designation_id" name="satsang_designation_id[]"></select>
-                            </td>
-                            <td class="m-0 p-0"><input type="text" name="seva_details[]" class="form-control">
-                            </td>
-                            <td class="m-0 p-0 text-center">
+        <div id="temporary_div">
+            <label for="status">Temporary :</label>
+            <input type="date" id="temporary_date" title="Select Temporary Date" placeholder="dd-mm-yyy (Temporary Date)" autocomplete="off" name="temporary_date">
+            <label for="status">Temporary Remark:</label>
+            <input type="text" id="temporary_remark" name="temporary_remark">
+        </div>
+        <!-- only for Admin -->
 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div id="expired_div">
+            <label for="status">Expired : </label>
+            <input type="date" id="expired_date" title="Select Expired Date" placeholder="dd-mm-yyy (Expired Date)" autocomplete="off" name="expired_date">
 
-                <button type="button" class="btn btn-success btn-block" onclick="insertSatsang()"><i class="fa fa-plus-circle"></i>Add New Satsang Seva</button>
+            <label for="status">Expired Remark:</label>
+            <input type="text" id="expired_remark" name="expired_remark">
+        </div>
+        <br>
+        <!-- only for Admin -->
 
-            </div>
-            <br />
-        </fieldset>
+        <div id="sant_in_baps_div">
+            <input type="text" placeholder="Name Of Parshad" name="name_of_parshad" id="name_of_parshad">
+            <input type="date" id="parshad_date" placeholder="dd-mm-yyy" name="parshad_date" autocomplete="off">
+            <br>
+            <input type="text" placeholder="Name Of Sant" name="name_of_sant" id="name_of_sant">
+            <input type="date" id="sant_in_baps_date" placeholder="dd-mm-yyy" name="sant_in_baps_date" autocomplete="off">
+        </div>
 
 
+        <div style="display: none">
+            <label for="status">Status :</label>
+            <select name="status[]" multiple id="status" title="Select Status" onchange="toggleStatus(this.value)">
+                <option value="">Select Status</option>
+                <option value="Admitted" id="Admitted">Admitted</option>
+                <option value="Certified" id="Certified">Certified</option>
+                <option value="Not Complete" id="NotComplete">Not Complete</option>
+                <option value="Expired" id="Expired">Expired</option>
+                <option value="Temporary" id="Temporary">Temporary</option>
+                <option value="Sant in BAPS" id="SantinBAPS">Sant in BAPS</option>
+            </select>
+        </div>
+        </div>
 
-    </form>
+        <!-- only for Admin -->
+
+        <label for="status">Role *</label>
+
+        <select name="role_id[]" multiple style="width: 100%" id="role_id" required title="Select Role">
+            <option value="1">Admin</option>
+            <option value="2" readonly selected style="color: red;font-weight: 600">Sevak</option>
+            <option value="3" disabled style="color: red;font-weight: 600">Sanchalak</option>
+            <option value="4" disabled style="color: red;font-weight: 600">Sah Sanchalak</option>
+            <option value="6">Sanyojak</option>
+            <option value="8">Sub Admin</option>
+            <option value="10" disabled style="color: red;font-weight: 600">Nirikshak</option>
+            <option value="12" disabled style="color: red;font-weight: 600">Followup Sahayak</option>
+            <option value="15">Database Operator</option>
+        </select>
+
+        <label for="status">Login Active :</label>
+        <select name="login_active" id="login_active">
+            <option value="Y">Active</option>
+            <option value="N">In Active</option>
+        </select>
+
+    </fieldset>
+
+
 
     <script>
+        // ----------------- Add Zone Modal -----------------
+        document.getElementById('sevakForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const sevak_no = document.getElementById('sevak_no').value;
+            const talim_batch_id = document.getElementById('addbatch').value;
+            const first_name = document.getElementById('first_name').value;
+            const middle_name = document.getElementById('middle_name').value;
+            const last_name = document.getElementById('last_name').value;
+            const birth_date = document.getElementById('birth_date').value;
+            const caste_id = document.getElementById('addcaste').value;
+            const category_id = document.getElementById('addcategory').value;
+            const blood_group_id = document.getElementById('addbloodgroup').value;
+            const gender = document.getElementById('addgender').value;
+            const marital_status_id = document.getElementById('addmaritalstatus').value;
+            const marital_date = document.getElementById('marital_date').value;
+            const sevak_photo = document.getElementById('sevak_photo').value;
+            const latest_photo = document.getElementById('latest_photo').value;
+            const address1 = document.getElementById('address1').value;
+            const city_id = document.getElementById('addcity').value;
+            const city_area_id = document.getElementById('addcityarea').value;
+            const pincode = document.getElementById('addpincode').value;
+            const taluka_id = document.getElementById('taluka_id').value;
+            const district_id = document.getElementById('district_id').value;
+            const state_id = document.getElementById('state_id').value;
+            const country_id = document.getElementById('country_id').value;
+            const shikhar_mandir_id = document.getElementById('shikhar_mandir_id').value;
+            const hari_mandir_id = document.getElementById('hari_mandir_id').value;
+            const satsang_mandal_name = document.getElementById('satsang_mandal_name').value;
+            const current_kshetra_id = document.getElementById('current_kshetra_id').value;
+            const current_sant_nirdeshak_id = document.getElementById('current_sant_nirdeshak_id').value;
+            const current_nirdeshak = document.getElementById('current_nirdeshak').value;
+            const current_mandir = document.getElementById('current_mandir').value;
+            const current_mandir_type = document.getElementById('current_mandir_type').value;
+            const is_perm_add = document.getElementById('is_perm_add').value;
+            const per_address1 = document.getElementById('per_address1').value;
+            const per_city_id = document.getElementById('per_city_id').value;
+            const per_city_area_id = document.getElementById('per_city_area_id').value;
+            const per_pincode = document.getElementById('per_pincode').value;
+            const per_taluka_id = document.getElementById('per_taluka_id').value;
+            const per_district_id = document.getElementById('per_district_id').value;
+            const per_state_id = document.getElementById('per_state_id').value;
+            const per_country_id = document.getElementById('per_country_id').value;
+            const is_talim_add = document.getElementById('is_talim_add').value;
+            const talim_address1 = document.getElementById('talim_address1').value;
+            const talim_city_id = document.getElementById('talim_city_id').value;
+            const talim_city_area_id = document.getElementById('talim_city_area_id').value;
+            const talim_pincode = document.getElementById('talim_pincode').value;
+            const talim_taluka_id = document.getElementById('talim_taluka_id').value;
+            const talim_district_id = document.getElementById('talim_district_id').value;
+            const talim_state_id = document.getElementById('talim_state_id').value;
+            const talim_country_id = document.getElementById('talim_country_id').value;
+            const kshetra_id = document.getElementById('kshetra_id').value;
+            const sant_nirdeshak = document.getElementById('sant_nirdeshak').value;
+            const nirdeshak = document.getElementById('nirdeshak').value;
+            const mandir = document.getElementById('mandir').value;
+            const mandir_type = document.getElementById('mandir_type').value;
+            const talim_kshetra_id = document.getElementById('talim_kshetra_id').value;
+            const talim_sant_nirdeshak = document.getElementById('talim_sant_nirdeshak').value;
+            const talim_nirdeshak = document.getElementById('talim_nirdeshak').value;
+            const talim_mandir = document.getElementById('talim_mandir').value;
+            const talim_mandir_type = document.getElementById('talim_mandir_type').value;
+            const ytk_sevak_satsangi = document.getElementById('ytk_sevak_satsangi').value;
+            const satsangi_batch_id = document.getElementById('satsangi_batch_id').value;
+            const satsangi_sevak_id = document.getElementById('satsangi_sevak_id').value;
+            const sat_ref_name = document.getElementById('sat_ref_name').value;
+            const sat_ref_city_id = document.getElementById('sat_ref_city_id').value;
+            const sat_ref_mobile_country_code = document.getElementById('sat_ref_mobile_country_code').value;
+            const sat_ref_mobile = document.getElementById('sat_ref_mobile').value;
+            const ytk_sevak_inspired = document.getElementById('ytk_sevak_inspired').value;
+            const inspired_batch_id = document.getElementById('inspired_batch_id').value;
+            const inspired_sevak_id = document.getElementById('inspired_sevak_id').value;
+            const ins_by_name = document.getElementById('ins_by_name').value;
+            const ins_by_city_id = document.getElementById('ins_by_city_id').value;
+            const ins_by_country_code = document.getElementById('ins_by_country_code').value;
+            const ins_by_mobile = document.getElementById('ins_by_mobile').value;
+
+
+            fetch('/sevakregistration/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sevak_no,
+                        talim_batch_id,
+                        first_name,
+                        middle_name,
+                        last_name,
+                        birth_date,
+                        caste_id,
+                        category_id,
+                        blood_group_id,
+                        gender,
+                        marital_status_id,
+                        marital_date,
+                        sevak_photo,
+                        latest_photo,
+                        address1,
+                        city_id,
+                        city_area_id,
+                        pincode,
+                        taluka_id,
+                        district_id,
+                        state_id,
+                        country_id,
+                        shikhar_mandir_id,
+                        hari_mandir_id,
+                        satsang_mandal_name,
+                        current_kshetra_id,
+                        current_sant_nirdeshak_id,
+                        current_nirdeshak,
+                        current_mandir,
+                        current_mandir_type,
+                        is_perm_add,
+                        per_address1,
+                        per_city_id,
+                        per_city_area_id,
+                        per_pincode,
+                        per_taluka_id,
+                        per_district_id,
+                        per_state_id,
+                        per_country_id,
+                        is_talim_add,
+                        talim_address1,
+                        talim_city_id,
+                        talim_city_area_id,
+                        talim_pincode,
+                        talim_taluka_id,
+                        talim_district_id,
+                        talim_state_id,
+                        talim_country_id,
+                        kshetra_id,
+                        sant_nirdeshak,
+                        nirdeshak,
+                        mandir,
+                        mandir_type,
+                        talim_kshetra_id,
+                        talim_sant_nirdeshak,
+                        talim_nirdeshak,
+                        talim_mandir,
+                        talim_mandir_type,
+                        ytk_sevak_satsangi,
+                        satsangi_batch_id,
+                        satsangi_sevak_id,
+                        sat_ref_name,
+                        sat_ref_city_id,
+                        sat_ref_mobile_country_code,
+                        sat_ref_mobile,
+                        ytk_sevak_inspired,
+                        inspired_batch_id,
+                        inspired_sevak_id,
+                        ins_by_name,
+                        ins_by_city_id,
+                        ins_by_country_code
+                    })
+                })
+                .then(res => res.json())
+                .then(result => {
+                    console.log(sevak_no,
+                        talim_batch_id,
+                        first_name,
+                        middle_name,
+                        last_name,
+                        birth_date,
+                        caste_id,
+                        category_id,
+                        blood_group_id,
+                        gender,
+                        marital_status_id,
+                        marital_date,
+                        sevak_photo,
+                        latest_photo,
+                        address1,
+                        city_id,
+                        city_area_id,
+                        pincode,
+                        taluka_id,
+                        district_id,
+                        state_id,
+                        country_id,
+                        shikhar_mandir_id,
+                        hari_mandir_id,
+                        satsang_mandal_name,
+                        current_kshetra_id,
+                        current_sant_nirdeshak_id,
+                        current_nirdeshak,
+                        current_mandir,
+                        current_mandir_type,
+                        is_perm_add,
+                        per_address1,
+                        per_city_id,
+                        per_city_area_id,
+                        per_pincode,
+                        per_taluka_id,
+                        per_district_id,
+                        per_state_id,
+                        per_country_id,
+                        is_talim_add,
+                        talim_address1,
+                        talim_city_id,
+                        talim_city_area_id,
+                        talim_pincode,
+                        talim_taluka_id,
+                        talim_district_id,
+                        talim_state_id,
+                        talim_country_id,
+                        kshetra_id,
+                        sant_nirdeshak,
+                        nirdeshak,
+                        mandir,
+                        mandir_type,
+                        talim_kshetra_id,
+                        talim_sant_nirdeshak,
+                        talim_nirdeshak,
+                        talim_mandir,
+                        talim_mandir_type,
+                        ytk_sevak_satsangi,
+                        satsangi_batch_id,
+                        satsangi_sevak_id,
+                        sat_ref_name,
+                        sat_ref_city_id,
+                        sat_ref_mobile_country_code,
+                        sat_ref_mobile,
+                        ytk_sevak_inspired,
+                        inspired_batch_id,
+                        inspired_sevak_id,
+                        ins_by_name,
+                        ins_by_city_id,
+                        ins_by_country_code);
+                    // window.location.reload(); // 🔄 refresh whole page
+
+                });
+        });
         // ----------------- Load Batches -----------------
         function loadBatches(selectId) {
             fetch('/talim_batch/list')
@@ -632,8 +1035,38 @@
         loadSelect('/category/list', 'addcategory', 'category_name', 'category_id');
         loadSelect('/blood_group/list', 'addbloodgroup', 'blood_group_name', 'blood_group_id');
         loadSelect('/marital_status/list', 'addmaritalstatus', 'marital_status_name', 'marital_status_id');
-        // loadSelect('/gosthi/list', 'addgosthi', 'gosthi_name', 'gosthi_id');
         loadSelect('/satsang_activity/list', 'satsang_activity_id', 'satsang_activity_name', 'satsang_activity_id');
+        loadSelect('/grade/list', 'grade_id', 'grade_name', 'grade_id');
+        loadSelect('/talent/list', 'talent_id', 'talent_name', 'talent_id');
+
+        function loadSelect1(url, selectId, textFields, valueField, selectedValue = null) {
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select --</option>';
+
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+
+                        // if multiple text fields are given → join them with " - "
+                        if (Array.isArray(textFields)) {
+                            option.textContent = textFields.map(f => item[f]).join(' - ');
+                        } else {
+                            option.textContent = item[textFields];
+                        }
+
+                        option.value = item[valueField];
+                        if (selectedValue && selectedValue == item[valueField]) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+                })
+                .catch(err => console.error("Error loading select:", err));
+        }
+        loadSelect1('/gosthigroup/list', 'addgosthi', ['group_code', 'group_name'], 'group_id');
 
         function loadCountryCode(selectId) {
             fetch('/country/list')
@@ -966,14 +1399,14 @@
             let cell3 = row.insertCell(2);
             let cell4 = row.insertCell(3);
 
-            cell1.innerHTML = `<select class="form-control" name="degree_id[]" id="degree_id_${current_table_row_education}" required>
+            cell1.innerHTML = `<select  name="degree_id[]" id="degree_id_${current_table_row_education}" required>
                                 <option value="">-- Select Degree --</option>
                             </select>`;
-            cell2.innerHTML = `<select class="form-control" name="specialization_id[]" id="specialization_id_${current_table_row_education}">
+            cell2.innerHTML = `<select  name="specialization_id[]" id="specialization_id_${current_table_row_education}">
                                 <option value="">-- Select Specialization --</option>
                             </select>`;
-            cell3.innerHTML = `<input type="text" name="edu_remark[]" class="form-control" style="padding:1px">`;
-            cell4.innerHTML = `<a href="#" onclick="DeleteEducationRow(this, event)"><i class="fa fa-trash-o"></i> Delete</a>
+            cell3.innerHTML = `<input type="text" name="edu_remark[]"  >`;
+            cell4.innerHTML = `<a href="#" onclick="DeleteEducationRow(this, event)"> Delete</a>
 `;
 
             $('#current_table_row_education').val(current_table_row_education);
@@ -1003,13 +1436,13 @@
             let cell4 = row.insertCell(3);
             let cell5 = row.insertCell(4);
 
-            cell1.innerHTML = `<select class="form-control" name="employment_id[]" id="employment_id_${current_table_row_employment}">
+            cell1.innerHTML = `<select  name="employment_id[]" id="employment_id_${current_table_row_employment}">
                           <option value="">Select Employment Type</option>
                        </select>`;
-            cell2.innerHTML = `<input type="text" class="form-control" name="emp_detail[]" style="padding:1px">`;
-            cell3.innerHTML = `<input type="text" class="form-control" name="post_designation[]" style="padding:1px">`;
-            cell4.innerHTML = `<input type="text" class="form-control" name="emp_remark[]" style="padding:1px">`;
-            cell5.innerHTML = `<a href="#" onclick="DeleteEmploymentRow(this, event)"><i class="fa fa-trash-o"></i> Delete</a>`;
+            cell2.innerHTML = `<input type="text"  name="emp_detail[]" >`;
+            cell3.innerHTML = `<input type="text"  name="post_designation[]" >`;
+            cell4.innerHTML = `<input type="text"  name="emp_remark[]" >`;
+            cell5.innerHTML = `<a href="#" onclick="DeleteEmploymentRow(this, event)"> Delete</a>`;
 
             $('#current_table_row_employment').val(current_table_row_employment);
 
@@ -1038,17 +1471,17 @@
             let cell6 = row.insertCell(5);
             let cell7 = row.insertCell(6);
 
-            cell1.innerHTML = `<select class="form-control" name="relationship_id[]" id="relationship_id_${current_table_row_family}">
+            cell1.innerHTML = `<select  name="relationship_id[]" id="relationship_id_${current_table_row_family}">
                           <option value="">Select Relationship</option>
                        </select>`;
-            cell2.innerHTML = `<input type="text" class="form-control" name="family_name[]">`;
-            cell3.innerHTML = `<select class="form-control" name="family_country_code[]" id="family_country_code_${current_table_row_family}">
+            cell2.innerHTML = `<input type="text"  name="family_name[]">`;
+            cell3.innerHTML = `<select  name="family_country_code[]" id="family_country_code_${current_table_row_family}">
                           <option value="">---</option>
                        </select>`;
-            cell4.innerHTML = `<input type="number" class="form-control number" name="family_mobile[]" maxlength="10" minlength="10" title="Please Enter 10 Digit Mobile No">`;
-            cell5.innerHTML = `<input type="email" class="form-control" name="family_email[]" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">`;
-            cell6.innerHTML = `<input type="text" class="form-control" name="family_occupation[]">`;
-            cell7.innerHTML = `<a href="#" onclick="DeleteFamilyRow(this, event)"><i class="fa fa-trash-o"></i> Delete</a>`;
+            cell4.innerHTML = `<input type="number"  name="family_mobile[]" maxlength="10" minlength="10" title="Please Enter 10 Digit Mobile No">`;
+            cell5.innerHTML = `<input type="email"  name="family_email[]" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">`;
+            cell6.innerHTML = `<input type="text"  name="family_occupation[]">`;
+            cell7.innerHTML = `<a href="#" onclick="DeleteFamilyRow(this, event)"> Delete</a>`;
 
             $('#current_table_row_family').val(current_table_row_family);
 
@@ -1077,25 +1510,23 @@
             let cell4 = row.insertCell(3);
 
             // Activity dropdown
-            cell1.innerHTML = `<select class="form-control" name="satsang_activity_id[]" id="satsang_activity_id_${current_table_row_satsang}">
+            cell1.innerHTML = `<select  name="satsang_activity_id[]" id="satsang_activity_id_${current_table_row_satsang}">
                             <option value="">-- Select Activity --</option>
                        </select>`;
 
             // Designation dropdown
-            cell2.innerHTML = `<select class="form-control" id="satsang_designation_id_${current_table_row_satsang}" name="satsang_designation_id[]">
-                            <option value="">-- Select Designation --</option>
-                       </select>`;
+            cell2.innerHTML = `<select  id="satsang_designation_id_${current_table_row_satsang}" name="satsang_designation_id[]"></select>`;
 
             // Details input
-            cell3.innerHTML = `<input type="text" class="form-control" name="seva_details[]" style="padding:1px">`;
+            cell3.innerHTML = `<input type="text"  name="seva_details[]" >`;
 
             // Delete link
-            cell4.innerHTML = `<a href="#" onclick="DeleteSatsangRow(this, event)"><i class="fa fa-trash-o"></i> Delete</a>`;
+            cell4.innerHTML = `<a href="#" onclick="DeleteSatsangRow(this, event)"> Delete</a>`;
 
             $('#current_table_row_satsang').val(current_table_row_satsang);
 
             // Load activities dynamically
-            loadSelect('/satsang_activity/list', `satsang_activity_id_${current_table_row_satsang}`, 'satsang_activity_name', 'activity_id');
+            loadSelect('/satsang_activity/list', `satsang_activity_id_${current_table_row_satsang}`, 'satsang_activity_name', 'satsang_activity_id');
 
             // Add event listener for this specific activity dropdown
             document.getElementById(`satsang_activity_id_${current_table_row_satsang}`)
@@ -1112,6 +1543,47 @@
         }
 
 
+        function InsertTalent() {
+            let current_table_row_talent = parseInt($('#current_table_row_talent').val() || 0);
+            current_table_row_talent++;
+
+            let table = document.getElementById("talentInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+
+            // Activity dropdown
+            cell1.innerHTML = `<select  name="talent_id[]" id="talent_id_${current_table_row_talent}">
+                                    <option value="">-- Select Activity --</option>
+                       </select>`;
+
+            // Designation dropdown
+            cell2.innerHTML = `<select  id="grade_id_${current_table_row_talent}" name="grade_id[]">
+                <option value="">-- Select Grade --</option>
+                </select>`;
+
+            // Details input
+            cell3.innerHTML = `<input type="text"  name="talent_detail[]" >`;
+
+            // Delete link
+            cell4.innerHTML = `<a href="#" onclick="DeleteTalentRow(this, event)"> Delete</a>`;
+
+            $('#current_table_row_talent').val(current_table_row_talent);
+            loadSelect('/grade/list', `grade_id_${current_table_row_talent}`, 'grade_name', 'grade_id');
+            loadSelect('/talent/list', `talent_id_${current_table_row_talent}`, 'talent_name', 'talent_id');
+
+        }
+
+        function DeleteTalentRow(r, e) {
+            e.preventDefault(); // prevent page jump
+            let i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("talentInvoice").deleteRow(i);
+        }
+
+        // Load Satsang Sevak for Satsang Activity
         document.getElementById('satsang_activity_id').addEventListener('change', function() {
             const satsang_activity_id = this.value;
             getSatsangDesignation(satsang_activity_id, 'satsangi_sevak_id');
@@ -1153,7 +1625,6 @@
                 .catch(err => console.error("Error loading Designations:", err));
         }
 
-
         $(document).ready(function() {
             $('#sameprimaryno').on('change', function() {
                 if ($(this).is(':checked')) {
@@ -1185,6 +1656,196 @@
                 $('#maritalStatusDate, #engagedDate, #marriedDate').hide();
                 $('#marital_date').prop('required', false);
             }
+        });
+
+
+        $("#admitted_div").hide();
+        $("#certified_div").hide();
+        $("#not_complete_div").hide();
+        $("#temporary_div").hide();
+        $("#expired_div").hide();
+        $("#sant_in_baps_div").hide();
+
+        function notCompleteDiv() {
+            var checkbox = document.getElementById("not_complete").checked;
+            if (checkbox == true) {
+                $("#not_complete_div").show();
+            } else {
+                $("#not_complete_div").hide();
+            }
+        }
+
+        function temporaryDiv() {
+            var checkbox = document.getElementById("temporary").checked;
+            if (checkbox == true) {
+                $("#temporary_div").show();
+            } else {
+                $("#temporary_div").hide();
+            }
+        }
+
+        function expiredDiv() {
+            var checkbox = document.getElementById("expired").checked;
+            if (checkbox == true) {
+                $("#expired_div").show();
+            } else {
+                $("#expired_div").hide();
+            }
+        }
+
+        function santInBapsDiv() {
+            var checkbox = document.getElementById("sant_in_baps").checked;
+            if (checkbox == true) {
+                $("#sant_in_baps_div").show();
+            } else {
+                $("#sant_in_baps_div").hide();
+            }
+        }
+
+        $(document).ready(function() {
+            $("#certified").on("change", function() {
+                if (this.checked) {
+                    //Disable unwanted checkbox & associative date
+                    $("#temporary").prop("disabled", true);
+                    $("#temporary_date").prop("disabled", true);
+                    $("#not_complete").prop("disabled", true);
+                    $("#not_complete_date").prop("disabled", true);
+                    //Enable Other wanted checkbox & associative date
+                    $("#certified").prop("disabled", false);
+                    $("#certified_date").prop("disabled", false);
+                    // $("#admitted").prop("disabled", false);
+                    // $("#admitted_date").prop("disabled", false);
+                    $("#expired").prop("disabled", false);
+                    $("#expired_date").prop("disabled", false);
+                    $("#sant_in_baps").prop("disabled", false);
+                    $("#sant_in_baps_date").prop("disabled", false);
+                } else {
+                    $("#temporary").prop("disabled", false);
+                    $("#temporary_date").prop("disabled", false);
+                    $("#not_complete").prop("disabled", false);
+                    $("#not_complete_date").prop("disabled", false);
+                    $("#certified").prop("disabled", false);
+                    $("#certified_date").prop("disabled", false);
+                    // $("#admitted").prop("disabled", false);
+                    // $("#admitted_date").prop("disabled", false);
+                    $("#expired").prop("disabled", false);
+                    $("#expired_date").prop("disabled", false);
+                    $("#sant_in_baps").prop("disabled", false);
+                    $("#sant_in_baps_date").prop("disabled", false);
+                }
+            });
+
+            $("#not_complete").on("change", function() {
+                if (this.checked) {
+                    //Disable unwanted checkbox & associative date
+                    $("#temporary").prop("disabled", true);
+                    $("#temporary_date").prop("disabled", true);
+                    $("#certified").prop("disabled", true);
+                    $("#certified_date").prop("disabled", true);
+                    //Enable Other wanted checkbox & associative date
+                    $("#admitted").prop("disabled", false);
+                    $("#admitted_date").prop("disabled", false);
+                    $("#not_complete").prop("disabled", false);
+                    $("#not_complete_date").prop("disabled", false);
+                    $("#sant_in_baps").prop("disabled", false);
+                    $("#sant_in_baps_date").prop("disabled", false);
+                    $("#expired").prop("disabled", false);
+                    $("#expired_date").prop("disabled", false);
+
+                } else {
+                    $("#temporary").prop("disabled", false);
+                    $("#temporary_date").prop("disabled", false);
+                    $("#not_complete").prop("disabled", false);
+                    $("#not_complete_date").prop("disabled", false);
+                    $("#certified").prop("disabled", false);
+                    $("#certified_date").prop("disabled", false);
+                    $("#admitted").prop("disabled", false);
+                    $("#admitted_date").prop("disabled", false);
+                    $("#expired").prop("disabled", false);
+                    $("#expired_date").prop("disabled", false);
+                    $("#sant_in_baps").prop("disabled", false);
+                    $("#sant_in_baps_date").prop("disabled", false);
+                }
+            });
+
+            $("#temporary").on("change", function() {
+                if (this.checked) {
+                    //Disable unwanted checkbox & associative date
+                    $("#not_complete").prop("disabled", true);
+                    $("#not_complete_date").prop("disabled", true);
+                    $("#certified").prop("disabled", true);
+                    $("#certified_date").prop("disabled", true);
+                    //Enable Other wanted checkbox & associative date
+                    $("#temporary").prop("disabled", false);
+                    $("#temporary_date").prop("disabled", false);
+                    $("#expired").prop("disabled", false);
+                    $("#expired_date").prop("disabled", false);
+                    $("#admitted").prop("disabled", false);
+                    $("#admitted_date").prop("disabled", false);
+                    $("#sant_in_baps").prop("disabled", false);
+                    $("#sant_in_baps_date").prop("disabled", false);
+                } else {
+                    $("#temporary").prop("disabled", false);
+                    $("#temporary_date").prop("disabled", false);
+                    $("#not_complete").prop("disabled", false);
+                    $("#not_complete_date").prop("disabled", false);
+                    $("#certified").prop("disabled", false);
+                    $("#certified_date").prop("disabled", false);
+                    $("#admitted").prop("disabled", false);
+                    $("#admitted_date").prop("disabled", false);
+                    $("#expired").prop("disabled", false);
+                    $("#expired_date").prop("disabled", false);
+                    $("#sant_in_baps").prop("disabled", false);
+                    $("#sant_in_baps_date").prop("disabled", false);
+                }
+            });
+        });
+
+        function toggleStatus(status) {
+            console.log(status);
+            if (status == 'Admitted') {
+                $("#Admitted").prop("disabled", false);
+                $("#Certified").prop("disabled", false);
+                $("#NotComplete").prop("disabled", true);
+                $("#Expired").prop("disabled", false);
+                $("#Temporary").prop("disabled", true);
+                $("#SantinBAPS").prop("disabled", false);
+            } else if (status == '') {
+
+            } else if (status == '') {
+
+            } else {
+                $("#Admitted").prop("disabled", true);
+                $("#Certified").prop("disabled", true);
+                $("#NotComplete").prop("disabled", true);
+                $("#Expired").prop("disabled", true);
+                $("#Temporary").prop("disabled", true);
+                $("#SantinBAPS").prop("disabled", true);
+            }
+            $('#status').trigger("chosen:updated");
+        }
+
+        // ----------------- Satasangi Since Logic -----------------
+        $(document).ready(function() {
+            $('#birth_date').on('change', function() {
+                let birthDate = $(this).val();
+                if (birthDate) {
+                    let birthYear = new Date(birthDate).getFullYear();
+                    let currentYear = new Date().getFullYear();
+
+                    // Clear old options
+                    $('#satasangi_since').empty();
+
+                    // Fill from birthYear → currentYear
+                    for (let y = birthYear; y <= currentYear; y++) {
+                        $('#satasangi_since').append(`<option value="${y}">${y}</option>`);
+                    }
+
+                    // Set default selected to birthYear
+                    $('#satasangi_since').val(birthYear);
+                    $('#hidden_satasangi_since').val(birthYear);
+                }
+            });
         });
     </script>
 
