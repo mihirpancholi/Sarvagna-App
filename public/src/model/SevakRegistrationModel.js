@@ -58,8 +58,29 @@ static async getAll() {
     }
   }
 
+     static async getCityById(city_id) {
+        const [rows] = await pool.execute(
+            `SELECT country_id 
+             FROM city_master 
+             WHERE city_id = ? 
+               AND is_deleted = 'N'`,
+            [city_id]
+        );
+        return rows[0] || null; // return the first matching row or null
+    }
 
-  
+    static async getMandirsByType(country_id, type) {
+        const [rows] = await pool.execute(
+            `SELECT mandir_id, mandir_name 
+             FROM mandir_master 
+             WHERE country_id = ? 
+               AND mandir_type = ? 
+               AND is_deleted = 'N'`,
+            [country_id, type]
+        );
+        return rows;
+    }
+
 
 
 

@@ -8,7 +8,7 @@ router.get("/viewSevak", SevakController.SevakIndex);
 
 router.post("/generateYtkID", SevakController.generateYtkID);
 router.post("/add", SevakController.addSevak);
-
+router.post('/getMandir', SevakController.getMandir);
 
 
 module.exports = router;

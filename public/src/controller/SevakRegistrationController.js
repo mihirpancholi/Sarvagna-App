@@ -74,6 +74,50 @@ exports.generateYtkID = async (req, res) => {
   }
 };
 
+
+exports.getMandir = async (req, res) => {
+    try {
+        const { city_id, shikhar_mandir_id = 0, hari_mandir_id = 0 } = req.body;
+
+        // 1️⃣ Get country_id from city_id
+        const city = await Model.getCityById(city_id);
+        if (!city) {
+            return res.status(404).json({ error: 'City not found' });
+        }
+        const country_id = city.country_id;
+
+        // 2️⃣ Fetch Shikharbadh mandirs by country
+        const shikharMandirs = await Model.getMandirsByType(country_id, 'Shikharbadh');
+
+        let shikharHTML = `<option value="">Select Shikharbaddh Mandir</option>`;
+        shikharHTML += shikharMandirs.map(m =>
+            `<option value="${m.mandir_id}" ${m.mandir_id == shikhar_mandir_id ? 'selected' : ''}>${m.mandir_name}</option>`
+        ).join('');
+
+        // 3️⃣ Fetch Hari Mandir by country
+        const hariMandirs = await Model.getMandirsByType(country_id, 'Hari Mandir');
+
+        let hariHTML = `<option value="">Select Hari Mandir</option>`;
+        hariHTML += hariMandirs.map(m =>
+            `<option value="${m.mandir_id}" ${m.mandir_id == hari_mandir_id ? 'selected' : ''}>${m.mandir_name}</option>`
+        ).join('');
+
+        // 4️⃣ Respond just like original PHP
+        res.json({
+            country_id,
+            shikhar_mandir: shikharHTML,
+            hari_mandir: hariHTML
+        });
+
+    } catch (err) {
+        console.error('Error in getMandir:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+
+
 // ---------- Multer Setup ----------
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),

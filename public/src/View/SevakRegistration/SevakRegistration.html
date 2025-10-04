@@ -1250,8 +1250,12 @@
                         option.value = ca.city_area_id;
                         option.textContent = ca.area_name;
                         areaSelect.appendChild(option);
+
                     });
+
                 });
+
+
 
             // Pincode
             fetch(`/common/getpincodebycity?city_id=${cityId}`)
@@ -1285,7 +1289,47 @@
 
                     document.getElementById(prefix + 'country_name').value = d.country_name || "";
                     document.getElementById(prefix + 'country_id').value = d.country_id || "";
+
+                    getMandirDiv(cityId);
+
                 });
+
+
+        }
+
+        function getMandirDiv(cityId) {
+            const shikharMandirId = document.getElementById('shikhar_mandir_id').getAttribute('data-selected') || 0;
+            const hariMandirId = document.getElementById('hari_mandir_id').getAttribute('data-selected') || 0;
+
+            fetch(`/SevakRegistration/getMandir`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        city_id: cityId, // ✅ send city_id now
+                        shikhar_mandir_id: shikharMandirId,
+                        hari_mandir_id: hariMandirId
+                    })
+                })
+                .then(res => res.json())
+                .then(obj => {
+                    if (obj.country_id == 2) {
+                        document.getElementById('withIndiaDiv').style.display = 'block';
+                        document.getElementById('withoutIndiaDiv').style.display = 'none';
+                    } else {
+                        document.getElementById('withIndiaDiv').style.display = 'none';
+                        document.getElementById('withoutIndiaDiv').style.display = 'block';
+                    }
+
+                    document.getElementById('shikhar_mandir_id').innerHTML = obj.shikhar_mandir || '';
+                    document.getElementById('hari_mandir_id').innerHTML = obj.hari_mandir || '';
+
+                    // Update chosen/select2 if used
+                    $('#shikhar_mandir_id').trigger('chosen:updated');
+                    $('#hari_mandir_id').trigger('chosen:updated');
+                })
+                .catch(err => console.error('Error fetching mandir data:', err));
         }
 
         document.getElementById('addcity').addEventListener('change', () =>
@@ -1665,6 +1709,8 @@
         $("#temporary_div").hide();
         $("#expired_div").hide();
         $("#sant_in_baps_div").hide();
+        $('#withoutIndiaDiv').hide();
+
 
         function notCompleteDiv() {
             var checkbox = document.getElementById("not_complete").checked;
