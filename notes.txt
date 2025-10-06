@@ -10,13 +10,10 @@ gosthi_pravachan_detail - FK - pravachan_sevak_id
 THINGS I NEED TO DO ASAP
 
 ************SEVAK REGISTRATION************
-- shikhar_mandir_id
--withIndiaDiv and  withoutIndiaDiv
-
-permamnent address same as current address
-talim address same as current address
 
 
 1) in sevak_master there is batch_id where does it link to?
 2) what is the use of batch_code_master table
 3)  
+
+in gosthi master what is the gosthi column for 

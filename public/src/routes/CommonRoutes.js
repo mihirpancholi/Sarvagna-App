@@ -10,8 +10,12 @@ router.get("/getcityareabycity", CommonController.getCityArea);
 router.get("/getpincodebycity", CommonController.getPincode);
 router.get("/getcitydetails", CommonController.getCityDetails);
 router.get("/getkshetradetails", CommonController.getKshetraDetails);
+router.get("/getkshetraforgroupmaster", CommonController.getKshetraDetailsgosthigroupmaster);
 router.get("/getSevakByBatch", CommonController.getSevakByBatch);
 router.get("/getsatsangdesignation", CommonController.getSatsangDesignation);
+
+router.get('/getZoneCodes', CommonController.getZoneCode);
+
 
 
 module.exports = router;

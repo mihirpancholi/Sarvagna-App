@@ -8,4 +8,6 @@ router.get("/", GosthiController.getGosthiIndex);
 // API endpoints
 router.get("/list", GosthiController.getGosthiData);
 
+
+
 module.exports = router;

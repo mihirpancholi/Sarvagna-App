@@ -81,6 +81,14 @@ static async getmandirbyzone(zone_id) {
   return rows; // return the whole array, not rows[0]
   }
 
+      static async getKshetraDetailsforgosthibyID(zone_id) {
+  const [rows] = await pool.execute(
+    `SELECT * FROM kshetra_master WHERE zone_id = ? AND is_deleted = 'N'`,
+    [zone_id]
+  );
+  return rows; // return the whole array, not rows[0]
+  }
+
 
 
     static async getSevakListByBatch(batch_id) {
@@ -99,6 +107,25 @@ static async getmandirbyzone(zone_id) {
   return rows; // return the whole array, not rows[0]
   }
 
+
+  static async getZoneNoAndCodeForGroup(zoneId, groupId) {
+    const [rows] = await pool.execute(
+      `SELECT zone_no, zone_code FROM group_master 
+       WHERE zone_id = ? AND group_id = ? AND is_deleted='N'`,
+      [zoneId, groupId]
+    );
+    return rows;
+  }
+
+  static async getMaxZoneNoAndCode(zoneId) {
+    const [rows] = await pool.execute(
+      `SELECT MAX(zone_no) AS zone_no, zone_code 
+       FROM group_master 
+       WHERE zone_id = ? AND is_deleted='N'`,
+      [zoneId]
+    );
+    return rows;
+  }
   
   
   
