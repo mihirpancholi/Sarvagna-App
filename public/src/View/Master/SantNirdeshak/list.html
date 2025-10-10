@@ -1,239 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sant Nirdeshak List</title>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    .btn {
-      padding: 5px 10px;
-      margin: 2px;
-      cursor: pointer;
-      border: none;
-      border-radius: 4px;
-    }
-    .btn-add { background-color: #2196F3; color: white; }
-    .btn-update { background-color: #4CAF50; color: white; }
-    .btn-delete { background-color: #f44336; color: white; }
 
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-    }
-    .modal-content {
-      background: white;
-      margin: 10% auto;
-      padding: 20px;
-      width: 400px;
-      border-radius: 8px;
-    }
-  </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sant Nirdeshak List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 400px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
+
 <body>
 
-  <h1>Sant Nirdeshak List</h1>
-  <button class="btn btn-add" onclick="openAddModal()">+ Add Sant Nirdeshak</button>
+    <h1>Sant Nirdeshak List</h1>
+    <button class="btn btn-add" onclick="openAddModal()">+ Add Sant Nirdeshak</button>
 
-  <table>
-    <thead>
-      <tr>
-        <th>S.No.</th>
-        <th>Sant Nirdeshak Name</th>
-        <th>Mobile No</th>
-        <th>WhatsApp No</th>
-        <th>Email ID</th>
-        <th>Created by</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="blood-group-table-body"></tbody>
-  </table>
+    <table>
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Sant Nirdeshak Name</th>
+                <th>Mobile No</th>
+                <th>WhatsApp No</th>
+                <th>Email ID</th>
+                <th>Created by</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="blood-group-table-body"></tbody>
+    </table>
 
-  <!-- Add Modal -->
-  <div id="addModal" class="modal">
-    <div class="modal-content">
-      <h3>Add New Sant Nirdeshak</h3>
-      <form id="addForm">
-        <label for="addsant_nirdeshak_name">Sant Nirdeshak Name:</label>
-        <input type="text" id="addsant_nirdeshak_name" required>
-        <br><br>
-        <label for="addmobile_no">Mobile No:</label>
-        <input type="number" id="addmobile_no" >
-        <br><br>
-        <label for="addwhatapp_no">WhatsApp No:</label>
-        <input type="number" id="addwhatapp_no" >
-        <br><br>
-        <label for="addemail_id">Email ID:</label>
-        <input type="email" id="addemail_id" >
-        <br><br>
-        <button type="submit" class="btn btn-add">Add</button>
-        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
-      </form>
+    <!-- Add Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h3>Add New Sant Nirdeshak</h3>
+            <form id="addForm">
+                <label for="addsant_nirdeshak_name">Sant Nirdeshak Name:</label>
+                <input type="text" id="addsant_nirdeshak_name" required>
+                <br><br>
+                <label for="addmobile_no">Mobile No:</label>
+                <input type="number" id="addmobile_no">
+                <br><br>
+                <label for="addwhatapp_no">WhatsApp No:</label>
+                <input type="number" id="addwhatapp_no">
+                <br><br>
+                <label for="addemail_id">Email ID:</label>
+                <input type="email" id="addemail_id">
+                <br><br>
+                <button type="submit" class="btn btn-add">Add</button>
+                <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <!-- Update Modal -->
-  <!-- Update Modal -->
-<div id="updateModal" class="modal">
-  <div class="modal-content">
-    <h3>Update Sant Nirdeshak</h3>
-    <form id="updateForm">
-      <input type="hidden" id="updateSantNirdeshakId">
+    <!-- Update Modal -->
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h3>Update Sant Nirdeshak</h3>
+            <form id="updateForm">
+                <input type="hidden" id="updateSantNirdeshakId">
 
-      <label for="updateSantNirdeshakName">Sant Nirdeshak Name:</label>
-      <input type="text" id="updateSantNirdeshakName" required>
-      <br><br>
+                <label for="updateSantNirdeshakName">Sant Nirdeshak Name:</label>
+                <input type="text" id="updateSantNirdeshakName" required>
+                <br><br>
 
-      <label for="updateMobileNo">Mobile No:</label>
-      <input type="number" id="updateMobileNo">
-      <br><br>
+                <label for="updateMobileNo">Mobile No:</label>
+                <input type="number" id="updateMobileNo">
+                <br><br>
 
-      <label for="updateWhatsAppNo">WhatsApp No:</label>
-      <input type="number" id="updateWhatsAppNo">
-      <br><br>
+                <label for="updateWhatsAppNo">WhatsApp No:</label>
+                <input type="number" id="updateWhatsAppNo">
+                <br><br>
 
-      <label for="updateEmailId">Email ID:</label>
-      <input type="email" id="updateEmailId">
-      <br><br>
+                <label for="updateEmailId">Email ID:</label>
+                <input type="email" id="updateEmailId">
+                <br><br>
 
-      <button type="submit" class="btn btn-update">Save</button>
-      <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
-    </form>
-  </div>
-</div>
+                <button type="submit" class="btn btn-update">Save</button>
+                <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+            </form>
+        </div>
+    </div>
 
 
-  <script>
-    // Fetch Sant Nirdeshak list
-    function loadSantNirdeshaks() {
-      fetch('/santnirdeshak/list')
-        .then(res => res.json())
-        .then(data => {
-          const tableBody = document.getElementById('blood-group-table-body');
-          tableBody.innerHTML = '';
-          data.forEach((santnirdeshak, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${index + 1}</td>
-              <td>${santnirdeshak.sant_nirdeshak_name}</td>
-              <td>${santnirdeshak.mobile_no}</td>
-              <td>${santnirdeshak.whatapp_no}</td>
-              <td>${santnirdeshak.email_id}</td>
-              <td>${santnirdeshak.full_name}</td>
-              <td>
-<button class="btn btn-update" 
-  onclick="openUpdateModal(
-    ${santnirdeshak.sant_nirdeshak_id}, 
-    '${santnirdeshak.sant_nirdeshak_name}', 
-    '${santnirdeshak.mobile_no}', 
-    '${santnirdeshak.whatapp_no}',  
-    '${santnirdeshak.email_id}'
-  )">Update</button>
-                <button class="btn btn-delete" onclick="deleteSantNirdeshak(${santnirdeshak.sant_nirdeshak_id})">Delete</button>
-              </td>
-            `;
-            tableBody.appendChild(row);
-          });
-        });
-    }
-
-    // --- Add Modal ---
-    function openAddModal() {
-      document.getElementById('addModal').style.display = 'block';
-    }
-    function closeAddModal() {
-      document.getElementById('addModal').style.display = 'none';
-    }
-    document.getElementById('addForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const sant_nirdeshak_name = document.getElementById('addsant_nirdeshak_name').value;
-      const mobile_no = document.getElementById('addmobile_no').value;
-      const whatapp_no = document.getElementById('addwhatapp_no').value;
-      const email_id = document.getElementById('addemail_id').value;
-
-      fetch('/santnirdeshak/addSantNirdeshak', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sant_nirdeshak_name, mobile_no, whatapp_no, email_id })
-      })
-      .then(res => res.json())
-      .then(result => {
-        closeAddModal();
-        loadSantNirdeshaks();
-        window.location.reload(); // 🔄 refresh whole page
-
-      });
-    });
-
-    // --- Update Modal ---
-function openUpdateModal(id, sant_nirdeshak_name, mobile_no, whatapp_no, email_id) {
-  document.getElementById('updateSantNirdeshakId').value = id;
-  document.getElementById('updateSantNirdeshakName').value = sant_nirdeshak_name;
-  document.getElementById('updateMobileNo').value = mobile_no;
-  document.getElementById('updateWhatsAppNo').value = whatapp_no;
-  document.getElementById('updateEmailId').value = email_id;
-  document.getElementById('updateModal').style.display = 'block';
-}
-
-    function closeUpdateModal() {
-      document.getElementById('updateModal').style.display = 'none';
-    }
-    document.getElementById('updateForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const id = document.getElementById('updateSantNirdeshakId').value;
-      const sant_nirdeshak_name = document.getElementById('updateSantNirdeshakName').value;
-      const mobile_no = document.getElementById('updateMobileNo').value;
-      const whatapp_no = document.getElementById('updateWhatsAppNo').value;
-      const email_id = document.getElementById('updateEmailId').value;
-
-      fetch(`/santnirdeshak/update/${id}`, {
-        method: 'POST', // keep POST if your backend expects it
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sant_nirdeshak_name, mobile_no, whatapp_no, email_id })
-      })
-      .then(res => res.json())
-      .then(result => {
-        closeUpdateModal();
-        loadSantNirdeshaks();
-        window.location.reload(); // 🔄 refresh whole page
-
-      });
-    });
-
-    // --- Delete ---
-    function deleteSantNirdeshak(id) {
-      if (confirm("Are you sure you want to delete this Sant Nirdeshak?")) {
-        fetch(`/santnirdeshak/delete/${id}`, { method: 'DELETE' }) // keep POST if backend expects it
-          .then(res => res.json())
-          .then(result => {
-            alert(result.message);
-            loadSantNirdeshaks();
-            window.location.reload(); // 🔄 refresh whole page
-
-          });
-      }
-    }
-
-    // Initial load
-    loadSantNirdeshaks();
-  </script>
+    <script src="master/SantNirdeshak/SantNirdeshak.js"></script>
 
 </body>
+
 </html>

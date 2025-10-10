@@ -1,248 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Talim Batch List</title>
-  <style>
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }
-    th { background-color: #f2f2f2; }
-    .btn { padding: 5px 10px; margin: 2px; cursor: pointer; border: none; border-radius: 4px; }
-    .btn-add { background-color: #2196F3; color: white; }
-    .btn-update { background-color: #4CAF50; color: white; }
-    .btn-delete { background-color: #f44336; color: white; }
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
-    .modal-content { background: white; margin: 10% auto; padding: 20px; width: 400px; border-radius: 8px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talim Batch List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 400px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
+
 <body>
 
-  <h1>Talim Batch List</h1>
-  <button class="btn btn-add" onclick="openAddModal()">+ Add Talim Batch</button>
+    <h1>Talim Batch List</h1>
+    <button class="btn btn-add" onclick="openAddModal()">+ Add Talim Batch</button>
 
-  <table>
-    <thead>
-      <tr>
-        <th>S.No.</th>
-        <th>Year</th>
-        <th>Batch Name</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Active</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="talim_batchTableBody"></tbody>
-  </table>
+    <table>
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Year</th>
+                <th>Batch Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="talim_batchTableBody"></tbody>
+    </table>
 
-  <!-- Add Modal -->
-  <div id="addModal" class="modal">
-    <div class="modal-content">
-      <h3>Add New Talim Batch</h3>
-      <form id="addForm">
-        <label for="addTalimYear">Year:</label>
-        <select id="addTalimYear" required></select>
-        <br><br>
+    <!-- Add Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h3>Add New Talim Batch</h3>
+            <form id="addForm">
+                <label for="addTalimYear">Year:</label>
+                <select id="addTalimYear" required></select>
+                <br><br>
 
-        <label for="addTalimBatchName">Talim Batch:</label>
-        <select id="addTalimBatchName" required>
-          <option value="F">First</option>
-          <option value="S">Second</option>
-        </select>
-        <br><br>
+                <label for="addTalimBatchName">Talim Batch:</label>
+                <select id="addTalimBatchName" required>
+                    <option value="F">First</option>
+                    <option value="S">Second</option>
+                </select>
+                <br><br>
 
-        <label for="addStartDate">Start Date:</label>
-        <input type="date" id="addStartDate" required>
-        <br><br>
+                <label for="addStartDate">Start Date:</label>
+                <input type="date" id="addStartDate" required>
+                <br><br>
 
-        <label for="addEndDate">End Date:</label>
-        <input type="date" id="addEndDate" required>
-        <br><br>
+                <label for="addEndDate">End Date:</label>
+                <input type="date" id="addEndDate" required>
+                <br><br>
 
-        <label for="addIsActive">Is Active:</label>
-        <select id="addIsActive" required>
-          <option value="Y">Yes</option>
-          <option value="N">No</option>
-        </select>
-        <br><br>
+                <label for="addIsActive">Is Active:</label>
+                <select id="addIsActive" required>
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+                <br><br>
 
-        <button type="submit" class="btn btn-add">Add</button>
-        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
-      </form>
+                <button type="submit" class="btn btn-add">Add</button>
+                <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <!-- Update Modal -->
-  <div id="updateModal" class="modal">
-    <div class="modal-content">
-      <h3>Update Talim Batch</h3>
-      <form id="updateForm">
-        <input type="hidden" id="updateBatchId">
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h3>Update Talim Batch</h3>
+            <form id="updateForm">
+                <input type="hidden" id="updateBatchId">
 
-        <label for="updateTalimYear">Year:</label>
-        <select id="updateTalimYear" required></select>
-        <br><br>
+                <label for="updateTalimYear">Year:</label>
+                <select id="updateTalimYear" required></select>
+                <br><br>
 
-        <label for="updateTalimBatchName">Talim Batch:</label>
-        <select id="updateTalimBatchName" required>
-          <option value="F">First</option>
-          <option value="S">Second</option>
-        </select>
-        <br><br>
+                <label for="updateTalimBatchName">Talim Batch:</label>
+                <select id="updateTalimBatchName" required>
+                    <option value="F">First</option>
+                    <option value="S">Second</option>
+                </select>
+                <br><br>
 
-        <label for="updateStartDate">Start Date:</label>
-        <input type="date" id="updateStartDate" required>
-        <br><br>
+                <label for="updateStartDate">Start Date:</label>
+                <input type="date" id="updateStartDate" required>
+                <br><br>
 
-        <label for="updateEndDate">End Date:</label>
-        <input type="date" id="updateEndDate" required>
-        <br><br>
+                <label for="updateEndDate">End Date:</label>
+                <input type="date" id="updateEndDate" required>
+                <br><br>
 
-        <label for="updateIsActive">Is Active:</label>
-        <select id="updateIsActive" required>
-          <option value="Y">Yes</option>
-          <option value="N">No</option>
-        </select>
-        <br><br>
+                <label for="updateIsActive">Is Active:</label>
+                <select id="updateIsActive" required>
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+                <br><br>
 
-        <button type="submit" class="btn btn-update">Save</button>
-        <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
-      </form>
+                <button type="submit" class="btn btn-update">Save</button>
+                <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+            </form>
+        </div>
     </div>
-  </div>
 
-<script>
-  // Populate year dropdowns
-  function populateYearDropdown(selectId) {
-    var select = document.getElementById(selectId);
-    select.innerHTML = '';
-    var currentYear = new Date().getFullYear();
-    for (var year = 2007; year <= currentYear + 1; year++) {
-      var option = document.createElement('option');
-      option.value = year;
-      option.text = year;
-      select.appendChild(option);
-    }
-  }
-  populateYearDropdown('addTalimYear');
-  populateYearDropdown('updateTalimYear');
+    <script src="master/talimbatch/talimbatch.js">
 
-  // --- Modals ---
-  function openAddModal(){ document.getElementById('addModal').style.display='block'; }
-  function closeAddModal(){ document.getElementById('addModal').style.display='none'; }
-  function closeUpdateModal(){ document.getElementById('updateModal').style.display='none'; }
-
-  // --- Load Talim Batches ---
-  function loadTalimBatches() {
-    fetch('/talim_batch/list')
-      .then(res => res.json())
-      .then(batches => {
-        var tableBody = document.getElementById('talim_batchTableBody');
-        tableBody.innerHTML = '';
-        batches.forEach((batch, index) => {
-          var row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${index+1}</td>
-            <td>${batch.talim_year}</td>
-            <td>${batch.talim_batch === "F" ? "First" : "Second"}</td>
-            <td>${formatDate(batch.start_date)}</td>
-            <td>${formatDate(batch.end_date)}</td>
-            <td>${batch.is_active}</td>
-            <td>
-              <button class="btn btn-update" onclick="openUpdateModal(${batch.talim_batch_id}, '${batch.talim_year}', '${batch.talim_batch}', '${batch.start_date}', '${batch.end_date}', '${batch.is_active}')">Update</button>
-              <button class="btn btn-delete" onclick="deleteTalimBatch(${batch.talim_batch_id})">Delete</button>
-            </td>
-          `;
-          tableBody.appendChild(row);
-        });
-      });
-  }
-
-  // --- Add Talim Batch ---
-  document.getElementById('addForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const data = {
-      talim_year: document.getElementById('addTalimYear').value,
-      talim_batch: document.getElementById('addTalimBatchName').value,
-      start_date: document.getElementById('addStartDate').value,
-      end_date: document.getElementById('addEndDate').value,
-      is_active: document.getElementById('addIsActive').value
-    };
-    fetch('/talim_batch/addTalim', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(() => {
-      closeAddModal();
-      loadTalimBatches();
-      window.location.reload();
-    });
-  });
-
-  // --- Helper to format dates ---
-  function formatDate(dateStr) {
-    if (!dateStr) return "";
-    return dateStr.split("T")[0].split(" ")[0]; // handles "YYYY-MM-DD" and "YYYY-MM-DD HH:mm:ss"
-  }
-
-  // --- Open Update Modal ---
-  function openUpdateModal(id, year, batch, start, end, active) {
-    document.getElementById('updateBatchId').value = id;
-    document.getElementById('updateTalimYear').value = year;
-
-    // Fix mismatch between DB values and dropdown options
-    if (batch === "First") batch = "F";
-    if (batch === "Second") batch = "S";
-    document.getElementById('updateTalimBatchName').value = batch;
-
-    document.getElementById('updateStartDate').value = formatDate(start);
-    document.getElementById('updateEndDate').value = formatDate(end);
-    document.getElementById('updateIsActive').value = active;
-
-    document.getElementById('updateModal').style.display = 'block';
-  }
-
-  // --- Update Talim Batch ---
-  document.getElementById('updateForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const id = document.getElementById('updateBatchId').value;
-    const talim_year = document.getElementById('updateTalimYear').value;
-    const talim_batch = document.getElementById('updateTalimBatchName').value;
-    const start_date = document.getElementById('updateStartDate').value;
-    const end_date = document.getElementById('updateEndDate').value;
-    const is_active = document.getElementById('updateIsActive').value;
-
-    fetch(`/talim_batch/update/${id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ talim_year, talim_batch, start_date, end_date, is_active })
-    })
-    .then(res => res.json())
-    .then(() => {
-      closeUpdateModal();
-      loadTalimBatches();
-      window.location.reload();
-    });
-  });
-
-  // --- Delete Talim Batch ---
-  function deleteTalimBatch(batchId){
-    if(confirm("Are you sure you want to delete this batch?")){
-      fetch('/talim_batch/delete/' + batchId, { method:'DELETE' })
-        .then(res => res.json())
-        .then(result => {
-          if(result.success){ loadTalimBatches(); }
-          else { alert(result.message); }
-        });
-    }
-  }
-
-  // Initial load
-  loadTalimBatches();
-</script>
+    </script>
 
 </body>
+
 </html>

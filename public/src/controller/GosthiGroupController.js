@@ -5,7 +5,8 @@ const viewsPath = path.join(__dirname, "..", "view");
 
 // Show gosthi group list page
 exports.getGosthiIndex = (req, res) => {
-    res.sendFile(path.join(viewsPath, "Gosthi", "GroupMaster", "list.html"));
+  res.sendFile(path.join(viewsPath, "Gosthi", "GroupMaster", "list.html"));
+  
 };
 
 // API - fetch gosthi group list

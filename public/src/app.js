@@ -11,6 +11,8 @@ app.use(bodyParser.json());
 // Static files
 
 app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "./View"))); 
+
 
 // Mount caste routes
 const casteRoutes = require("./routes/casteRoutes");

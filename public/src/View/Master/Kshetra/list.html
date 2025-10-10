@@ -1,338 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kshetra List</title>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    .btn {
-      padding: 5px 10px;
-      margin: 2px;
-      cursor: pointer;
-      border: none;
-      border-radius: 4px;
-    }
-    .btn-add { background-color: #2196F3; color: white; }
-    .btn-update { background-color: #4CAF50; color: white; }
-    .btn-delete { background-color: #f44336; color: white; }
 
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-    }
-    .modal-content {
-      background: white;
-      margin: 10% auto;
-      padding: 20px;
-      width: 400px;
-      border-radius: 8px;
-    }
-  </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kshetra List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 400px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
+
 <body>
 
-  <h1>Kshetra List</h1>
-  <button class="btn btn-add" onclick="openAddModal()">+ Add Kshetra</button>
+    <h1>Kshetra List</h1>
+    <button class="btn btn-add" onclick="openAddModal()">+ Add Kshetra</button>
 
-  <table>
-    <thead>
-      <tr>
-        <th>S.No.</th>
-        <th>Kshetra Code</th>
-        <th>Kshetra Name</th>
-        <th>Zone</th>
-        <th>Mandir</th>
-        <th>Sant Nirdeshak</th>
-        <th>Nirdeshak</th>
-        <th>Created by</th> 
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="Kshetra-table-body"></tbody>
-  </table>
+    <table>
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Kshetra Code</th>
+                <th>Kshetra Name</th>
+                <th>Zone</th>
+                <th>Mandir</th>
+                <th>Sant Nirdeshak</th>
+                <th>Nirdeshak</th>
+                <th>Created by</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="Kshetra-table-body"></tbody>
+    </table>
 
-  <!-- Add Modal -->
-  <div id="addModal" class="modal">
-    <div class="modal-content">
-      <h3>Add New Kshetra</h3>
-      <form id="addForm">
-        <label>Kshetra Code:</label>
-        <input type="text" id="addKshetraCode" required><br><br>
+    <!-- Add Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h3>Add New Kshetra</h3>
+            <form id="addForm">
+                <label>Kshetra Code:</label>
+                <input type="text" id="addKshetraCode" required><br><br>
 
-        <label>Kshetra Name:</label>
-        <input type="text" id="addKshetraName" required><br><br>
+                <label>Kshetra Name:</label>
+                <input type="text" id="addKshetraName" required><br><br>
 
-        <label>Zone:</label>
-        <select id="addZone" required></select><br><br>
+                <label>Zone:</label>
+                <select id="addZone" required></select><br><br>
 
-        <label>Mandir:</label>
-        <select id="addMandir" required></select><br><br>
+                <label>Mandir:</label>
+                <select id="addMandir" required></select><br><br>
 
-        <label>Sant Nirdeshak:</label>
-        <select id="addSantNirdeshak" required></select><br><br>
+                <label>Sant Nirdeshak:</label>
+                <select id="addSantNirdeshak" required></select><br><br>
 
-        <label>Nirdeshak:</label>
-        <select id="addNirdeshak" required></select><br><br>
+                <label>Nirdeshak:</label>
+                <select id="addNirdeshak" required></select><br><br>
 
-        <button type="submit" class="btn btn-add">Add</button>
-        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
-      </form>
+                <button type="submit" class="btn btn-add">Add</button>
+                <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <!-- Update Modal -->
-  <div id="updateModal" class="modal">
-    <div class="modal-content">
-      <h3>Update Kshetra</h3>
-      <form id="updateForm">
-        <input type="hidden" id="updateKshetraId">
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h3>Update Kshetra</h3>
+            <form id="updateForm">
+                <input type="hidden" id="updateKshetraId">
 
-        
-        <label>Kshetra Code:</label>
-        <input type="text" id="updateKshetraCode" required><br><br>
 
-        <label>Kshetra Name:</label>
-        <input type="text" id="updateKshetraName" required><br><br>
+                <label>Kshetra Code:</label>
+                <input type="text" id="updateKshetraCode" required><br><br>
 
-        <label>Zone:</label>
-        <select id="updateZone" required></select><br><br>
+                <label>Kshetra Name:</label>
+                <input type="text" id="updateKshetraName" required><br><br>
 
-        <label>Mandir:</label>
-        <select id="updateMandir" required></select><br><br>
+                <label>Zone:</label>
+                <select id="updateZone" required></select><br><br>
 
-        <label>Sant Nirdeshak:</label>
-        <select id="updateSantNirdeshak" required></select><br><br>
+                <label>Mandir:</label>
+                <select id="updateMandir" required></select><br><br>
 
-        <label>Nirdeshak:</label>
-        <select id="updateNirdeshak" required></select><br><br>
+                <label>Sant Nirdeshak:</label>
+                <select id="updateSantNirdeshak" required></select><br><br>
 
-        <button type="submit" class="btn btn-update">Save</button>
-        <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
-      </form>
+                <label>Nirdeshak:</label>
+                <select id="updateNirdeshak" required></select><br><br>
+
+                <button type="submit" class="btn btn-update">Save</button>
+                <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+            </form>
+        </div>
     </div>
-  </div>
 
-<script>
-// ----------------- Loaders -----------------
-function loadKshetra() {
-  fetch('/Kshetra/list')
-    .then(res => res.json())
-    .then(data => {
-      const tableBody = document.getElementById('Kshetra-table-body');
-      tableBody.innerHTML = '';
-      data.forEach((k, i) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${i + 1}</td>
-          <td>${k.kshetra_code}</td>
-          <td>${k.kshetra_name}</td>
-          <td>${k.zone_name}</td>
-          <td>${k.mandir_name}</td>
-          <td>${k.sant_nirdeshak_name}</td>
-          <td>${k.nirdeshak_name}</td>
-          <td>${k.full_name}</td>
-          <td>
-            <button class="btn btn-update" 
-  onclick="openUpdateModal(
-    ${k.kshetra_id}, 
-    '${k.kshetra_code}', 
-    '${k.kshetra_name}', 
-    ${k.zone_id}, 
-    ${k.mandir_id}, 
-    ${k.sant_nirdeshak_id}, 
-    ${k.nirdeshak_id}
-  )">
-  Update
-</button>
-
-            <button class="btn btn-delete" onclick="deleteKshetra(${k.kshetra_id})">Delete</button>
-          </td>`;
-        tableBody.appendChild(row);
-      });
-    });
-}
-
-function LoadZones(selectId, selectedValue = null) {
-  fetch('/zone/list')
-    .then(res => res.json())
-    .then(zones => {
-      const select = document.getElementById(selectId);
-      select.innerHTML = '<option value="">-- Select Zone --</option>';
-      zones.forEach(z => {
-        const opt = document.createElement('option');
-        opt.value = z.zone_id;
-        opt.textContent = z.zone_name;
-        if (selectedValue && selectedValue == z.zone_id) opt.selected = true;
-        select.appendChild(opt);
-      });
-    });
-}
-
-function LoadSantNirdeshak(selectId, selectedValue = null) {
-  fetch('/santnirdeshak/list')
-    .then(res => res.json())
-    .then(data => {
-      const select = document.getElementById(selectId);
-      select.innerHTML = '<option value="">-- Select Sant Nirdeshak --</option>';
-      data.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d.sant_nirdeshak_id;
-        opt.textContent = d.sant_nirdeshak_name;
-        if (selectedValue && selectedValue == d.sant_nirdeshak_id) opt.selected = true;
-        select.appendChild(opt);
-      });
-    });
-}
-
-function LoadNirdeshak(selectId, selectedValue = null) {
-  fetch('/nirdeshak/list')
-    .then(res => res.json())
-    .then(data => {
-      const select = document.getElementById(selectId);
-      select.innerHTML = '<option value="">-- Select Nirdeshak --</option>';
-      data.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d.nirdeshak_id;
-        opt.textContent = d.nirdeshak_name;
-        if (selectedValue && selectedValue == d.nirdeshak_id) opt.selected = true;
-        select.appendChild(opt);
-      });
-    });
-}
-
-function loadMandir(zone_id, selectId, selectedValue = null) {
-  fetch(`/common/getmandirbyzone?zone_id=${zone_id}`)
-    .then(res => res.json())
-    .then(mandirs => {
-      const select = document.getElementById(selectId);
-      select.innerHTML = '<option value="">-- Select Mandir --</option>';
-      mandirs.forEach(m => {
-        const opt = document.createElement('option');
-        opt.value = m.mandir_id;
-        opt.textContent = m.mandir_name;
-        if (selectedValue && selectedValue == m.mandir_id) opt.selected = true;
-        select.appendChild(opt);
-      });
-    });
-}
-
-// ----------------- Add Modal -----------------
-function openAddModal() {
-  LoadZones('addZone');
-  LoadSantNirdeshak('addSantNirdeshak');
-  LoadNirdeshak('addNirdeshak');
-  document.getElementById('addMandir').innerHTML = '<option value="">-- Select Mandir --</option>';
-  document.getElementById('addModal').style.display = 'block';
-}
-
-function closeAddModal() {
-  document.getElementById('addModal').style.display = 'none';
-}
-
-document.getElementById('addZone').addEventListener('change', function() {
-  if (this.value) loadMandir(this.value, 'addMandir');
-});
-
-// Add Form Submit
-document.getElementById('addForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const Kshetra_code = document.getElementById('addKshetraCode').value;
-  const Kshetra_name = document.getElementById('addKshetraName').value;
-  const zone_id = document.getElementById('addZone').value;
-  const mandir_id = document.getElementById('addMandir').value;
-  const sant_nirdeshak_id = document.getElementById('addSantNirdeshak').value;
-  const nirdeshak_id = document.getElementById('addNirdeshak').value;
-
-  fetch('/Kshetra/addKshetra', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ Kshetra_code, Kshetra_name, zone_id, mandir_id, sant_nirdeshak_id, nirdeshak_id })
-  }).then(r => r.json())
-    .then(() => {
-      closeAddModal();
-      loadKshetra();
-                      window.location.reload(); // 🔄 refresh whole page
-
-      // console.log(Kshetra_code, Kshetra_name, zone_id, mandir_id, sant_nirdeshak_id, nirdeshak_id);
-    });
-});
-
-// ----------------- Update Modal -----------------
-function openUpdateModal(id, Kshetra_code, Kshetra_name, zone_id, mandir_id, sant_nirdeshak_id, nirdeshak_id) {
-  document.getElementById('updateKshetraId').value = id;
-  document.getElementById('updateKshetraCode').value = Kshetra_code;
-  document.getElementById('updateKshetraName').value = Kshetra_name;
-
-  LoadZones('updateZone', zone_id);
-  loadMandir(zone_id, 'updateMandir', mandir_id);
-  LoadSantNirdeshak('updateSantNirdeshak', sant_nirdeshak_id);
-  LoadNirdeshak('updateNirdeshak', nirdeshak_id);
-
-  document.getElementById('updateModal').style.display = 'block';
-}
-
-function closeUpdateModal() {
-  document.getElementById('updateModal').style.display = 'none';
-}
-
-document.getElementById('updateZone').addEventListener('change', function() {
-  if (this.value) loadMandir(this.value, 'updateMandir');
-});
-
-// Update Form Submit
-document.getElementById('updateForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const id = document.getElementById('updateKshetraId').value;
-  const Kshetra_code = document.getElementById('updateKshetraCode').value;
-  const Kshetra_name = document.getElementById('updateKshetraName').value;
-  const zone_id = document.getElementById('updateZone').value;
-  const mandir_id = document.getElementById('updateMandir').value;
-  const sant_nirdeshak_id = document.getElementById('updateSantNirdeshak').value;
-  const nirdeshak_id = document.getElementById('updateNirdeshak').value;
-
-  fetch(`/Kshetra/update/${id}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ Kshetra_code, Kshetra_name, zone_id, mandir_id, sant_nirdeshak_id, nirdeshak_id })
-  }).then(r => r.json())
-    .then(() => {
-      closeUpdateModal();
-      loadKshetra();
-                      window.location.reload(); // 🔄 refresh whole page
-
-    });
-});
-
-// ----------------- Delete -----------------
-function deleteKshetra(id) {
-  if (confirm("Are you sure?")) {
-    fetch(`/Kshetra/delete/${id}`, { method: 'DELETE' })
-      .then(r => r.json())
-      .then(() => loadKshetra());
-                      window.location.reload(); // 🔄 refresh whole page
-
-  }
-}
-
-// Initial load
-loadKshetra();
-</script>
+    <script src="master/kshetra/kshetra.js"></script>
 </body>
+
 </html>

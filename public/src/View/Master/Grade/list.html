@@ -1,191 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grade List</title>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    .btn {
-      padding: 5px 10px;
-      margin: 2px;
-      cursor: pointer;
-      border: none;
-      border-radius: 4px;
-    }
-    .btn-add { background-color: #2196F3; color: white; }
-    .btn-update { background-color: #4CAF50; color: white; }
-    .btn-delete { background-color: #f44336; color: white; }
 
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-    }
-    .modal-content {
-      background: white;
-      margin: 10% auto;
-      padding: 20px;
-      width: 400px;
-      border-radius: 8px;
-    }
-  </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 400px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
+
 <body>
 
-  <h1>Grade List</h1>
-  <button class="btn btn-add" onclick="openAddModal()">+ Add Grade</button>
+    <h1>Grade List</h1>
+    <button class="btn btn-add" onclick="openAddModal()">+ Add Grade</button>
 
-  <table>
-    <thead>
-      <tr>
-        <th>S.No.</th>
-        <th>Grade Name</th>
-        <th>Created by</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="grade-table-body"></tbody>
-  </table>
+    <table>
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Grade Name</th>
+                <th>Created by</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="grade-table-body"></tbody>
+    </table>
 
-  <!-- Add Modal -->
-  <div id="addModal" class="modal">
-    <div class="modal-content">
-      <h3>Add New Grade</h3>
-      <form id="addForm">
-        <label for="addGradeName">Grade Name:</label>
-        <input type="text" id="addGradeName" required>
-        <br><br>
-        <button type="submit" class="btn btn-add">Add</button>
-        <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
-      </form>
+    <!-- Add Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h3>Add New Grade</h3>
+            <form id="addForm">
+                <label for="addGradeName">Grade Name:</label>
+                <input type="text" id="addGradeName" required>
+                <br><br>
+                <button type="submit" class="btn btn-add">Add</button>
+                <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <!-- Update Modal -->
-  <div id="updateModal" class="modal">
-    <div class="modal-content">
-      <h3>Update Grade</h3>
-      <form id="updateForm">
-        <input type="hidden" id="updateGradeId">
-        <label for="updateGradeName">Grade Name:</label>
-        <input type="text" id="updateGradeName" required>
-        <br><br>
-        <button type="submit" class="btn btn-update">Save</button>
-        <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
-      </form>
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h3>Update Grade</h3>
+            <form id="updateForm">
+                <input type="hidden" id="updateGradeId">
+                <label for="updateGradeName">Grade Name:</label>
+                <input type="text" id="updateGradeName" required>
+                <br><br>
+                <button type="submit" class="btn btn-update">Save</button>
+                <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Fetch grade list
-    function loadGrades() {
-      fetch('/grade/list')
-        .then(res => res.json())
-        .then(data => {
-          const tableBody = document.getElementById('grade-table-body');
-          tableBody.innerHTML = '';
-          data.forEach((grade, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${index + 1}</td>
-              <td>${grade.grade_name}</td>
-              <td>${grade.full_name}</td>
-              <td>
-                <button class="btn btn-update" onclick="openUpdateModal(${grade.grade_id}, '${grade.grade_name}')">Update</button>
-                <button class="btn btn-delete" onclick="deleteGrade(${grade.grade_id})">Delete</button>
-              </td>
-            `;
-            tableBody.appendChild(row);
-          });
-        });
-    }
-
-    // --- Add Modal ---
-    function openAddModal() {
-      document.getElementById('addModal').style.display = 'block';
-    }
-    function closeAddModal() {
-      document.getElementById('addModal').style.display = 'none';
-    }
-    document.getElementById('addForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const grade_name = document.getElementById('addGradeName').value;
-
-      fetch('/grade/addGrade', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ grade_name })
-      })
-      .then(res => res.json())
-      .then(result => {
-        closeAddModal();
-        loadGrades();
-        window.location.reload(); // 🔄 refresh whole page
-
-      });
-    });
-
-    // --- Update Modal ---
-    function openUpdateModal(id, name) {
-      document.getElementById('updateGradeId').value = id;
-      document.getElementById('updateGradeName').value = name;
-      document.getElementById('updateModal').style.display = 'block';
-    }
-    function closeUpdateModal() {
-      document.getElementById('updateModal').style.display = 'none';
-    }
-    document.getElementById('updateForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const id = document.getElementById('updateGradeId').value;
-      const grade_name = document.getElementById('updateGradeName').value;
-
-      fetch(`/grade/update/${id}`, {
-        method: 'POST', // keep POST if your backend expects it
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ grade_name })
-      })
-      .then(res => res.json())
-      .then(result => {
-        closeUpdateModal();
-        loadGrades();
-                window.location.reload(); // 🔄 refresh whole page
-
-      });
-    });
-
-    // --- Delete ---
-    function deleteGrade(id) {
-      if (confirm("Are you sure you want to delete this grade?")) {
-        fetch(`/grade/delete/${id}`, { method: 'DELETE' }) // keep POST if backend expects it
-          .then(res => res.json())
-          .then(result => {
-            alert(result.message);
-            loadGrades();
-                    window.location.reload(); // 🔄 refresh whole page
-
-          });
-      }
-    }
-
-    // Initial load
-    loadGrades();
-  </script>
+    <script src="Master/grade/grade.js"></script>
 
 </body>
+
 </html>
