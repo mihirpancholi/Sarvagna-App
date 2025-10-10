@@ -132,10 +132,15 @@ app.use("/gosthi_type", GosthiTypeRoutes);
 const GosthiGroupRoutes = require("./routes/GosthiGroupRoutes.js");
 app.use("/gosthigroup", GosthiGroupRoutes);
 
-
 // Mount sevak registration routes
 const SevakRegistrationRoutes = require("./routes/SevakRegistrationRoutes.js");
 app.use("/SevakRegistration", SevakRegistrationRoutes);
+
+// Mount Nirikshak routes
+const NirikshakRoutes = require("./routes/GosthiNirikshakRoutes.js");
+app.use("/Nirikshak", NirikshakRoutes);
+
+
 
 // Root route
 app.get("/", (req, res) => {

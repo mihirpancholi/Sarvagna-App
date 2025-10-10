@@ -108,23 +108,32 @@ static async getmandirbyzone(zone_id) {
   }
 
 
-  static async getZoneNoAndCodeForGroup(zoneId, groupId) {
+  static async getZoneNoAndCodeForGroup(zone_id, group_id) {
     const [rows] = await pool.execute(
       `SELECT zone_no, zone_code FROM group_master 
        WHERE zone_id = ? AND group_id = ? AND is_deleted='N'`,
-      [zoneId, groupId]
+      [zone_id, group_id]
     );
     return rows;
   }
 
-  static async getMaxZoneNoAndCode(zoneId) {
+  static async getMaxZoneNoAndCode(zone_id) {
     const [rows] = await pool.execute(
       `SELECT MAX(zone_no) AS zone_no, zone_code 
        FROM group_master 
        WHERE zone_id = ? AND is_deleted='N'`,
-      [zoneId]
+      [zone_id]
     );
     return rows;
+  }
+
+
+      static async getGroupGosthi(zone_id) {
+  const [rows] = await pool.execute(
+    `SELECT * FROM group_master WHERE zone_id = ? AND is_deleted = 'N'`,
+    [zone_id]
+  );
+  return rows; // return the whole array, not rows[0]
   }
   
   

@@ -1,6 +1,7 @@
 // controller/CityController.js
 const path = require("path");
 const Model = require("../model/CommonModel");
+const GroupMasterModel = require("../model/gosthiGroupModel");
 
 
 // when you search for a country it will show states of that country
@@ -132,16 +133,19 @@ exports.getSatsangDesignation = async (req, res) => {
 
 exports.getZoneCode = async (req, res) => {
   try {
-    const data = req.body;
-    let zoneId = data.zone_id || 0;
-    let groupId = data.group_id || null;
+    // let zone_id = data.zone_id || 0;
+    // let group_id = data.group_id || null;
+    const { zone_id } = req.query;
+    const { group_id } = req.query;
+    
 
-    if (!zoneId) {
+
+    if (!zone_id) {
       return res.status(400).json({ message: 'zone_id is required' });
     }
 
     // Step 1: Get Zone Name
-    const zoneRows = await GosthiGroupModel.getZoneNameById(zoneId);
+    const zoneRows = await GroupMasterModel.getZoneNameById(zone_id);
     if (zoneRows.length === 0) {
       return res.status(404).json({ message: 'Zone not found' });
     }
@@ -151,14 +155,14 @@ exports.getZoneCode = async (req, res) => {
 
     let zone_no = '';
 
-    // Step 2: If groupId present, fetch its zone_no
-    if (groupId) {
-      const groupRows = await GosthiGroupModel.getZoneNoAndCodeForGroup(zoneId, groupId);
+    // Step 2: If group_id present, fetch its zone_no
+    if (group_id) {
+      const groupRows = await Model.getZoneNoAndCodeForGroup(zone_id, group_id);
       if (groupRows.length > 0) {
         zone_no = groupRows[0].zone_no.toString().padStart(2, '0');
       } else {
         // fallback: if group_id not found
-        const maxRows = await GosthiGroupModel.getMaxZoneNoAndCode(zoneId);
+        const maxRows = await Model.getMaxZoneNoAndCode(zone_id);
         if (maxRows.length > 0 && maxRows[0].zone_no !== null) {
           zone_no = (maxRows[0].zone_no + 1).toString().padStart(2, '0');
         } else {
@@ -166,8 +170,8 @@ exports.getZoneCode = async (req, res) => {
         }
       }
     } else {
-      // Step 3: If no groupId, take max zone_no + 1
-      const maxRows = await GosthiGroupModel.getMaxZoneNoAndCode(zoneId);
+      // Step 3: If no group_id, take max zone_no + 1
+      const maxRows = await Model.getMaxZoneNoAndCode(zone_id);
       if (maxRows.length > 0 && maxRows[0].zone_no !== null) {
         zone_no = (maxRows[0].zone_no + 1).toString().padStart(2, '0');
       } else {
@@ -182,3 +186,16 @@ exports.getZoneCode = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+
+exports.GroupForGhosthi = async (req, res) => {
+  try {
+    const { zone_id } = req.query;
+    const rows = await Model.getGroupGosthi(zone_id);
+    res.json(rows); 
+  } catch (err) {
+    console.error("Error fetching Group:", err);
+    res.status(500).json({ message: "Error fetching Group" });
+  }
+};
+

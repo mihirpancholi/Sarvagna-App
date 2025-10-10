@@ -20,57 +20,100 @@ exports.getGosthiData = async (req, res) => {
 };
 
 
-exports.getZoneCode = async (req, res) => {
+
+
+exports.addGosthiGroup = async (req, res) => {
   try {
-    const data = req.body;
-    let zoneId = data.zone_id || 0;
-    let groupId = data.group_id || null;
+    const { zone_code, zone_no, zone_id, mandir_id, kshetra_id, group_name, created_id } = req.body;
 
-    if (!zoneId) {
-      return res.status(400).json({ message: 'zone_id is required' });
-    }
+    // ✅ Generate group_code properly (example: concatenate zone_code and zone_no)
+    const group_code = `${zone_code}-${zone_no}`;
 
-    // Step 1: Get Zone Name
-    const zoneRows = await GosthiGroupModel.getZoneNameById(zoneId);
-    if (zoneRows.length === 0) {
-      return res.status(404).json({ message: 'Zone not found' });
-    }
+    // Call model function
+    const id = await Model.addGroup(
+      zone_code,
+      zone_no,
+      zone_id,
+      mandir_id,
+      kshetra_id,
+      group_code,
+      group_name,
+      created_id || 1 // default to 1 if missing
+    );
 
-    const zoneName = zoneRows[0].zone_name;
-    const zoneCode = zoneName ? zoneName.substring(0, 1) : '';
-
-    let zone_no = '';
-
-    // Step 2: If groupId present, fetch its zone_no
-    if (groupId) {
-      const groupRows = await GosthiGroupModel.getZoneNoAndCodeForGroup(zoneId, groupId);
-      if (groupRows.length > 0) {
-        zone_no = groupRows[0].zone_no.toString().padStart(2, '0');
-      } else {
-        // fallback: if group_id not found
-        const maxRows = await GosthiGroupModel.getMaxZoneNoAndCode(zoneId);
-        if (maxRows.length > 0 && maxRows[0].zone_no !== null) {
-          zone_no = (maxRows[0].zone_no + 1).toString().padStart(2, '0');
-        } else {
-          zone_no = '01';
-        }
-      }
-    } else {
-      // Step 3: If no groupId, take max zone_no + 1
-      const maxRows = await GosthiGroupModel.getMaxZoneNoAndCode(zoneId);
-      if (maxRows.length > 0 && maxRows[0].zone_no !== null) {
-        zone_no = (maxRows[0].zone_no + 1).toString().padStart(2, '0');
-      } else {
-        zone_no = '01';
-      }
-    }
-
-    res.json({ zone_code: zoneCode, zone_no });
-
+    res.json({ success: true, message: "Gosthi Group added successfully", id });
   } catch (err) {
-    console.error('Error fetching zone code:', err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error adding Gosthi Group:", err);
+    res.status(500).json({ success: false, message: "Error adding Gosthi Group" });
   }
 };
 
+
+// Get Group by ID (for update modal)
+exports.getGroupById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const Group = await Model.getById(id);
+    if (!Group) return res.status(404).json({ message: "Group not found" });
+    res.json(Group);
+  } catch (err) {
+    console.error("Error fetching Group:", err);
+    res.status(500).json({ message: "Error fetching Group" });
+  }
+};
+
+// Update Group
+// Update Group
+exports.updateGroup = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updated_id = 1; // TODO: Replace with actual user id
+    const { zone_code, zone_no, zone_id, mandir_id, kshetra_id, group_name } = req.body;
+
+    const group_code = `${zone_code}-${zone_no}`;
+
+    // ✅ Check if group_name or group_code already exists for other records
+    const duplicate = await Model.checkDuplicateGroup(id, group_name, group_code);
+    if (duplicate) {
+      return res.status(400).json({
+        success: false,
+        message: `Group with name "${group_name}" or code "${group_code}" already exists.`,
+      });
+    }
+
+    // ✅ Proceed with update
+    await Model.updateGroup(
+      id,
+      zone_code,
+      zone_no,
+      zone_id,
+      mandir_id,
+      kshetra_id,
+      group_code,
+      group_name,
+      updated_id
+    );
+
+    res.json({ success: true, message: "Group updated successfully" });
+  } catch (err) {
+    console.error("Error updating Group:", err);
+    res.status(500).json({ success: false, message: "Error updating Group" });
+  }
+};
+
+
+
+
+// Delete Group
+exports.deleteGroup = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted_id = 1; 
+    await Model.deleteGroupmaster(id, deleted_id);
+    res.json({ success: true, message: "Group deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting Group:", err);
+    res.status(500).json({ success: false, message: "Error deleting Group" });
+  }
+};
 

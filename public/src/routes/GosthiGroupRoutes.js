@@ -7,6 +7,12 @@ router.get("/", GosthiController.getGosthiIndex);
 
 // API endpoints
 router.get("/list", GosthiController.getGosthiData);
+router.post("/add", GosthiController.addGosthiGroup);
+router.get("/:id", GosthiController.getGroupById);
+router.post("/update/:id", GosthiController.updateGroup);
+router.delete("/delete/:id", GosthiController.deleteGroup);
+
+
 
 
 
