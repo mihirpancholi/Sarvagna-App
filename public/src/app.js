@@ -142,7 +142,9 @@ app.use("/SevakRegistration", SevakRegistrationRoutes);
 const NirikshakRoutes = require("./routes/GosthiNirikshakRoutes.js");
 app.use("/Nirikshak", NirikshakRoutes);
 
-
+// Mount GosthiScheduleRoutes
+const ScheduleRoutes = require("./routes/GosthiScheduleRoutes.js");
+app.use("/GosthiSchedule", ScheduleRoutes)
 
 // Root route
 app.get("/", (req, res) => {
