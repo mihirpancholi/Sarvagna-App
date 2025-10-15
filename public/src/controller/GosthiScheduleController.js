@@ -109,7 +109,7 @@ exports.postGosthiSchedule = async (req, res) => {
 exports.getGosthiScheduleById = async (req, res) => {
   try {
     const { id } = req.params;
-    const GosthiType = await Model.getById(id);
+    const GosthiType = await Model.getById(id);  // <-- your model fetch
     if (!GosthiType) return res.status(404).json({ message: "GosthiType not found" });
     res.json(GosthiType);
   } catch (err) {
@@ -117,6 +117,7 @@ exports.getGosthiScheduleById = async (req, res) => {
     res.status(500).json({ message: "Error fetching Gosthi Type" });
   }
 };
+
 
 exports.deleteGosthiSchedule = async (req, res) => {
   try {
@@ -139,15 +140,52 @@ exports.updateview = async (req, res) => {
 
 exports.PostupdateGosthiSchedule = async (req, res) => {
   try {
-    const { id } = req.params;
-    const updated_id = 1; // This should be the ID of the user making the update
-    const { gosthi_topic_type } = req.body;
-    await Model.updateGosthiType(id, gosthi_topic_type, updated_id);
-    res.json({ success: true, message: "GosthiType updated successfully" });
+    const { gosthi_year, gosthi_month, report_submission_from_date, topics } = req.body;
+    const scheduleId = req.params.id;
+
+    if (!topics || topics.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select at least one Gosthi Topic",
+      });
+    }
+
+    if (!scheduleId) {
+      return res.status(400).json({
+        success: false,
+        message: "Schedule ID is required for update",
+      });
+    }
+
+    // 1️⃣ Update main schedule
+    const gosthiScheduleData = {
+      gosthi_schedule_id: scheduleId,
+      gosthi_year,
+      gosthi_month,
+      report_submission_from_date,
+      updated_id: 1, // you can replace with logged-in user ID
+    };
+    await Model.UpdateGosthiSchedule(gosthiScheduleData);
+
+    // 2️⃣ Mark existing topics as deleted
+    await Model.DeleteGosthiScheduleDetails(gosthiScheduleData);
+
+    // 3️⃣ Insert all topics
+    for (const topic of topics) {
+      const scheduleDetailData = {
+        gosthi_schedule_id: scheduleId,
+        gosthi_topic_type_id: topic.gosthi_topic_type_id,
+        gosthi_topic_type_no: topic.gosthi_topic_type_no,
+        topic_name: topic.topic_name,
+        created_id: 1 // you can replace with logged-in user ID
+      };
+      await Model.insertGosthiScheduleDetail(scheduleDetailData);
+    }
+
+    res.json({ success: true, message: "Gosthi Schedule updated successfully" });
+
   } catch (err) {
-    console.error("Error updating Gosthi Type:", err);
-    res
-      .status(500)
-      .json({ success: false, message: "Error updating Gosthi Type" });
+    console.error("Error updating Gosthi Schedule:", err);
+    res.status(500).json({ success: false, message: "Error saving Gosthi Schedule" });
   }
-}
+};

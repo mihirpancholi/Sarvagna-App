@@ -12,7 +12,7 @@ router.post("/getYearwiseMonth", GosthiScheduleController.getYearwiseMonth);
 router.post("/getGosthiNo", GosthiScheduleController.getGosthiNo);
 router.post("/addGosthiSchedule", GosthiScheduleController.postGosthiSchedule);
 router.get("/:id", GosthiScheduleController.getGosthiScheduleById);
-router.post("/update/:id", GosthiScheduleController.updateview);
+router.get("/update/:id", GosthiScheduleController.updateview);
 router.post("/Postupdate/:id", GosthiScheduleController.PostupdateGosthiSchedule);
 router.delete("/delete/:id", GosthiScheduleController.deleteGosthiSchedule);
 

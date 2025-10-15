@@ -1,1 +1,59 @@
-this is edit page
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Gosthi Schedule</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <h2>Edit Gosthi Schedule</h2>
+        <hr>
+        <form id="gosthiScheduleForm">
+            <label>Gosthi Year *</label>
+            <select id="gosthi_year" name="gosthi_year" required onchange="getGosthiYearWise(this.value);"></select>
+
+            <label>Gosthi Month *</label>
+            <select id="gosthi_month" name="gosthi_month" required>
+                <option value="">- Select Gosthi Month -</option>
+            </select>
+
+            <label>Gosthi Evaluation Report Submission Date *</label>
+            <input type="date" id="report_submission_from_date" name="report_submission_from_date" required>
+
+            <h4>Gosthi Topic Detail</h4>
+
+            <label>Gosthi Topic Type:</label>
+            <select id="gosthi_topic_type_id" name="gosthi_topic_type_id"
+                onchange="getGosthiNumber(this.value);"></select>
+
+            <label>No:</label>
+            <input type="text" id="gosthi_topic_type_no" name="gosthi_topic_type_no" readonly>
+
+            <label>Topic Name:</label>
+            <input type="text" id="topic_name" name="topic_name">
+
+            <button type="button" id="EditItem" onclick="InsertTableRow()">Add/Edit Topic</button>
+
+            <table id="GosthiTopicTable">
+                <thead>
+                    <tr style="background: #eeeeee;">
+                        <th>Gosthi Topic Type</th>
+                        <th>Gosthi No</th>
+                        <th>Topic Name</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <button type="submit">Update Schedule</button>
+        </form>
+
+        <script src="/Gosthi/GosthiSchedule/editgosthischedule.js"></script>
+    </div>
+</body>
+
+</html>

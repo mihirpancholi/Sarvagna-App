@@ -69,16 +69,6 @@ class GosthiSchedule {
     return result.insertId;
   }
 
-  static async getById(id) {
-    const [rows] = await pool.execute(
-      `SELECT * FROM gosthi_schedule
-      JOIN gosthi_schedule_detail on gosthi_schedule.gosthi_schedule_id = gosthi_schedule_detail.gosthi_schedule_id
-      WHERE gosthi_schedule_id = ? AND is_deleted = 'N'`,
-      [id]
-    );
-    return rows[0];
-  }
-
   static async deleteGosthiSchedule(gosthi_schedule_id, deleted_id) {
     const conn = await pool.getConnection();
     try {
@@ -110,6 +100,96 @@ class GosthiSchedule {
       conn.release();
     }
   }
+
+  static async getById(id) {
+    const [rows] = await pool.execute(
+      `SELECT gs.*, gsd.gosthi_schedule_detail_id, gsd.gosthi_topic_type_id,
+      gsd.gosthi_topic_type_no, gsd.topic_name,
+     gtm.gosthi_topic_type
+      FROM gosthi_schedule gs
+     LEFT JOIN gosthi_schedule_detail gsd ON gs.gosthi_schedule_id = gsd.gosthi_schedule_id
+     LEFT JOIN gosthi_topic_type_master gtm on gtm.gosthi_topic_type_id = gsd.gosthi_topic_type_id
+     WHERE gs.gosthi_schedule_id = ? AND gs.is_deleted = 'N' AND gsd.is_deleted = 'N'`,
+      [id]
+    );
+
+    if (!rows.length) return null;
+
+    // Structure response
+    const schedule = {
+      gosthi_schedule_id: rows[0].gosthi_schedule_id,
+      gosthi_year: rows[0].gosthi_year,
+      gosthi_month: rows[0].gosthi_month,
+      report_submission_from_date: rows[0].report_submission_from_date,
+      topics: rows.map(r => ({
+        gosthi_schedule_detail_id: r.gosthi_schedule_detail_id,
+        gosthi_topic_type_id: r.gosthi_topic_type_id,
+        gosthi_topic_type_no: r.gosthi_topic_type_no,
+        topic_name: r.topic_name,
+        gosthi_topic_type: r.gosthi_topic_type
+      }))
+
+    };
+
+    return schedule;
+  }
+
+  static async UpdateGosthiSchedule(gosthiScheduleData) {
+    const [result] = await pool.execute(
+      `UPDATE gosthi_schedule 
+       SET gosthi_year = ?, 
+           gosthi_month = ?, 
+           report_submission_from_date = ?, 
+           updated_id = ?, 
+           updated_at = NOW()
+       WHERE gosthi_schedule_id = ?`,
+      [
+        gosthiScheduleData.gosthi_year,
+        gosthiScheduleData.gosthi_month,
+        gosthiScheduleData.report_submission_from_date,
+        gosthiScheduleData.updated_id,
+        gosthiScheduleData.gosthi_schedule_id
+      ]
+    );
+    return result.affectedRows;
+  }
+
+  // Mark all existing details as deleted
+  static async DeleteGosthiScheduleDetails(gosthiScheduleData) {
+    const [result] = await pool.execute(
+      `UPDATE gosthi_schedule_detail
+       SET is_deleted = 'Y', deleted_at = NOW(), deleted_id = ?
+       WHERE gosthi_schedule_id = ?`,
+      [
+        gosthiScheduleData.updated_id,
+        gosthiScheduleData.gosthi_schedule_id
+      ]
+    );
+    return result.affectedRows;
+  }
+
+  // // Insert a new topic detail
+  // static async InsertGosthiScheduleDetail(scheduleDetailData) {
+  //   const [result] = await pool.execute(
+  //     `INSERT INTO gosthi_schedule_detail 
+  //      (gosthi_schedule_id, gosthi_topic_type_id, gosthi_topic_type_no, topic_name, created_id, created_at)
+  //      VALUES (?, ?, ?, ?, ?, NOW())`,
+  //     [
+  //       scheduleDetailData.gosthi_schedule_id,
+  //       scheduleDetailData.gosthi_topic_type_id,
+  //       scheduleDetailData.gosthi_topic_type_no,
+  //       scheduleDetailData.topic_name,
+  //       scheduleDetailData.created_id
+  //     ]
+  //   );
+  //   return result.insertId;
+  // }
+
+
+
+
+
+
 
 
 
