@@ -105,3 +105,49 @@ exports.postGosthiSchedule = async (req, res) => {
       .json({ success: false, message: "Error saving Gosthi Schedule" });
   }
 };
+
+exports.getGosthiScheduleById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const GosthiType = await Model.getById(id);
+    if (!GosthiType) return res.status(404).json({ message: "GosthiType not found" });
+    res.json(GosthiType);
+  } catch (err) {
+    console.error("Error fetching Gosthi Type:", err);
+    res.status(500).json({ message: "Error fetching Gosthi Type" });
+  }
+};
+
+exports.deleteGosthiSchedule = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted_id = 1;
+    await Model.deleteGosthiSchedule(id, deleted_id);
+    res.json({ success: true, message: "GosthiType deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting Gosthi Type:", err);
+    res
+      .status(500)
+      .json({ success: false, message: "Error deleting Gosthi Type" });
+  }
+};
+
+exports.updateview = async (req, res) => {
+  res.sendFile(path.join(viewsPath, "Gosthi", "GosthiSchedule", "edit.html"));
+};
+
+
+exports.PostupdateGosthiSchedule = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updated_id = 1; // This should be the ID of the user making the update
+    const { gosthi_topic_type } = req.body;
+    await Model.updateGosthiType(id, gosthi_topic_type, updated_id);
+    res.json({ success: true, message: "GosthiType updated successfully" });
+  } catch (err) {
+    console.error("Error updating Gosthi Type:", err);
+    res
+      .status(500)
+      .json({ success: false, message: "Error updating Gosthi Type" });
+  }
+}

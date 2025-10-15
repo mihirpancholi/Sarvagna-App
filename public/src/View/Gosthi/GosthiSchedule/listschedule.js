@@ -26,10 +26,10 @@ function LoadGosthiSchedule() {
           <td>${schedule.full_name || ""}</td>
           <td>
             <button class="btn btn-update" onclick="window.location.href='/GosthiSchedule/update/${
-              schedule.group_id
+              schedule.gosthi_schedule_id
             }'">Update</button>
             <button class="btn btn-delete" onclick="deleteGosthiSchedule(${
-              schedule.group_id || 0
+              schedule.gosthi_schedule_id
             })">Delete</button>
           </td>
         `;
@@ -40,3 +40,17 @@ function LoadGosthiSchedule() {
 }
 
 LoadGosthiSchedule();
+
+function deleteGosthiSchedule(id) {
+  if (confirm("Are you sure you want to delete this?")) {
+    fetch(`/GosthiSchedule/delete/${id}`, {
+      method: "DELETE",
+    }) // keep POST if backend expects it
+      .then((res) => res.json())
+      .then((result) => {
+        alert(result.message);
+        LoadGosthiSchedule();
+        window.location.reload(); // 🔄 refresh whole page
+      });
+  }
+}

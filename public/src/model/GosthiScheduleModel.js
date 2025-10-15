@@ -68,6 +68,54 @@ class GosthiSchedule {
     );
     return result.insertId;
   }
+
+  static async getById(id) {
+    const [rows] = await pool.execute(
+      `SELECT * FROM gosthi_schedule
+      JOIN gosthi_schedule_detail on gosthi_schedule.gosthi_schedule_id = gosthi_schedule_detail.gosthi_schedule_id
+      WHERE gosthi_schedule_id = ? AND is_deleted = 'N'`,
+      [id]
+    );
+    return rows[0];
+  }
+
+  static async deleteGosthiSchedule(gosthi_schedule_id, deleted_id) {
+    const conn = await pool.getConnection();
+    try {
+      await conn.beginTransaction();
+
+      // 1️⃣ Soft delete from gosthi_schedule
+      await conn.execute(
+        `UPDATE gosthi_schedule 
+         SET is_deleted = 'Y', deleted_at = NOW(), deleted_id = ? 
+         WHERE gosthi_schedule_id = ? AND is_deleted = 'N'`,
+        [deleted_id, gosthi_schedule_id]
+      );
+
+      // 2️⃣ Soft delete from gosthi_schedule_detail
+      const [result] = await conn.execute(
+        `UPDATE gosthi_schedule_detail 
+         SET is_deleted = 'Y', deleted_at = NOW(), deleted_id = ? 
+         WHERE gosthi_schedule_id = ? AND is_deleted = 'N'`,
+        [deleted_id, gosthi_schedule_id]
+      );
+
+      await conn.commit();
+      return result.affectedRows > 0;
+    } catch (err) {
+      await conn.rollback();
+      console.error("Error Deleting", err);
+      throw err;
+    } finally {
+      conn.release();
+    }
+  }
+
+
+
+
+
+
 }
 
 module.exports = GosthiSchedule;
