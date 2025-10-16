@@ -168,33 +168,6 @@ class GosthiSchedule {
     return result.affectedRows;
   }
 
-  // // Insert a new topic detail
-  // static async InsertGosthiScheduleDetail(scheduleDetailData) {
-  //   const [result] = await pool.execute(
-  //     `INSERT INTO gosthi_schedule_detail 
-  //      (gosthi_schedule_id, gosthi_topic_type_id, gosthi_topic_type_no, topic_name, created_id, created_at)
-  //      VALUES (?, ?, ?, ?, ?, NOW())`,
-  //     [
-  //       scheduleDetailData.gosthi_schedule_id,
-  //       scheduleDetailData.gosthi_topic_type_id,
-  //       scheduleDetailData.gosthi_topic_type_no,
-  //       scheduleDetailData.topic_name,
-  //       scheduleDetailData.created_id
-  //     ]
-  //   );
-  //   return result.insertId;
-  // }
-
-
-
-
-
-
-
-
-
-
-
 
 }
 

@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 // Static files
 
 app.use(express.static(path.join(__dirname, "../public")));
-app.use(express.static(path.join(__dirname, "./View"))); 
+app.use(express.static(path.join(__dirname, "./View")));
 
 
 // Mount caste routes
@@ -145,6 +145,10 @@ app.use("/Nirikshak", NirikshakRoutes);
 // Mount GosthiScheduleRoutes
 const ScheduleRoutes = require("./routes/GosthiScheduleRoutes.js");
 app.use("/GosthiSchedule", ScheduleRoutes)
+
+// Mount GroupMemberMapping routes
+const GroupMemberMappingRoutes = require("./routes/GroupMemberMappingRoutes.js");
+app.use("/GroupMemberMapping", GroupMemberMappingRoutes)
 
 // Root route
 app.get("/", (req, res) => {

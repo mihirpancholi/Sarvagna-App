@@ -18,5 +18,4 @@ router.get('/getZoneCodes', CommonController.getZoneCode);
 router.get('/getGroupForGhosthi', CommonController.GroupForGhosthi);
 
 
-
 module.exports = router;

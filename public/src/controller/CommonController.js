@@ -137,7 +137,7 @@ exports.getZoneCode = async (req, res) => {
     // let group_id = data.group_id || null;
     const { zone_id } = req.query;
     const { group_id } = req.query;
-    
+
 
 
     if (!zone_id) {
@@ -192,10 +192,11 @@ exports.GroupForGhosthi = async (req, res) => {
   try {
     const { zone_id } = req.query;
     const rows = await Model.getGroupGosthi(zone_id);
-    res.json(rows); 
+    res.json(rows);
   } catch (err) {
     console.error("Error fetching Group:", err);
     res.status(500).json({ message: "Error fetching Group" });
   }
 };
+
 
