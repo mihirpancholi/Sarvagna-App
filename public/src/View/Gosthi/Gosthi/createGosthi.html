@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Create Gosthi</title>
+</head>
+
+<body>
+    <h2>New Gosthi</h2>
+
+    <form id="createGosthiForm">
+        <label>Group:</label>
+        <select id="group_id">
+            <option value="">Select Group</option>
+        </select><br /><br />
+
+        <label>Next Gosthi Date:</label>
+        <input type="date" id="gosthi_date" /><br /><br />
+
+        <label>From Time:</label>
+        <input type="time" id="from_time" /><br /><br />
+
+        <label>To Time:</label>
+        <input type="time" id="to_time" /><br /><br />
+
+        <label>Location:</label>
+        <input type="text" id="location" /><br /><br />
+
+        <button type="submit">Create Gosthi</button>
+    </form>
+
+    <hr />
+    <h3>Gosthi Reports</h3>
+
+    <table border="1" id="reportTable" style="margin-top: 10px;">
+        <thead>
+            <tr>
+                <th>Group</th>
+                <th>Sevak</th>
+                <th>Month</th>
+                <th>Date</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Location</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="reportBody"></tbody>
+    </table>
+
+    <script src="gosthi/createGosthi.js"></script>
+</body>
+
+</html>

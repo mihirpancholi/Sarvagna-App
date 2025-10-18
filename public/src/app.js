@@ -150,6 +150,15 @@ app.use("/GosthiSchedule", ScheduleRoutes)
 const GroupMemberMappingRoutes = require("./routes/GroupMemberMappingRoutes.js");
 app.use("/GroupMemberMapping", GroupMemberMappingRoutes)
 
+// Mount GosthiReportSubmission routes
+const GosthiReportSubmissionRoutes = require("./routes/GosthiReportSubmissionRoutes.js");
+app.use("/GosthiReportSubmission", GosthiReportSubmissionRoutes)
+
+// Mount GosthiRoutes
+const GosthiRoutes = require("./routes/GosthiRoutes.js");
+app.use("/Gosthi", GosthiRoutes)
+
+
 // Root route
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "view", "dashboard.html"));
