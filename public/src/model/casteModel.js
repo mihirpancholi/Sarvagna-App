@@ -17,7 +17,7 @@ class Caste {
       SELECT caste_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM caste_master 
-      JOIN sevak_master ON sevak_master.sevak_id = caste_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = caste_master.created_id 
       WHERE caste_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class Caste {
   }
 
   // Soft delete
-static async deleteCaste(caste_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE caste_master 
+  static async deleteCaste(caste_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE caste_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE caste_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, caste_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, caste_id]
+    );
+    return result;
+  }
 
 
 }

@@ -17,7 +17,7 @@ class Nirdeshak {
       SELECT nirdeshak_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM nirdeshak_master 
-      JOIN sevak_master ON sevak_master.sevak_id = nirdeshak_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = nirdeshak_master.created_id 
       WHERE nirdeshak_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class Nirdeshak {
   }
 
   // Soft delete
-static async deleteNirdeshak(nirdeshak_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE nirdeshak_master 
+  static async deleteNirdeshak(nirdeshak_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE nirdeshak_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE nirdeshak_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, nirdeshak_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, nirdeshak_id]
+    );
+    return result;
+  }
 
 
 }

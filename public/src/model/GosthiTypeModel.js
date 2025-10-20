@@ -18,7 +18,7 @@ class GosthiType {
       SELECT gosthi_topic_type_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM gosthi_topic_type_master 
-      JOIN sevak_master ON sevak_master.sevak_id = gosthi_topic_type_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = gosthi_topic_type_master.created_id 
       WHERE gosthi_topic_type_master.is_deleted = 'N'
     `);
     return rows;
@@ -43,18 +43,18 @@ class GosthiType {
   }
 
   // Soft delete
-static async deleteGosthiType(gosthi_topic_type_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE gosthi_topic_type_master 
+  static async deleteGosthiType(gosthi_topic_type_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE gosthi_topic_type_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE gosthi_topic_type_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, gosthi_topic_type_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, gosthi_topic_type_id]
+    );
+    return result;
+  }
 
 
 }

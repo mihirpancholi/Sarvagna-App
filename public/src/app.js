@@ -158,6 +158,18 @@ app.use("/GosthiReportSubmission", GosthiReportSubmissionRoutes)
 const GosthiRoutes = require("./routes/GosthiRoutes.js");
 app.use("/Gosthi", GosthiRoutes)
 
+// Mount ExamDashboard routes
+const ExamDashboardRoutes = require("./routes/ExamDashboard.js");
+app.use("/ExamDashboard", ExamDashboardRoutes)
+
+// Mount ExamType routes
+const ExamTypeRoutes = require("./routes/ExamTypeRoutes.js");
+app.use("/examtype", ExamTypeRoutes);
+
+
+// Mount Exam routes
+const ExamRoutes = require("./routes/ExamRoutes.js");
+app.use("/Exam", ExamRoutes);
 
 // Root route
 app.get("/", (req, res) => {

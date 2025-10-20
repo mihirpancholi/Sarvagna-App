@@ -17,7 +17,7 @@ class Category {
       SELECT category_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM category_master 
-      JOIN sevak_master ON sevak_master.sevak_id = category_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = category_master.created_id 
       WHERE category_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class Category {
   }
 
   // Soft delete
-static async deleteCategory(category_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE category_master 
+  static async deleteCategory(category_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE category_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE category_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, category_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, category_id]
+    );
+    return result;
+  }
 
 
 }

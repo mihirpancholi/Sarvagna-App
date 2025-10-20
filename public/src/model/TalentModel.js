@@ -17,7 +17,7 @@ class Talent {
       SELECT talent_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM talent_master 
-      JOIN sevak_master ON sevak_master.sevak_id = talent_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = talent_master.created_id 
       WHERE talent_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class Talent {
   }
 
   // Soft delete
-static async deleteTalent(talent_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE talent_master 
+  static async deleteTalent(talent_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE talent_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE talent_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, talent_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, talent_id]
+    );
+    return result;
+  }
 
 
 }

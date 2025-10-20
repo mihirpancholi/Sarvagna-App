@@ -17,7 +17,7 @@ class BloodGroup {
       SELECT blood_group_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM blood_group_master 
-      JOIN sevak_master ON sevak_master.sevak_id = blood_group_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = blood_group_master.created_id 
       WHERE blood_group_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class BloodGroup {
   }
 
   // Soft delete
-static async deleteBloodGroup(blood_group_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE blood_group_master 
+  static async deleteBloodGroup(blood_group_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE blood_group_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE blood_group_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, blood_group_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, blood_group_id]
+    );
+    return result;
+  }
 
 
 }

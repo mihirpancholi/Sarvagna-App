@@ -17,7 +17,7 @@ class Grade {
       SELECT grade_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM grade_master 
-      JOIN sevak_master ON sevak_master.sevak_id = grade_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = grade_master.created_id 
       WHERE grade_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class Grade {
   }
 
   // Soft delete
-static async deleteGrade(grade_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE grade_master 
+  static async deleteGrade(grade_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE grade_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE grade_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, grade_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, grade_id]
+    );
+    return result;
+  }
 
 
 }

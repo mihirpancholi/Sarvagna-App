@@ -17,7 +17,7 @@ class Relationship {
       SELECT relationship_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM relationship_master 
-      JOIN sevak_master ON sevak_master.sevak_id = relationship_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = relationship_master.created_id 
       WHERE relationship_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class Relationship {
   }
 
   // Soft delete
-static async deleteRelationship(relationship_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE relationship_master 
+  static async deleteRelationship(relationship_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE relationship_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE relationship_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, relationship_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, relationship_id]
+    );
+    return result;
+  }
 
 
 }

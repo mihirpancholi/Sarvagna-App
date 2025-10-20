@@ -7,7 +7,7 @@ class GosthiSchedule {
       SELECT gosthi_schedule.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM gosthi_schedule 
-      JOIN sevak_master ON sevak_master.sevak_id = gosthi_schedule.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = gosthi_schedule.created_id 
       WHERE gosthi_schedule.is_deleted = 'N'
     `);
     return rows;

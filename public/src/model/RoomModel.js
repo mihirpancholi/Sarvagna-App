@@ -17,7 +17,7 @@ class Room {
       SELECT room_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM room_master 
-      JOIN sevak_master ON sevak_master.sevak_id = room_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = room_master.created_id 
       WHERE room_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class Room {
   }
 
   // Soft delete
-static async deleteRoom(room_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE room_master 
+  static async deleteRoom(room_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE room_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE room_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, room_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, room_id]
+    );
+    return result;
+  }
 
 
 }

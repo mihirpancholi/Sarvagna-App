@@ -1,0 +1,125 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam </title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 400px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Exam Master</h1>
+    <button class="btn btn-add" onclick="openAddModal()">+ Add Exam </button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Exam Type</th>
+                <th>Exam Name</th>
+                <th>Created by</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="Exam-table-body"></tbody>
+    </table>
+
+    <!-- Add Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h3>Add New Exam</h3>
+            <form id="addForm">
+                <label for="addexamtype">Exam Type:</label>
+                <select id="addexamtype" required></select>
+                <br><br>
+                <label for="addExamName">Exam Name:</label>
+                <input type="text" id="addExamName" required>
+                <br><br>
+                <button type="submit" class="btn btn-add">Add</button>
+                <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h3>Update Exam</h3>
+            <form id="updateForm">
+                <input type="hidden" id="updateExamId">
+                <label for="updateexamtype">Exam Type:</label>
+                <select id="updateexamtype" required></select>
+                <br><br>
+                <label for="updateExamName">Exam Name:</label>
+                <input type="text" id="updateExamName" required>
+                <br><br>
+                <button type="submit" class="btn btn-update">Save</button>
+                <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="Exam/Exam.js"></script>
+</body>
+
+</html>

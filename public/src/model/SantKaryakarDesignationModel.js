@@ -17,7 +17,7 @@ class SantKaryakarDesignation {
       SELECT sant_karyakar_designation_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM sant_karyakar_designation_master 
-      JOIN sevak_master ON sevak_master.sevak_id = sant_karyakar_designation_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = sant_karyakar_designation_master.created_id 
       WHERE sant_karyakar_designation_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class SantKaryakarDesignation {
   }
 
   // Soft delete
-static async deleteSantKaryakarDesignation(sant_karyakar_designation_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE sant_karyakar_designation_master 
+  static async deleteSantKaryakarDesignation(sant_karyakar_designation_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE sant_karyakar_designation_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE sant_karyakar_designation_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, sant_karyakar_designation_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, sant_karyakar_designation_id]
+    );
+    return result;
+  }
 
 
 }

@@ -17,7 +17,7 @@ class Degree {
       SELECT degree_master.*, 
              CONCAT(sevak_master.first_name, ' ', sevak_master.last_name) AS full_name 
       FROM degree_master 
-      JOIN sevak_master ON sevak_master.sevak_id = degree_master.created_id 
+LEFT JOIN sevak_master ON sevak_master.sevak_id = degree_master.created_id 
       WHERE degree_master.is_deleted = 'N'
     `);
     return rows;
@@ -42,18 +42,18 @@ class Degree {
   }
 
   // Soft delete
-static async deleteDegree(degree_id, deleted_id) {
-  const [result] = await pool.execute(
-    `UPDATE degree_master 
+  static async deleteDegree(degree_id, deleted_id) {
+    const [result] = await pool.execute(
+      `UPDATE degree_master 
      SET is_deleted = 'Y', 
          deleted_at = NOW(), 
          deleted_id = ? 
      WHERE degree_id = ? 
-       AND is_deleted = 'N'`, 
-    [deleted_id, degree_id]
-  );
-  return result;
-}
+       AND is_deleted = 'N'`,
+      [deleted_id, degree_id]
+    );
+    return result;
+  }
 
 
 }
