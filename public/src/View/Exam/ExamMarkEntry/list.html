@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Mark Entry</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        table a {
+            cursor: pointer;
+        }
+
+        table a:hover {
+            color: #0d47a1;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Exam Mark Entry</h1>
+    <a style="text-decoration: none;" class="btn btn-add" href="./add">+ Add Mark Entry</a>
+
+    <br> <br>
+    <div id="indexData">
+        Loading current Talim Batch info...
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Sn</th>
+                <th>Exam Type</th>
+                <th>Exam Name</th>
+                <th>Exam Date</th>
+                <th>Total Marks</th>
+                <th>Present Count</th>
+                <th>Absent Count</th>
+                <th>View</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="ExamMarks-table-body"></tbody>
+    </table>
+
+</body>
+
+<script src="/Exam/ExamMarkEntry/ExamMarkEntry.js"></script>
+
+</html>

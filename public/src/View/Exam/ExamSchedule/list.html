@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Schedule</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        table a {
+            cursor: pointer;
+        }
+
+        table a:hover {
+            color: #0d47a1;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 20px;
+            width: 400px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Exam Schedule</h1>
+    <button class="btn btn-add" onclick="openAddModal()">+ Add Schedule</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Exam Type</th>
+                <th>Exam</th>
+                <th>Exam Date</th>
+                <th>Total Marks</th>
+                <th>Mark Entry Period</th>
+                <th>View</th>
+                <th>Created By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="ExamSchedule-table-body"></tbody>
+    </table>
+
+    <!-- Add Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h3>Add Exam Schedule</h3>
+            <form id="addForm">
+                <label>Exam Type:</label>
+                <select id="addExamType" required></select><br><br>
+
+                <label>Exam:</label>
+                <select id="addExam" required></select><br><br>
+
+                <label>Exam Date:</label>
+                <input type="date" id="addExamDate" required><br><br>
+
+                <label>Total Marks:</label>
+                <input type="number" id="addTotalMarks" required><br><br>
+
+                <label>Mark Entry Start:</label>
+                <input type="date" id="addStartDate" required><br><br>
+
+                <label>Mark Entry End:</label>
+                <input type="date" id="addEndDate" required><br><br>
+
+                <label>Upload Exam Paper:</label>
+                <input type="file" id="addExamFile" name="exam_paper" accept=".pdf,.doc,.docx,.jpg,.png">
+                <br><br>
+
+                <button type="submit" class="btn btn-add">Add</button>
+                <button type="button" onclick="closeAddModal()" class="btn">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h3>Update Exam Schedule</h3>
+            <form id="updateForm">
+                <input type="hidden" id="updateScheduleId">
+
+                <label>Exam Type:</label>
+                <select id="updateExamType" required></select><br><br>
+
+                <label>Exam:</label>
+                <select id="updateExam" required></select><br><br>
+
+                <label>Exam Date:</label>
+                <input type="date" id="updateExamDate" required><br><br>
+
+                <label>Total Marks:</label>
+                <input type="number" id="updateTotalMarks" required><br><br>
+
+                <label>Mark Entry Start:</label>
+                <input type="date" id="updateStartDate" required><br><br>
+
+                <label>Mark Entry End:</label>
+                <input type="date" id="updateEndDate" required><br><br>
+
+                <label>Upload New Exam Paper:</label>
+                <input type="file" id="updateExamFile" name="exam_paper" accept=".pdf,.doc,.docx,.jpg,.png">
+                <br><br>
+
+                <button type="submit" class="btn btn-update">Save</button>
+                <button type="button" onclick="closeUpdateModal()" class="btn">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="Exam/ExamSchedule/ExamSchedule.js"></script>
+</body>
+
+</html>

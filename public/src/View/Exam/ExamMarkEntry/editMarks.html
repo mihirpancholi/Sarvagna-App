@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Mark Entry</title>
+    <style>
+        input[type="checkbox"].atten {
+            appearance: none;
+            width: 45px;
+            height: 22px;
+            background: #ccc;
+            border-radius: 22px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type="checkbox"].atten::after {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+        }
+
+        input[type="checkbox"].atten:checked {
+            background: #4caf50;
+        }
+
+        input[type="checkbox"].atten:checked::after {
+            left: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Exam Mark Entry</h2>
+    <form id="editexamMarkForm">
+
+        <!-- Exam Type -->
+        <label for="examtype_id">Exam Type:</label>
+        <select id="examtype_id" name="examtype_id" required>
+            <option value="">-- Select Exam Type --</option>
+        </select>
+
+        <br><br>
+
+        <!-- Exam Name -->
+        <label for="exam_id">Exam Name:</label>
+        <select id="exam_id" name="exam_id" required>
+            <option value="">-- Select Exam Name --</option>
+        </select>
+
+        <br><br>
+
+        <!-- Total Marks -->
+        <span id="total_marks"></span>
+
+        <br><br>
+
+        <!-- Students Table -->
+        <div id="tb"></div>
+        <br>
+        <button type="submit">Save Marks</button>
+    </form>
+
+    <script src="/Exam/ExamMarkEntry/EditMarks.js"></script>
+
+</body>
+
+</html>

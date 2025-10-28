@@ -17,5 +17,6 @@ router.get("/getsatsangdesignation", CommonController.getSatsangDesignation);
 router.get('/getZoneCodes', CommonController.getZoneCode);
 router.get('/getGroupForGhosthi', CommonController.GroupForGhosthi);
 
+router.get('/getexambyTypeid', CommonController.ExamsByType);
 
 module.exports = router;

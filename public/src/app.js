@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-
 const app = express();
 
 // Middleware
@@ -9,9 +8,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Static files
-
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.static(path.join(__dirname, "./View")));
+
 
 
 // Mount caste routes
@@ -166,10 +165,17 @@ app.use("/ExamDashboard", ExamDashboardRoutes)
 const ExamTypeRoutes = require("./routes/ExamTypeRoutes.js");
 app.use("/examtype", ExamTypeRoutes);
 
-
 // Mount Exam routes
 const ExamRoutes = require("./routes/ExamRoutes.js");
 app.use("/Exam", ExamRoutes);
+
+// Mount Exam routes
+const ExamScheduleRoutes = require("./routes/ExamScheduleRoutes.js");
+app.use("/ExamSchedule", ExamScheduleRoutes);
+
+// Mount ExamMarkEntry routes
+const ExamMarkEntryRoutes = require("./routes/ExamMarkEntryRoutes.js");
+app.use("/ExamMarkEntry", ExamMarkEntryRoutes);
 
 // Root route
 app.get("/", (req, res) => {

@@ -136,7 +136,13 @@ class CommonModel {
     return rows; // return the whole array, not rows[0]
   }
 
-
+  static async getExamsByType(examtype_id) {
+    const [rows] = await pool.execute(
+      `SELECT * FROM exam_master WHERE examtype_id = ? AND is_deleted = 'N'`,
+      [examtype_id]
+    );
+    return rows; // return the whole array, not rows[0]
+  }
 
 
 

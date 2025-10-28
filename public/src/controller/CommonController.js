@@ -200,3 +200,13 @@ exports.GroupForGhosthi = async (req, res) => {
 };
 
 
+exports.ExamsByType = async (req, res) => {
+  try {
+    const { examtype_id } = req.query;
+    const rows = await Model.getExamsByType(examtype_id);
+    res.json(rows);
+  } catch (err) {
+    console.error("Error fetching Exams:", err);
+    res.status(500).json({ message: "Error fetching Exams" });
+  }
+};
