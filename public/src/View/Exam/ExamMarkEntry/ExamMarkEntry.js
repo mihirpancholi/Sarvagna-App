@@ -24,7 +24,7 @@ function LoadExamMarks() {
           <td>${exam.present_count}</td>
           <td>${exam.absent_count}</td>
           <td>
-            <a href="./edit?exam_id=${exam.exam_id}&examtype_id=${exam.examtype_id}" class="btn btn-update" style="text-decoration: none;">
+            <a href="./ExamMarkEntry/edit?exam_id=${exam.exam_id}&examtype_id=${exam.examtype_id}" class="btn btn-update" style="text-decoration: none;">
    Update
 </a>
 
