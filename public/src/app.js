@@ -177,6 +177,14 @@ app.use("/ExamSchedule", ExamScheduleRoutes);
 const ExamMarkEntryRoutes = require("./routes/ExamMarkEntryRoutes.js");
 app.use("/ExamMarkEntry", ExamMarkEntryRoutes);
 
+// Mount SevakEvaluation routes
+const SevakEvaluationRoutes = require("./routes/SevakEvaluationRoutes.js");
+app.use("/SevakEvaluation", SevakEvaluationRoutes);
+
+// Mount MyBatchmate routes
+const MyBatchmateRoutes = require("./routes/MyBatchmateRoutes.js");
+app.use("/MyBatchmate", MyBatchmateRoutes);
+
 // Root route
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "view", "dashboard.html"));

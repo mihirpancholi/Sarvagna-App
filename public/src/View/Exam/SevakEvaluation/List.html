@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sevak Evaluation</title>
+
+</head>
+
+<body>
+    <div>
+        <!-- Modals for Remarks -->
+        <div id="remarkModal"
+            style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5);">
+            <div
+                style="background-color:#fefefe; margin:15% auto; padding:20px; border:1px solid #888; width:80%; max-width:500px;">
+                <h4 id="remarkModalTitle">Remark</h4>
+                <p id="remarkModalBody"></p>
+                <button onclick="closeRemarkModal()">Close</button>
+            </div>
+        </div>
+
+        <a href="/SevakEvaluation/add">Add Sevak Evaluation</a>
+        <hr>
+        <form id="filterForm">
+            <div>
+                <label><input type="radio" name="type" value="AllSevakEvaluation" onchange="operation(this.value)"
+                        checked>
+                    <b>View All</b></label>
+                <label><input type="radio" name="type" value="Sevak" onchange="operation(this.value)"> <b>Filter
+                        By</b></label>
+            </div>
+            <div id="filterSevak" style="display:none;">
+                <!-- Filter dropdowns will be populated by JS -->
+                <select name="talim_batch_id" id="talim_batch_id" title="Talim Batch"></select>
+                <select name="city_id" id="city_id" title="City"></select>
+                <select name="grade_id" id="grade_id" title="Overall Grade"></select>
+                <select name="kshetra_id" id="kshetra_id" title="Kshetra"></select>
+                <select name="district_id" id="district_id" title="District"></select>
+                <select name="degree_id" id="degree_id" title="Degree"></select>
+                <select name="group_id" id="group_id" title="Goshthi Group"></select>
+                <select name="mandir" id="mandir" title="Mandir"></select>
+                <select name="zone_id" id="zone_id" title="Region"></select>
+                <select name="satsang_activity_id" id="satsang_activity_id" title="Satsang Activity"></select>
+                <select name="satsang_designation_id" id="satsang_designation_id" title="Satsang Designation"></select>
+                <button type="button" id="searchBtn">Search</button>
+                <button type="button" id="searchExcelBtn">Excel</button>
+            </div>
+        </form>
+        <div id="allSevakListTb">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Talim Batch</th>
+                        <th>Sevak Name</th>
+                        <th>City</th>
+                        <th>Satsang Grade</th>
+                        <th>Seva Grade</th>
+                        <th>Human Relations Grade</th>
+                        <th>Skill Grade</th>
+                        <th>Education Grade</th>
+                        <th>Family Ecostatus Grade</th>
+                        <th>Family Satsang Grade</th>
+                        <th>Overall Grade</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="evaluation-table-body">
+                    <!-- Data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+        <div id="searchingListTb"></div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const filterContainer = document.getElementById('filterSevak');
+                const searchBtn = document.getElementById('searchBtn');
+                const tableBody = document.getElementById('evaluation-table-body');
+
+                // Populate filter dropdowns
+                fetch('/SevakEvaluation/filter-options')
+                    .then(res => res.json())
+                    .then(response => {
+                        if (response.success) {
+                            const { data } = response;
+                            populateSelect('talim_batch_id', data.talimBatchList, 'talim_batch_id', 'batch', 'Talim Batch');
+                            populateSelect('city_id', data.cityList, 'city_id', 'city_name', 'City');
+                            populateSelect('grade_id', data.gradeList, 'grade_id', 'grade_name', 'Overall Grade');
+                            // ... populate other selects similarly
+                        }
+                    });
+
+                // Initial data load
+                loadTableData();
+
+                // Filter button click
+                searchBtn.addEventListener('click', () => {
+                    const filters = getFilterValues();
+                    loadTableData(filters);
+                });
+
+                // Radio button logic
+                window.operation = function (value) {
+                    if (value === 'Sevak') {
+                        filterContainer.style.display = 'block';
+                    } else {
+                        filterContainer.style.display = 'none';
+                        loadTableData(); // Reload all data
+                    }
+                };
+            });
+
+            function populateSelect(selectId, data, valueField, textField, defaultOptionText) {
+                const select = document.getElementById(selectId);
+                select.innerHTML = `<option value="">-- Select ${defaultOptionText} --</option>`;
+                data.forEach(item => {
+                    select.innerHTML += `<option value="${item[valueField]}">${item[textField]}</option>`;
+                });
+            }
+
+            function getFilterValues() {
+                const form = document.getElementById('filterForm');
+                const formData = new FormData(form);
+                const filters = {};
+                for (let [key, value] of formData.entries()) {
+                    if (value) filters[key] = value;
+                }
+                return filters;
+            }
+
+            function loadTableData(filters = {}) {
+                const tableBody = document.getElementById('evaluation-table-body');
+                tableBody.innerHTML = '<tr><td colspan="12">Loading...</td></tr>';
+
+                fetch('/sevak-evaluation/filter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(filters)
+                })
+                    .then(res => res.json())
+                    .then(response => {
+                        tableBody.innerHTML = '';
+                        if (response.success && response.data.length > 0) {
+                            response.data.forEach(row => {
+                                const tr = document.createElement('tr');
+                                tr.innerHTML = `
+                            <td>${row.talim_batch || ''}</td>
+                            <td>${row.sevak_name || ''}</td>
+                            <td>${row.city_name || ''}</td>
+                            <td>${createRemarkLink(row, 'satsang')}</td>
+                            <td>${createRemarkLink(row, 'seva')}</td>
+                            <td>${createRemarkLink(row, 'humanRelations')}</td>
+                            <td>${createRemarkLink(row, 'skill')}</td>
+                            <td>${createRemarkLink(row, 'education')}</td>
+                            <td>${createRemarkLink(row, 'familyEcostatus')}</td>
+                            <td>${createRemarkLink(row, 'familySatsang')}</td>
+                            <td>${createRemarkLink(row, 'overall')}</td>
+                            <td>
+                                <a href="/sevak-evaluation/edit/${row.sevak_evaluation_id}">Edit</a> |
+                                <a href="/sevak-evaluation/delete/${row.sevak_evaluation_id}" onclick="return confirm('Are you sure?')">Delete</a> |
+                                <a href="/sevak-evaluation/print/${row.sevak_evaluation_id}" target="_blank">Print</a>
+                            </td>
+                        `;
+                                tableBody.appendChild(tr);
+                            });
+                        } else {
+                            tableBody.innerHTML = '<tr><td colspan="12">No data found.</td></tr>';
+                        }
+                    });
+            }
+
+            function createRemarkLink(row, type) {
+                const grade = row[`${type}Grade`] || '';
+                const notes = row[`${type}_notes`] || '';
+                if (notes) {
+                    return `${grade} <a href="#" onclick="showRemarkModal('${type}', ${row.sevak_evaluation_id}, event)">(i)</a>`;
+                }
+                return grade;
+            }
+
+            function showRemarkModal(type, id, event) {
+                event.preventDefault();
+                fetch(`/sevak-evaluation/remarks/${type}/${id}`)
+                    .then(res => res.json())
+                    .then(response => {
+                        if (response.success) {
+                            document.getElementById('remarkModalTitle').textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} Remark`;
+                            document.getElementById('remarkModalBody').textContent = response.remark;
+                            document.getElementById('remarkModal').style.display = 'block';
+                        }
+                    });
+            }
+
+            function closeRemarkModal() {
+                document.getElementById('remarkModal').style.display = 'none';
+            }
+        </script>
+</body>
+
+</html>

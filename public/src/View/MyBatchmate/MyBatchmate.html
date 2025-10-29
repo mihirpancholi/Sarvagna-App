@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Batchmates</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <h4><b>My Batchmate</b></h4>
+    <div>
+        <b>Talim Batch:</b> <span id="talim-batch-name"></span>
+    </div>
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <th>Sr No</th>
+                <th>Ytk Id</th>
+                <th>Sevak Name</th>
+                <th>City</th>
+                <th>Birth Date</th>
+                <th>Marriage Date</th>
+                <th>Contact No</th>
+            </tr>
+        </thead>
+        <tbody id="batchmate-table-body">
+        </tbody>
+    </table>
+
+    <script src="./MyBatchmate.js"></script>
+
+</body>
+
+</html>
