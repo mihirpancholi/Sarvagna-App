@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Sevak Evaluation</title>
+</head>
+
+<body>
+    <h3>Edit Sevak Evaluation</h3>
+    <a href="/SevakEvaluation">Back to List</a>
+    <hr>
+    <form id="editForm">
+        <input type="hidden" id="sevak_evaluation_id" name="sevak_evaluation_id">
+
+        <!-- Talim Batch -->
+        <label>Talim Batch:</label>
+        <select id="talim_batch_id" name="talim_batch_id"></select><br><br>
+
+        <!-- Sevak Dropdown -->
+        <label>Sevak:</label>
+        <select id="sevak_id" name="sevak_id"></select><br><br>
+
+        <label for="satsang_grade_id">Satsang Grade *</label>
+        <select id="satsang_grade_id" name="satsang_grade_id"></select>
+        <textarea name="satsang_notes" id="satsang_notes"></textarea> <br><br>
+
+        <label for="seva_grade_id">Seva Grade *</label>
+        <select id="seva_grade_id" name="seva_grade_id"></select>
+        <textarea name="seva_notes" id="seva_notes"></textarea><br><br>
+
+        <label for="human_relations_grade_id">Human Relations Grade *</label>
+        <select id="human_relations_grade_id" name="human_relations_grade_id"></select>
+        <textarea name="human_relations_notes" id="human_relations_notes"></textarea><br><br>
+
+        <label for="skill_grade_id">Skill Grade *</label>
+        <select id="skill_grade_id" name="skill_grade_id"></select>
+        <textarea name="skill_notes" id="skill_notes"></textarea><br><br>
+
+        <label for="abhyas_grade_id">Abhyas Grade *</label>
+        <select id="abhyas_grade_id" name="abhyas_grade_id"></select>
+        <textarea name="abhyas_notes" id="abhyas_notes"></textarea><br><br>
+
+        <label for="family_ecostatus_grade_id">Family Economic Status Grade *</label>
+        <select id="family_ecostatus_grade_id" name="family_ecostatus_grade_id"></select>
+        <textarea name="family_ecostatus_notes" id="family_ecostatus_notes"></textarea><br><br>
+
+        <label for="family_satsang_grade_id">Family Satsang Grade *</label>
+        <select id="family_satsang_grade_id" name="family_satsang_grade_id"></select>
+        <textarea name="family_satsang_notes" id="family_satsang_notes"></textarea><br><br>
+
+        <label for="overall_grade_id">Overall Grade *</label>
+        <select id="overall_grade_id" name="overall_grade_id"></select>
+        <textarea name="overall_notes" id="overall_notes"></textarea><br><br>
+
+        <label for="remarks">Remarks</label>
+        <textarea name="remarks" id="remarks"></textarea> <br><br>
+
+        <button type="submit">Update</button>
+    </form>
+
+
+</body>
+<script src="/Exam/SevakEvaluation/edit.js"></script>
+
+</html>

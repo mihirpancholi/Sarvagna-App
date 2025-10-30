@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Exam Marks Report</title>
+    <!-- Include SheetJS (xlsx) for Excel generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <h3>All Exam Report</h3>
+    <hr>
+
+    <form id="reportForm">
+        <div>
+            <label>Talim Batch:</label>
+            <select id="talim_batch_id" name="talim_batch_id" required></select>
+        </div>
+        <br>
+        <div>
+            <button type="button" id="generateExcelBtn">Generate Excel Report</button>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const talimBatchSelect = document.getElementById('talim_batch_id');
+
+            // Populate initial dropdown
+            fetch('/AllExamMarksReport/initial-data')
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        populateSelect(talimBatchSelect, result.data.talimBatches, 'talim_batch_id', 'batch', 'Select Talim Batch');
+                    }
+                });
+
+            // Event listener for report generation
+            document.getElementById('generateExcelBtn').addEventListener('click', generateExcelReport);
+
+            function populateSelect(selectElement, data, valueField, textField, defaultText) {
+                selectElement.innerHTML = `<option value="">-- ${defaultText} --</option>`;
+                data.forEach(item => {
+                    selectElement.innerHTML += `<option value="${item[valueField]}">${item[textField]}</option>`;
+                });
+            }
+
+            async function generateExcelReport() {
+                const talimBatchId = talimBatchSelect.value;
+
+                if (!talimBatchId) {
+                    alert('Please select a Talim Batch.');
+                    return;
+                }
+
+                const response = await fetch('/AllExamMarksReport/generate-report', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ talim_batch_id: talimBatchId })
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    alert(result.message);
+                    return;
+                }
+
+                const { exams, students, marksMap } = result.data;
+
+                // --- Prepare data for Excel ---
+                const headers = ['No', 'Sevak Name'];
+                let totalMarksOfAllExams = 0;
+
+                exams.forEach(exam => {
+                    headers.push(`${exam.exam_name} (${exam.total_marks})`);
+                    totalMarksOfAllExams += parseFloat(exam.total_marks || 0);
+                });
+                headers.push(`Total Marks (${totalMarksOfAllExams})`);
+                headers.push('Percentage');
+
+                const body = students.map((student, index) => {
+                    const row = {
+                        'No': index + 1,
+                        'Sevak Name': `${student.sevak_name} (${student.city_name || ''})`
+                    };
+
+                    let studentTotalMarks = 0;
+                    exams.forEach(exam => {
+                        const markKey = `${student.sevak_id}_${exam.exam_id}`;
+                        const mark = marksMap[markKey] !== undefined ? marksMap[markKey] : 'N/A';
+                        row[`${exam.exam_name} (${exam.total_marks})`] = mark;
+                        if (mark !== 'N/A') {
+                            studentTotalMarks += parseFloat(mark);
+                        }
+                    });
+
+                    row[`Total Marks (${totalMarksOfAllExams})`] = studentTotalMarks;
+                    const percentage = totalMarksOfAllExams > 0 ? (studentTotalMarks * 100 / totalMarksOfAllExams).toFixed(2) : 0;
+                    row['Percentage'] = `${percentage}%`;
+
+                    return row;
+                });
+
+                // --- Create and download Excel file ---
+                const title = [
+                    { A: '॥ Shree Swaminarayano Vijayate ॥' },
+                    { A: 'BAPS Yuva Talim Kendra, Sarangpur' },
+                    { A: 'All Exam Results' }
+                ];
+
+                const worksheet = XLSX.utils.json_to_sheet(title, { skipHeader: true });
+                XLSX.utils.sheet_add_json(worksheet, body, { origin: 'A5', header: headers, skipHeader: false });
+
+                // Merge title cells
+                worksheet['!merges'] = [
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
+                    { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } },
+                    { s: { r: 2, c: 0 }, e: { r: 2, c: headers.length - 1 } }
+                ];
+
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "All Exam Report");
+                XLSX.writeFile(workbook, "All-Exam-Marks-Report.xlsx");
+            }
+        });
+    </script>
+</body>
+
+</html>

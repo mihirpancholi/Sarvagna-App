@@ -181,6 +181,14 @@ app.use("/ExamMarkEntry", ExamMarkEntryRoutes);
 const SevakEvaluationRoutes = require("./routes/SevakEvaluationRoutes.js");
 app.use("/SevakEvaluation", SevakEvaluationRoutes);
 
+// Mount ExamWiseSubjectReport routes
+const ExamWiseSubjectReportRoutes = require("./routes/ExamWiseSubjectReportRoutes.js");
+app.use("/ExamWiseSubjectReport", ExamWiseSubjectReportRoutes);
+
+// Mount AllExamMarksReport routes
+const AllExamMarksReportRoutes = require("./routes/AllExamMarksReportRoutes.js");
+app.use("/AllExamMarksReport", AllExamMarksReportRoutes);
+
 // Mount MyBatchmate routes
 const MyBatchmateRoutes = require("./routes/MyBatchmateRoutes.js");
 app.use("/MyBatchmate", MyBatchmateRoutes);

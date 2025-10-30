@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Wise Subject Report</title>
+    <!-- Include jsPDF and jspdf-autotable for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <!-- Include SheetJS (xlsx) for Excel generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <h3>Exam Wise Report</h3>
+    <hr>
+
+    <form id="reportForm">
+        <div>
+            <label>Talim Batch:</label>
+            <select id="talim_batch_id" name="talim_batch_id" required></select>
+        </div>
+        <br>
+        <div>
+            <label>Exam Type:</label>
+            <select id="examtype_id" name="examtype_id" required></select>
+        </div>
+        <br>
+        <div>
+            <label>Exam Name:</label>
+            <select id="exam_id" name="exam_id" required></select>
+        </div>
+        <br>
+        <div>
+            <button type="button" id="generatePdfBtn">Generate PDF Report</button>
+            <button type="button" id="generateExcelBtn">Generate Excel Report</button>
+        </div>
+    </form>
+
+    <script src="/Exam/ExamWiseSubjectReport/ExamWiseSubjectReport.js"></script>
+</body>
+
+</html>
