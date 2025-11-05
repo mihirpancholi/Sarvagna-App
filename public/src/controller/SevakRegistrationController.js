@@ -1,7 +1,7 @@
 const multer = require('multer'); // Add this at the top of your controller
 
 const path = require("path");
-const pool = require("../config/db"); 
+const pool = require("../config/db");
 const Model = require("../model/SevakRegistrationModel.js");
 const viewsPath = path.join(__dirname, "..", "view");
 
@@ -12,7 +12,7 @@ exports.AddSevakRegistration = (req, res) => {
 };
 
 exports.SevakIndex = (req, res) => {
-  res.sendFile(path.join(viewsPath, "Master", "SevakRegistration", "viewSevak.html"));
+  res.sendFile(path.join(viewsPath, "SevakRegistration", "viewSevak.html"));
 };
 
 
@@ -76,51 +76,218 @@ exports.generateYtkID = async (req, res) => {
 
 
 exports.getMandir = async (req, res) => {
-    try {
-        const { city_id, shikhar_mandir_id = 0, hari_mandir_id = 0 } = req.body;
+  try {
+    const { city_id, shikhar_mandir_id = 0, hari_mandir_id = 0 } = req.body;
 
-        // 1️⃣ Get country_id from city_id
-        const city = await Model.getCityById(city_id);
-        if (!city) {
-            return res.status(404).json({ error: 'City not found' });
-        }
-        const country_id = city.country_id;
-
-        // 2️⃣ Fetch Shikharbadh mandirs by country
-        const shikharMandirs = await Model.getMandirsByType(country_id, 'Shikharbadh');
-
-        let shikharHTML = `<option value="">Select Shikharbaddh Mandir</option>`;
-        shikharHTML += shikharMandirs.map(m =>
-            `<option value="${m.mandir_id}" ${m.mandir_id == shikhar_mandir_id ? 'selected' : ''}>${m.mandir_name}</option>`
-        ).join('');
-
-        // 3️⃣ Fetch Hari Mandir by country
-        const hariMandirs = await Model.getMandirsByType(country_id, 'Hari Mandir');
-
-        let hariHTML = `<option value="">Select Hari Mandir</option>`;
-        hariHTML += hariMandirs.map(m =>
-            `<option value="${m.mandir_id}" ${m.mandir_id == hari_mandir_id ? 'selected' : ''}>${m.mandir_name}</option>`
-        ).join('');
-
-        // 4️⃣ Respond just like original PHP
-        res.json({
-            country_id,
-            shikhar_mandir: shikharHTML,
-            hari_mandir: hariHTML
-        });
-
-    } catch (err) {
-        console.error('Error in getMandir:', err);
-        res.status(500).json({ error: 'Internal server error' });
+    // 1️⃣ Get country_id from city_id
+    const city = await Model.getCityById(city_id);
+    if (!city) {
+      return res.status(404).json({ error: 'City not found' });
     }
+    const country_id = city.country_id;
+
+    // 2️⃣ Fetch Shikharbadh mandirs by country
+    const shikharMandirs = await Model.getMandirsByType(country_id, 'Shikharbadh');
+
+    let shikharHTML = `<option value="">Select Shikharbaddh Mandir</option>`;
+    shikharHTML += shikharMandirs.map(m =>
+      `<option value="${m.mandir_id}" ${m.mandir_id == shikhar_mandir_id ? 'selected' : ''}>${m.mandir_name}</option>`
+    ).join('');
+
+    // 3️⃣ Fetch Hari Mandir by country
+    const hariMandirs = await Model.getMandirsByType(country_id, 'Hari Mandir');
+
+    let hariHTML = `<option value="">Select Hari Mandir</option>`;
+    hariHTML += hariMandirs.map(m =>
+      `<option value="${m.mandir_id}" ${m.mandir_id == hari_mandir_id ? 'selected' : ''}>${m.mandir_name}</option>`
+    ).join('');
+
+    // 4️⃣ Respond just like original PHP
+    res.json({
+      country_id,
+      shikhar_mandir: shikharHTML,
+      hari_mandir: hariHTML
+    });
+
+  } catch (err) {
+    console.error('Error in getMandir:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
 
 
+exports.getSpecializationByDegree = async (req, res) => {
+  try {
+    const { degree_id } = req.query;
+    if (!degree_id) {
+      return res.status(400).json({ error: 'Degree ID is required' });
+    }
+    const specializations = await Model.getSpecializationByDegree(degree_id);
+    res.json(specializations);
+  } catch (err) {
+    console.error('Error fetching specializations:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+exports.FilterData = async (req, res) => {
+  try {
+    const filters = req.body;
+
+    const sevakID = 1;
+
+    // Save filter data to session
+    if (req.session) {
+      req.session.searchSessionData = filters;
+    }
+
+    const sevakResult = await Model.filterSevaks(filters);
+
+    // This part is a placeholder for your user rights logic
+    const userrolecheck = {
+      checkRights: (form, right) => 'Y' // Mock: returns 'Y' for demo
+    };
+
+    let table = `<div class="table-responsive mt-5">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" id="sevakSearch-datatable">`;
+    table += `<thead><tr>
+                <th>YTK ID</th>
+                <th>Sevak Name</th>
+                <th>City</th>
+                <th>City Area</th>
+                <th>Taluka</th>
+                <th>District</th>
+                <th>State</th>
+                <th>Country</th>
+                <th>Kshetra</th>
+                <th>Kshetra Code</th>
+                <th>Mandir</th>
+                <th>Zone</th>
+                <th>Mobile 1</th>
+                <th>Mobile 2</th>
+                <th>Office Phone 1</th>
+                <th>Office Phone 2</th>
+                <th>Residence Phone 1</th>
+                <th>Residence Phone 2</th>
+                <th>Whatsapp No</th>
+                <th>Birth Date</th>
+                <th>Employment</th>
+                <th>Employment Detail</th>
+                <th>Post Designation</th>
+                <th>Education</th>
+                <th>Specialisation</th>
+                <th>Caste</th>
+                <th>Marriage Date</th>
+                <th>Grade</th>
+                <th>Email</th>
+                <th>Company Email</th>
+                <th>Sant Nirdeshak</th>
+                <th>Satsang Activity</th>
+                <th>Satsang Designation</th>
+                <th>Address</th>
+                <th>Active Status</th>`;
+
+    if (userrolecheck.checkRights('Sevak_list', 'Edit') === 'Y') {
+      table += '<th>Edit</th>';
+    }
+    if (userrolecheck.checkRights('Sevak_list', 'Delete') === 'Y') {
+      table += '<th>Delete</th>';
+    }
+    table += '</tr></thead><tbody>';
+
+    sevakResult.forEach(row => {
+      const sevak_id = row.sevak_id;
+      let notes = row.overall_notes ? `<a href="#" data-toggle="modal" onclick="getSevakId(${sevak_id})" data-target="#overAllRemarkModel">&nbsp;&nbsp;<i class="fa fa-info-circle"></i></a>` : '';
+
+      table += `<tr>
+        <td class="text-center">${row.ytk_id || ''}</td>
+        <td class="text-left"><a href="#" data-toggle="modal" title="Sevak Detail" style="text-decoration: underline;" data-target="#CurrentSevakModel" onclick="getCurrentSevakDetail(${sevak_id})">${row.sevak_name || ''}</a></td>
+        <td class="text-left">${row.city_name || ''}</td>
+        <td class="text-left">${row.area_name || ''}</td>
+        <td class="text-left">${row.taluka_name || ''}</td>
+        <td class="text-left">${row.district_name || ''}</td>
+        <td class="text-left">${row.state_name || ''}</td>
+        <td class="text-left">${row.country_name || ''}</td>
+        <td class="text-left">${row.kshetra_name || ''}</td>
+        <td class="text-left">${row.kshetra_code || ''}</td>
+        <td class="text-left">${row.mandir || ''}</td>
+        <td class="text-left">${row.zone_name || ''}</td>
+        <td class="text-left">${(row.primary_contact_mobile1 || '').replace(/ /g, '')}</td>
+        <td class="text-left">${(row.contact_mobile2 || '').replace(/ /g, '')}</td>
+        <td class="text-left">${row.contact_phone_1 || ''}</td>
+        <td class="text-left">${row.contact_phone_2 || ''}</td>
+        <td class="text-left">${row.contact_res_phone1 || ''}</td>
+        <td class="text-left">${row.contact_res_phone2 || ''}</td>
+        <td class="text-left">${(row.contact_whatsapp_no || '').replace(/ /g, '')}</td>
+        <td class="text-left">${row.birth_date || ''}</td>
+        <td class="text-left">${row.employment_name || ''}</td>
+        <td class="text-left">${row.employment_detail || ''}</td>
+        <td class="text-left">${row.post_designation || ''}</td>
+        <td class="text-left">${row.sevak_education || ''}</td>
+        <td class="text-left">${row.specialization || ''}</td>
+        <td class="text-left">${row.caste_name || ''}</td>
+        <td class="text-left">${row.marriage_date || ''}</td>
+        <td class="text-left">${row.grade_name || ''}${notes}</td>
+        <td class="text-left">${row.contact_per_mail || ''}</td>
+        <td class="text-left">${row.contact_bus_mail || ''}</td>
+        <td class="text-left">${row.current_sant_nirdeshak || ''}</td>
+        <td class="text-left">${row.satsang_activity_name || ''}</td>
+        <td class="text-left">${row.satsang_designation_name || ''}</td>
+        <td class="text-left">${row.address || ''}</td>
+        <td class="text-left">${row.statusRegister || ''}</td>`;
+
+      if (userrolecheck.checkRights('Sevak_list', 'Edit') === 'Y') {
+        table += `<td class="text-left"><form action="/SevakRegistration/edit/" method="post"><input type="hidden" name="id" value="${sevak_id}"><button type="submit" data-toggle="tooltip" title="Edit" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i></button></form></td>`;
+      }
+      if (userrolecheck.checkRights('Sevak_list', 'Delete') === 'Y') {
+        table += `<td class="text-left"><a href="#" onclick="getSevakPassword(${sevak_id})" class="btn btn-sm btn-danger btn-xs" data-toggle="modal" data-target="#sevakPasswordModel"><i class="fa fa-trash-o"></i></a></td>`;
+      }
+      table += '</tr>';
+    });
+
+    table += '</tbody></table></div></div>';
+    res.send(table); // Send the HTML back to the client
+
+  } catch (err) {
+    console.error('Error in sevakFilterData:', err);
+    res.status(500).send('An error occurred while filtering data.');
+  }
+};
+
+// New endpoints for the viewSevak page
+exports.allSevakData = async (req, res) => {
+  try {
+    // This is a simplified version. For full server-side processing,
+    // you would handle req.query.draw, req.query.start, req.query.length, etc.
+    const [sevaks] = await pool.execute("SELECT * FROM sevak_view");
+    res.json({
+      draw: parseInt(req.query.draw) || 1,
+      recordsTotal: sevaks.length,
+      recordsFiltered: sevaks.length,
+      data: sevaks
+    });
+  } catch (err) {
+    console.error('Error fetching all sevak data:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+exports.OverAllRemark = async (req, res) => {
+  res.send(`<p>Overall remark for Sevak ID: ${req.body.sevak_id}</p>`);
+};
+
+exports.checkSevakPassword = async (req, res) => {
+  res.send(`<div>Password check for Sevak ID: ${req.body.sevak_id}</div>`);
+};
+
 
 // ---------- Multer Setup ----------
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
+  destination: (req, file, cb) => cb(null, "public/uploads/sevak_photos/"),
   filename: (req, file, cb) =>
     cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname))
 });
@@ -132,47 +299,84 @@ const formatDate = (dateStr) =>
 
 // ---------- Controller ----------
 exports.addSevak = [
-  upload.fields([
-    { name: "sevak_photo", maxCount: 1 },
-    { name: "latest_photo", maxCount: 1 }
-  ]),
+  upload.any(), // Use upload.any() to handle all multipart form data
   async (req, res) => {
     const conn = await (await require("../config/db")).getConnection();
     try {
       await conn.beginTransaction();
       let data = { ...req.body };
 
-      // Remove unnecessary fields
-      [
-        "sevak_id","taluka_name","district_name","state_name","country_name",
-        "per_taluka_name","per_district_name","per_state_name","per_country_name",
-        "talim_taluka_name","talim_district_name","talim_state_name","talim_country_name"
-      ].forEach(f => delete data[f]);
+      // 1. Unset unnecessary fields (like in PHP)
+      const fieldsToDelete = [
+        "sevak_id", "taluka_name", "district_name", "state_name", "country_name",
+        "per_taluka_name", "per_district_name", "per_state_name", "per_country_name",
+        "talim_taluka_name", "talim_district_name", "talim_state_name", "talim_country_name"
+      ];
+      fieldsToDelete.forEach(f => delete data[f]);
+
+      // Sanitize integer/foreign key fields: convert empty strings to null
+      const intFields = [
+        // Personal Info
+        'talim_batch_id', 'caste_id', 'category_id', 'blood_group_id', 'marital_status_id',
+        // Address Fields (Current, Permanent, Talim)
+        'country_id', 'state_id', 'district_id', 'taluka_id', 'city_id', 'city_area_id', 'pincode',
+        'per_country_id', 'per_state_id', 'per_district_id', 'per_taluka_id', 'per_city_id', 'per_city_area_id', 'per_pincode',
+        'talim_country_id', 'talim_state_id', 'talim_district_id', 'talim_taluka_id', 'talim_city_id', 'talim_city_area_id', 'talim_pincode',
+        // Kshetra & Mandir
+        'kshetra_id', 'talim_kshetra_id', 'current_kshetra_id',
+        'shikhar_mandir_id', 'hari_mandir_id',
+        // Referees
+        'satsangi_batch_id', 'satsangi_sevak_id', 'sat_ref_city_id',
+        'inpired_batch_id', 'inspired_sevak_id', 'ins_by_city_id',
+        // Other
+        'gosthi_group_id'
+      ];
+
+      for (const field of intFields) {
+        if (data[field] === '') {
+          data[field] = null;
+        }
+      }
 
       // Capitalize names
-      ["first_name","middle_name","last_name"].forEach(f => {
+      ["first_name", "middle_name", "last_name"].forEach(f => {
         if (data[f])
           data[f] = data[f].charAt(0).toUpperCase() + data[f].slice(1).toLowerCase();
       });
 
-      // Status fields
-      const statusFields = ["admitted","certified","not_complete","temporary","expired","sant_in_baps"];
-      statusFields.forEach(f => {
-        if (f in data) {
-          data[f + "_status"] = data[f] === "on" ? "Y" : "N";
-          data[f + "_date"] = formatDate(data[f + "_date"]);
-          delete data[f];
-          delete data[f + "_date"];
-        }
+      // 2. Format all optional date fields
+      const dateFields = [
+        'birth_date', 'marital_date', 'parshad_date', 'certified_date',
+        'not_complete_date', 'temporary_date', 'expired_date', 'sant_in_baps_date'
+      ];
+      dateFields.forEach(field => {
+        data[field] = formatDate(data[field]);
       });
+
+      // 3. Handle status checkboxes
+      const statusFields = ["certified", "not_complete", "temporary", "expired", "sant_in_baps"];
+      let statusArray = [];
+      statusFields.forEach(field => {
+        if (data[field] === 'on') {
+          statusArray.push(field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' '));
+          data[`${field}_status`] = 'Y'; // The date is already formatted above
+        } else {
+          data[`${field}_status`] = 'N';
+        }
+        delete data[field]; // remove original checkbox field
+      });
+      delete data.status; // <-- CRITICAL: Remove original status array from form data
+      data.status = statusArray.join(',');
 
       // Checkboxes
       data.sameprimaryno = data.sameprimaryno === "on" ? "Y" : "N";
+      data.ytk_sevak_satsangi = data.ytk_sevak_satsangi === "on" ? "Y" : "N";
+      data.ytk_sevak_inspired = data.ytk_sevak_inspired === "on" ? "Y" : "N";
 
       // Permanent Address
       if (data.is_perm_add === "on") {
         data.is_perm_add = "Y";
-        ["address1","country_id","state_id","district_id","taluka_id","city_id","pincode"].forEach(field => {
+        ["address1", "country_id", "state_id", "district_id", "taluka_id", "city_id", "city_area_id", "pincode"].forEach(field => {
           data["per_" + field] = data[field];
         });
       } else data.is_perm_add = "N";
@@ -180,100 +384,126 @@ exports.addSevak = [
       // Talim Address
       if (data.is_talim_add === "on") {
         data.is_talim_add = "Y";
-        ["address1","country_id","state_id","district_id","taluka_id","city_id","pincode"].forEach(field => {
+        ["address1", "country_id", "state_id", "district_id", "taluka_id", "city_id", "city_area_id", "pincode"].forEach(field => {
           data["talim_" + field] = data[field];
         });
       } else data.is_talim_add = "N";
 
       // Uploaded Files
-      if (req.files["sevak_photo"])
-        data.sevak_photo = req.files["sevak_photo"][0].filename;
-      if (req.files["latest_photo"])
-        data.latest_photo = req.files["latest_photo"][0].filename;
+      // With upload.any(), files are in req.files array
+      if (req.files && req.files.length > 0) {
+        const sevakPhotoFile = req.files.find(f => f.fieldname === 'sevak_photo');
+        if (sevakPhotoFile) {
+          data.sevak_photo = sevakPhotoFile.path.replace('public/', '');
+        }
+        const latestPhotoFile = req.files.find(f => f.fieldname === 'latest_photo');
+        if (latestPhotoFile) {
+          data.latest_photo = latestPhotoFile.path.replace('public/', '');
+        }
+      }
 
       // Metadata
       data.created_id = req.user?.user_id || 1; // fallback if no auth
       data.created_at = new Date();
       data.role_id = 2;
 
-      // Duplicate check
-      const existing = await Model.checkDuplicateSevak(data.talim_batch_id, data.sevak_no);
-      if (existing.length > 0) {
-        return res.status(400).json({ success: false, message: "Sevak No already exists" });
-      }
+      // 4. Separate array data and remove from main data object before insert
+      const subTableFields = [
+        'degree_id', 'specialization_id', 'edu_remark',
+        'employment_id', 'emp_detail', 'post_designation', 'emp_remark',
+        'relationship_id', 'family_name', 'family_country_code', 'family_mobile', 'family_email', 'family_occupation',
+        'satsang_activity_id', 'satsang_designation_id', 'seva_details',
+        'talent_id', 'grade_id', 'talent_detail',
+        'role_id' // <-- Add role_id here
+      ];
+      const subTableData = {};
+      subTableFields.forEach(field => {
+        if (data[field]) {
+          // Ensure it's an array, as single entries might not be
+          subTableData[field] = Array.isArray(data[field]) ? data[field] : [data[field]];
+          delete data[field];
+        }
+      });
+      // Also remove the gosthi_group_id as it's for a separate mapping table
+      const gosthiGroupId = data.gosthi_group_id;
+      delete data.gosthi_group_id;
 
-      // Insert Sevak
+
+      // 4. Main Insert
       const sevakID = await Model.insert("sevak_master", data);
 
-      // Group Mapping
-      await Model.insert("group_member_mapping", {
-        group_id: data.gosthi_group_id,
-        is_sanchalak: "N",
-        is_sah_sanchalak: "N",
-        sevak_id: sevakID
-      });
+      // 5. Sub-table Inserts
+      // Group Mapping (if gosthi_group_id is provided)
+      if (gosthiGroupId) {
+        await Model.insert("group_member_mapping", {
+          group_id: gosthiGroupId,
+          is_sanchalak: "N",
+          is_sah_sanchalak: "N",
+          sevak_id: sevakID
+        });
+      }
 
       // Roles (array)
-      if (req.body.role_id && Array.isArray(req.body.role_id)) {
-        const roles = req.body.role_id.map(roleId => ({ role_id: roleId, sevak_id: sevakID }));
+      if (subTableData.role_id) {
+        const roles = (Array.isArray(subTableData.role_id) ? subTableData.role_id : [subTableData.role_id]).map(roleId => ({ role_id: roleId, sevak_id: sevakID }));
         await Model.insertMultiple("sevak_role", roles);
       }
 
       // Talents (array)
-      if (data.talent_id && Array.isArray(data.talent_id)) {
-        const talents = data.talent_id.map((t, i) => ({
+      if (subTableData.talent_id && subTableData.talent_id.length > 0 && subTableData.talent_id[0]) {
+        const talents = subTableData.talent_id.map((t, i) => ({
           sevak_id: sevakID,
           talent_id: t,
-          grade_id: data.grade_id[i],
-          talent_detail: data.talent_detail[i]
+          grade_id: subTableData.grade_id[i],
+          talent_detail: subTableData.talent_detail[i]
         }));
         await Model.insertMultiple("sevak_talent", talents);
       }
 
       // Family (array)
-      if (data.relationship_id && Array.isArray(data.relationship_id)) {
-        const family = data.relationship_id.map((r, i) => ({
+      if (subTableData.relationship_id && subTableData.relationship_id.length > 0 && subTableData.relationship_id[0]) {
+        const family = subTableData.relationship_id.map((r, i) => ({
           sevak_id: sevakID,
           relationship_id: r,
-          family_name: data.family_name[i],
-          family_country_code: data.family_country_code[i],
-          family_mobile: data.family_mobile[i],
-          family_occupation: data.family_occupation[i],
-          family_email: data.family_email[i]
+          family_name: subTableData.family_name[i],
+          family_country_code: subTableData.family_country_code[i],
+          family_mobile: subTableData.family_mobile[i],
+          family_occupation: subTableData.family_occupation[i],
+          family_email: subTableData.family_email[i]
         }));
         await Model.insertMultiple("sevak_family", family);
       }
 
       // Education (array)
-      if (data.degree_id && Array.isArray(data.degree_id)) {
-        const edu = data.degree_id.map((d, i) => ({
+      if (subTableData.degree_id && subTableData.degree_id.length > 0 && subTableData.degree_id[0]) {
+        const edu = subTableData.degree_id.map((d, i) => ({
           sevak_id: sevakID,
           degree_id: d,
-          specialization_id: data.specialization_id[i],
-          edu_remark: data.edu_remark[i]
+          specialization_id: subTableData.specialization_id[i],
+          edu_remark: subTableData.edu_remark[i]
         }));
         await Model.insertMultiple("sevak_education", edu);
       }
 
       // Employment (array)
-      if (data.employment_id && Array.isArray(data.employment_id)) {
-        const emp = data.employment_id.map((e, i) => ({
+      if (subTableData.employment_id && subTableData.employment_id.length > 0 && subTableData.employment_id[0]) {
+        const emp = subTableData.employment_id.map((e, i) => ({
           sevak_id: sevakID,
           employment_id: e,
-          emp_detail: data.emp_detail[i],
-          post_designation: data.post_designation[i],
-          emp_remark: data.emp_remark[i]
+          emp_detail: subTableData.emp_detail[i],
+          post_designation: subTableData.post_designation[i],
+          emp_remark: subTableData.emp_remark[i]
         }));
         await Model.insertMultiple("sevak_employment", emp);
       }
 
       // Satsang (array)
-      if (data.satsang_activity_id && Array.isArray(data.satsang_activity_id)) {
-        const satsang = data.satsang_activity_id.map((s, i) => ({
+      if (subTableData.satsang_activity_id && subTableData.satsang_activity_id.length > 0 && subTableData.satsang_activity_id[0]) {
+        const satsang = subTableData.satsang_activity_id.map((s, i) => ({
           sevak_id: sevakID,
           satsang_activity_id: s,
-          satsang_designation_id: data.satsang_designation_id[i],
-          seva_details: data.seva_details[i]
+          satsang_designation_id: subTableData.satsang_designation_id[i],
+          seva_details: subTableData.seva_details[i]
         }));
         await Model.insertMultiple("sevak_satsang", satsang);
       }
@@ -289,7 +519,3 @@ exports.addSevak = [
     }
   }
 ];
-
-
-
-

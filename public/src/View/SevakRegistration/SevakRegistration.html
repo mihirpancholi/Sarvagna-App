@@ -14,7 +14,7 @@
     <form id="sevakForm">
         <fieldset>
             <!-- Sevak Number + YTK ID -->
-            <label>Sevak No:</label>
+            <label for="sevak_no">Sevak No:</label>
             <input type="text" id="sevak_no" onkeyup="generateYtkID()">
             <span id="is_sevak_duplicate" style="display:none;color:red;">Duplicate Sevak No!</span>
             <br>
@@ -23,7 +23,7 @@
             <select id="addbatch" name="talim_batch_id"></select>
             <br>
 
-            <label>YTK ID:</label>
+            <label for="ytk_id">YTK ID:</label>
             <input type="text" id="ytk_id" readonly>
             <br><br>
 
@@ -36,19 +36,19 @@
             <label>Middle Name:</label>
             <input type="text" id="middle_name" name="middle_name"><br>
 
-            <label>Birth Date:</label>
+            <label for="birth_date">Birth Date:</label>
             <input type="date" id="birth_date" name="birth_date"><br>
 
-            <label>Caste:</label>
+            <label for="addcaste">Caste:</label>
             <select id="addcaste" name="caste_id"></select><br>
 
-            <label>Category:</label>
+            <label for="addcategory">Category:</label>
             <select id="addcategory" name="category_id"></select><br>
 
-            <label>Blood Group:</label>
+            <label for="addbloodgroup">Blood Group:</label>
             <select id="addbloodgroup" name="blood_group_id"></select><br>
 
-            <label>Gender:</label>
+            <label for="addgender">Gender:</label>
             <select id="addgender" name="gender">
                 <option value="">-- Select --</option>
                 <option value="M">Male</option>
@@ -70,10 +70,10 @@
             </div><br>
 
 
-            <label>Sevak Photo:</label>
+            <label for="sevak_photo">Sevak Photo:</label>
             <input type="file" id="sevak_photo" name="sevak_photo"><br>
 
-            <label>Latest Photo:</label>
+            <label for="latest_photo">Latest Photo:</label>
             <input type="file" id="latest_photo" name="latest_photo"><br>
 
             <!-- City Section (Current Address) -->
@@ -81,28 +81,28 @@
             <label for="address">Address</label>
             <input type="text" id="address" name="address1"><br>
 
-            <label>City:</label>
+            <label for="addcity">City:</label>
             <select id="addcity" name="city_id"></select><br>
 
-            <label>City Area:</label>
+            <label for="addcityarea">City Area:</label>
             <select id="addcityarea" name="city_area_id"></select><br>
 
-            <label>Pincode:</label>
+            <label for="addpincode">Pincode:</label>
             <select id="addpincode" name="pincode"></select><br>
 
-            <label>Taluka:</label>
+            <label for="taluka_name">Taluka:</label>
             <input type="text" id="taluka_name" readonly>
             <input type="hidden" id="taluka_id" name="taluka_id"><br>
 
-            <label>District:</label>
+            <label for="district_name">District:</label>
             <input type="text" id="district_name" readonly>
             <input type="hidden" id="district_id" name="district_id"><br>
 
-            <label>State:</label>
+            <label for="state_name">State:</label>
             <input type="text" id="state_name" readonly>
             <input type="hidden" id="state_id" name="state_id"><br>
 
-            <label>Country:</label>
+            <label for="country_name">Country:</label>
             <input type="text" id="country_name" readonly>
             <input type="hidden" id="country_id" name="country_id"><br><br>
 
@@ -125,18 +125,18 @@
             <br><br>
 
             <div class="current_kshetra_info" id="withIndiaDiv">
-                <label>Current Kshetra:</label>
+                <label for="current_kshetra">Current Kshetra:</label>
                 <select id="current_kshetra" name="current_kshetra_id"></select><br>
-                <label>Sant Nirdeshak:</label>
-                <input type="text" id="current_sant_nirdeshak" readonly>
-                <input type="hidden" id="current_sant_nirdeshak_id" name="current_sant_nirdeshak_id"><br>
-                <label>Nirdeshak:</label>
-                <input type="text" id="current_nirdeshak" readonly>
-                <input type="hidden" id="current_nirdeshak_id" name="current_nirdeshak"><br>
-                <label>Mandir:</label>
-                <input type="text" id="current_mandir" readonly>
-                <input type="hidden" id="current_mandir_id" name="current_mandir"><br>
-                <label>Mandir Type:</label>
+                <label for="current_sant_nirdeshak">Sant Nirdeshak:</label>
+                <input type="text" id="current_sant_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="current_sant_nirdeshak" name="current_sant_nirdeshak"><br> <!-- Submit ID -->
+                <label for="current_nirdeshak">Nirdeshak:</label>
+                <input type="text" id="current_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="current_nirdeshak" name="current_nirdeshak"><br> <!-- Submit ID -->
+                <label for="current_mandir">Mandir:</label>
+                <input type="text" id="current_mandir_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="current_mandir" name="current_mandir"><br> <!-- Submit ID -->
+                <label for="current_mandir_type">Mandir Type:</label>
                 <input type="text" id="current_mandir_type" name="current_mandir_type" readonly><br><br>
             </div>
 
@@ -146,66 +146,67 @@
             <div id="permanent_address">
                 <h3>Permanent Address</h3>
                 <label for="per_address">Address</label>
-                <input type="text" id="per_address" name="per_address1"><br>
+                <input type="text" id="per_address" name="per_address1" autocomplete="off"><br>
 
-                <label>City:</label>
+                <label for="per_city">City:</label>
                 <select id="per_city" name="per_city_id"></select><br>
 
-                <label>City Area:</label>
+                <label for="per_city_area">City Area:</label>
                 <select id="per_city_area" name="per_city_area_id"></select><br>
 
-                <label>Pincode:</label>
+                <label for="per_pincode">Pincode:</label>
                 <select id="per_pincode" name="per_pincode"></select><br>
 
-                <label>Taluka:</label>
+                <label for="per_taluka_name">Taluka:</label>
                 <input type="text" id="per_taluka_name" readonly>
-                <input type="hidden" id="per_taluka_id" name="per_taluka_id"><br>
+                <input type="text" id="per_taluka_id" name="per_taluka_id"><br>
 
-                <label>District:</label>
+                <label for="per_district_name">District:</label>
                 <input type="text" id="per_district_name" readonly>
-                <input type="hidden" id="per_district_id" name="per_district_id"><br>
+                <input type="text" id="per_district_id" name="per_district_id"><br>
 
-                <label>State:</label>
+                <label for="per_state_name">State:</label>
                 <input type="text" id="per_state_name" readonly>
-                <input type="hidden" id="per_state_id" name="per_state_id"><br>
+                <input type="text" id="per_state_id" name="per_state_id"><br>
 
-                <label>Country:</label>
+                <label for="per_country_name">Country:</label>
                 <input type="text" id="per_country_name" readonly>
-                <input type="hidden" id="per_country_id" name="per_country_id"><br><br>
+                <input type="text" id="per_country_id" name="per_country_id"><br><br>
             </div>
 
             <br><br>
 
             <!-- Talim Address -->
-            <label><input type="checkbox" id="is_talim_add" name="is_talim_add"> Is TALIM ADDRESS same as CURRENT ADDRESS</label>
+            <label><input type="checkbox" id="is_talim_add" name="is_talim_add"> Is TALIM ADDRESS same as CURRENT
+                ADDRESS</label>
             <div id="talim_address">
                 <h3>Talim Address</h3>
                 <label for="talim_address">Address</label>
-                <input type="text" id="talim_address" name="talim_address1"><br>
-                <label>City:</label>
+                <input type="text" id="talim_address_input" name="talim_address1"><br>
+                <label for="talim_city">City:</label>
                 <select id="talim_city" name="talim_city_id"></select><br>
 
-                <label>City Area:</label>
+                <label for="talim_city_area">City Area:</label>
                 <select id="talim_city_area" name="talim_city_area_id"></select><br>
 
-                <label>Pincode:</label>
+                <label for="talim_pincode">Pincode:</label>
                 <select id="talim_pincode" name="talim_pincode"></select><br>
 
-                <label>Taluka:</label>
+                <label for="talim_taluka_name">Taluka:</label>
                 <input type="text" id="talim_taluka_name" readonly>
-                <input type="hidden" id="talim_taluka_id" name="talim_taluka_id"><br>
+                <input type="text" id="talim_taluka_id" name="talim_taluka_id"><br>
 
-                <label>District:</label>
+                <label for="talim_district_name">District:</label>
                 <input type="text" id="talim_district_name" readonly>
-                <input type="hidden" id="talim_district_id" name="talim_district_id"><br>
+                <input type="text" id="talim_district_id" name="talim_district_id"><br>
 
-                <label>State:</label>
+                <label for="talim_state_name">State:</label>
                 <input type="text" id="talim_state_name" readonly>
-                <input type="hidden" id="talim_state_id" name="talim_state_id"><br>
+                <input type="text" id="talim_state_id" name="talim_state_id"><br>
 
-                <label>Country:</label>
+                <label for="talim_country_name">Country:</label>
                 <input type="text" id="talim_country_name" readonly>
-                <input type="hidden" id="talim_country_id" name="talim_country_id"><br><br>
+                <input type="text" id="talim_country_id" name="talim_country_id"><br><br>
             </div>
             <hr>
 
@@ -213,37 +214,36 @@
             <h3>Kshetra Details</h3>
 
             <div id="permanent_kshetra_info">
-                form submitted from <br>
-                <label>Permanent Kshetra:</label>
+                Form submitted from <br>
+                <label for="kshetra">Permanent Kshetra:</label>
                 <select id="kshetra" name="kshetra_id"></select><br>
-                <label>Sant Nirdeshak:</label>
-                <input type="text" id="sant_nirdeshak" readonly>
-                <input type="hidden" id="sant_nirdeshak_id" name="sant_nirdeshak"><br>
-                <label>Nirdeshak:</label>
-                <input type="text" id="nirdeshak" readonly>
-                <input type="hidden" id="nirdeshak_id" name="nirdeshak"><br>
-                <label>Mandir:</label>
-                <input type="text" id="mandir" readonly>
-                <input type="hidden" id="mandir_id" name="mandir"><br>
-                <label>Mandir Type:</label>
+                <label for="sant_nirdeshak_name">Sant Nirdeshak:</label>
+                <input type="text" id="sant_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="sant_nirdeshak" name="sant_nirdeshak"><br> <!-- Submit ID -->
+                <label for="nirdeshak_name">Nirdeshak:</label>
+                <input type="text" id="nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="nirdeshak" name="nirdeshak"><br> <!-- Submit ID -->
+                <label for="mandir_name">Mandir:</label>
+                <input type="text" id="mandir_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="mandir" name="mandir"><br> <!-- Submit ID -->
+                <label for="mandir_type">Mandir Type:</label>
                 <input type="text" id="mandir_type" readonly name="mandir_type"><br><br>
 
             </div>
 
             <div id="talim_kshetra_info">
-
-                <label>Talim Kshetra:</label>
+                <label for="talim_kshetra">Talim Kshetra:</label>
                 <select id="talim_kshetra" name="talim_kshetra_id"></select><br>
-                <label>Sant Nirdeshak:</label>
-                <input type="text" id="talim_sant_nirdeshak" readonly>
-                <input type="hidden" id="talim_sant_nirdeshak_id" name="talim_sant_nirdeshak"><br>
-                <label>Nirdeshak:</label>
-                <input type="text" id="talim_nirdeshak" readonly>
-                <input type="hidden" id="talim_nirdeshak_id" name="talim_nirdeshak"><br>
-                <label>Mandir:</label>
-                <input type="text" id="talim_mandir" readonly>
-                <input type="hidden" id="talim_mandir_id" name="talim_mandir"><br>
-                <label>Mandir Type:</label>
+                <label for="talim_sant_nirdeshak_name">Sant Nirdeshak:</label>
+                <input type="text" id="talim_sant_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="talim_sant_nirdeshak" name="talim_sant_nirdeshak"><br> <!-- Submit ID -->
+                <label for="talim_nirdeshak_name">Nirdeshak:</label>
+                <input type="text" id="talim_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="talim_nirdeshak" name="talim_nirdeshak"><br> <!-- Submit ID -->
+                <label for="talim_mandir_name">Mandir:</label>
+                <input type="text" id="talim_mandir_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="talim_mandir" name="talim_mandir"><br> <!-- Submit ID -->
+                <label for="talim_mandir_type">Mandir Type:</label>
                 <input type="text" id="talim_mandir_type" name="talim_mandir_type" readonly><br><br>
             </div>
 
@@ -276,7 +276,8 @@
                     <label for="sat_ref_mobile">Mobile No : </label>
                     <select name="sat_ref_mobile_country_code" id="sat_ref_mobile_country_code"></select>
 
-                    <input type="number" name="sat_ref_mobile" id="sat_ref_mobile" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
+                    <input type="number" name="sat_ref_mobile" id="sat_ref_mobile"
+                        title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
                 </div>
 
             </div>
@@ -307,412 +308,431 @@
                     <select name="ins_by_city_id" id="ins_by_city_id"></select> <br>
 
                     <label for="ins_by_mobile">Mobile No : </label>
-                    <select name="ins_by_country_code" id="ins_by_country_code"></select>
+                    <select name="ins_by_mobile_country_code" id="ins_by_country_code"></select>
 
-                    <input type="number" name="ins_by_mobile" id="ins_by_mobile" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
+                    <input type="number" name="ins_by_mobile" id="ins_by_mobile"
+                        title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
                 </div>
 
             </div>
 
         </fieldset>
         <hr>
-        <button type="submit" value="Submit" name="submit">Submit</button>
 
+        <!-- step 2 -->
 
-    </form>
-    <!-- step 2 -->
+        <h4>Education</h4>
 
-    <h4>Education</h4>
+        <div class="education_section">
 
-    <div class="education_section">
-
-        <input type="hidden" id="current_table_row_education">
-        <table class="table table-bordered table-striped" id="educationInvoice">
-            <thead>
-                <tr>
-                    <th>Degree</th>
-                    <th>Specialization</th>
-                    <th>Remark</th>
-                    <th><i class="fa fa-flash"></i></th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <tr>
-                    <td class="m-0 p-0">
-                        <select name="degree_id[]" id="adddegree" required></select>
-                    </td>
-                    <td class="m-0 p-0">
-                        <select name="specialization_id[]" id="addspecialization"></select>
-                    </td>
-                    <td class="m-0 p-0">
-                        <input type="text" name="edu_remark[]">
-                    </td>
-                    <td class="m-0 p-0 text-center"></td>
-
-                </tr>
-
-            </tbody>
-        </table>
-
-        <button type="button" class="btn btn-success btn-block pull-right" onclick="insertEducation()"><i class="fa fa-plus-circle"></i>
-            Add New Education
-        </button>
-
-        <h4><i class="fa fa-user"></i>
-            Employment</h4>
-        <input type="hidden" id="current_table_row_employment">
-        <table class="table table-bordered table-striped" id="employmentInvoice">
-            <thead>
-                <tr>
-                    <th>Employment Type</th>
-                    <th>Detail</th>
-                    <th>Post/Designation</th>
-                    <th>Remark</th>
-                    <th><i class="fa fa-flash"></i></th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <tr>
-                    <td class="m-0 p-0">
-                        <select name="employment_id[]" id="employment_ids">
-                            <option value="">Select Employment
-                                Type
-                            </option>
-                        </select>
-                    </td>
-                    <td class="m-0 p-0">
-                        <input type="text" name="emp_detail[]" id="emp_details">
-                    </td>
-                    <td class="m-0 p-0">
-                        <input type="text" name="post_designation[]" id="post_designations">
-                    </td>
-                    <td class="m-0 p-0"><input type="text" name="emp_remark[]" id="emp_remarks">
-                    </td>
-                    <td class="m-0 p-0 text-center"></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <button type="button" class="btn btn-success btn-block addEmpBtn" onclick="insertEmployment()"><i class="fa fa-plus-circle"></i>
-            Add New Employment
-        </button>
-        <br />
-    </div>
-
-    <!-- Step 3 -->
-
-    <h4>Family Detail</h4>
-    <div class="family_details">
-        <input type="hidden" id="current_table_row_family">
-        <table class="table table-bordered table-striped" id="familyInvoice">
-            <thead>
-                <tr>
-                    <th>Relationship</th>
-                    <th width="30%">Name</th>
-                    <th colspan="2">Mobile</th>
-                    <th width="20%">Email</th>
-                    <th>Occupation</th>
-                    <th><i class="fa fa-flash"></i></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="m-0 p-0">
-                        <select name="relationship_id[]" id="relationship_ids">
-                            <option value="">Select Relationship</option>
-                        </select>
-                    </td>
-                    <td class="m-0 p-0">
-                        <input type="text" name="family_name[]" id="family_names">
-                    </td>
-                    <td class="m-0 p-0" width="15%">
-                        <select name="family_country_code[]" id="family_country_code">
-                            <option value="">---</option>
-                        </select>
-
-                    </td>
-                    <td class="m-0 p-0">
-                        <input type="number" name="family_mobile[]" id="family_mobile" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter Your 10 Dogit Mobile Number.">
-                        <span id="spnError" style="color: Red; display: none">*Valid
-                            characters: Numbers and space.</span>
-                    </td>
-                    <td class="m-0 p-0">
-                        <input type="email" name="family_email[]" id="family_emails" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                    </td>
-                    <td class="m-0 p-0">
-                        <input type="text" name="family_occupation[]" id="family_occupations">
-                    </td>
-                    <td class="m-0 p-0 text-center">
-
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
-
-        <button type="button" class="btn btn-success btn-block btnAddFamily" onclick="insertFamily()"><i class="fa fa-plus-circle"></i>Add New Member</button>
-    </div>
-    <br />
-
-    <!-- Step 4 -->
-    <h4>Contact</h4>
-
-    <div class="contact">
-        <label for="contact_mobile1">Mobile 1 :</label>
-        <select name="mobile1_country_code" id="mobile1_country_code"></select>
-        <input type="number" name="contact_mobile1" id="contact_mobile1" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 1">
-        <br><br>
-
-        <label for="contact_mobile2">Mobile 2 :</label>
-        <select name="mobile2_country_code" id="mobile2_country_code"></select>
-        <input type="number" name="contact_mobile2" id="contact_mobile2" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 2">
-        <br><br>
-
-        <label for="contact_phone_1">Office Phone 1 :</label>
-        <input type="text" name="contact_phone_1" id="contact_phone_1" placeholder="Office Phone 1">
-        <br><br>
-
-        <label for="contact_phone_2">Office Phone 2 :</label>
-        <input type="text" name="contact_phone_2" id="contact_phone_2" placeholder="Office Phone 2">
-        <br><br>
-
-        <label for="contact_res_phone1">Residence Phone 1 :</label>
-        <input type="text" name="contact_res_phone1" id="contact_res_phone1" placeholder="Residence Phone 1">
-        <br><br>
-
-        <label for="contact_res_phone2">Residence Phone 2 :</label>
-        <input type="text" name="contact_res_phone2" id="contact_res_phone2" placeholder="Residence Phone 2">
-        <br><br>
-
-        <label for="contact_per_mail">Personal Email :</label>
-        <input type="email" name="contact_per_mail" placeholder="Personal Email" id="contact_per_mail">
-        <br><br>
-
-        <label for="contact_bus_mail">Business Email :</label>
-        <input type="email" name="contact_bus_mail" id="contact_bus_mail" placeholder="Business Email">
-        <br><br>
-
-        <label for="contact_whatsapp_no">Whatsapp No :</label>
-        <label for="contact_whatsapp_no">
-            <input type="checkbox" name="sameprimaryno" id="sameprimaryno">Same as Parimary
-            No</label>
-        <br><br>
-
-        <select name="whatsapp_country_code" id="whatsapp_country_code"></select>
-        <input type="number" placeholder="Whatsapp No" name="contact_whatsapp_no" pattern="\d{3}[\-]\d{3}[\-]\d{4}" maxlength="10" minlength="10" title="Please Enter 10 Digit Your Mobile No" id="contact_whatsapp_no">
-        <br><br>
-    </div>
-
-    <!-- step 5 satsang details -->
-    <fieldset>
-        <h4>Satsang Network</h4>
-
-        <div class="satsang_network">
-            <label for="satasangi_since">Satasangi Since</label>
-            <input type="hidden" name="hidden_satasangi_since" id="hidden_satasangi_since">
-            <select name="satasangi_since" id="satasangi_since"></select>
-            <br>
-
-            <label for="satsang_remark">Remarks</label>
-            <textarea name="satsang_remark" placeholder="Remark" id="satsang_remark"></textarea>
-            <br>
-            <label for="other_achievement">Goshthi Group</label>
-            <select name="gosthi_group_id" id="addgosthi"></select>
-            <br>
-            <label for="achievement_remarks">Goshthi Status</label>
-            <select name="gosthi_group_status">
-                <option value="Y">Y</option>
-                <option value="N">N</option>
-            </select> <br>
-
-            <label for="goshthi_status_remark">Goshthi Status Remarks</label>
-            <textarea name="goshthi_status_remark" placeholder="Goshthi Status Remarks" id="goshthi_status_remark"></textarea>
-            <br>
-        </div>
-
-        <hr>
-
-        <h4>Satsang Seva</h4>
-        <div class="satsang_seva">
-            <input type="hidden" id="current_table_row_satsang">
-            <table class="table table-bordered table-striped" id="satsangInvoice">
+            <input type="hidden" id="current_table_row_education">
+            <table class="table table-bordered table-striped" id="educationInvoice">
                 <thead>
                     <tr>
-                        <th>Activity</th>
-                        <th>Designation</th>
-                        <th>Details</th>
+                        <th>Degree</th>
+                        <th>Specialization</th>
+                        <th>Remark</th>
                         <th><i class="fa fa-flash"></i></th>
                     </tr>
                 </thead>
                 <tbody>
+
                     <tr>
                         <td class="m-0 p-0">
-                            <select id="satsang_activity_id" name="satsang_activity_id[]"></select>
+                            <select name="degree_id[]" id="adddegree" required></select>
                         </td>
                         <td class="m-0 p-0">
-                            <select id="satsang_designation_id" name="satsang_designation_id[]"></select>
+                            <select name="specialization_id[]" id="addspecialization"></select>
                         </td>
-                        <td class="m-0 p-0"><input type="text" name="seva_details[]">
+                        <td class="m-0 p-0">
+                            <input type="text" name="edu_remark[]">
                         </td>
-                        <td class="m-0 p-0 text-center">
+                        <td class="m-0 p-0 text-center"></td>
 
-                        </td>
                     </tr>
+
                 </tbody>
             </table>
 
-            <button type="button" class="btn btn-success btn-block" onclick="insertSatsang()"><i class="fa fa-plus-circle"></i>Add New Satsang Seva</button>
+            <button type="button" class="btn btn-success btn-block pull-right" onclick="insertEducation()"><i
+                    class="fa fa-plus-circle"></i>
+                Add New Education
+            </button>
 
-        </div>
-        <br />
-    </fieldset>
-
-    <br>
-
-    <fieldset>
-        <h4>Talent</h4>
-        <div id="talent_section">
-            <input type="hidden" id="current_table_row_talent">
-            <table class="table table-bordered table-striped" id="talentInvoice">
+            <h4><i class="fa fa-user"></i>
+                Employment</h4>
+            <input type="hidden" id="current_table_row_employment">
+            <table class="table table-bordered table-striped" id="employmentInvoice">
                 <thead>
                     <tr>
-                        <th>Talent</th>
-                        <th>Grade</th>
+                        <th>Employment Type</th>
                         <th>Detail</th>
+                        <th>Post/Designation</th>
+                        <th>Remark</th>
                         <th><i class="fa fa-flash"></i></th>
                     </tr>
                 </thead>
                 <tbody>
+
                     <tr>
                         <td class="m-0 p-0">
-                            <select name="talent_id[]" id="talent_id">
-                                <option value="">Select Talent</option>
+                            <select name="employment_id[]" id="employment_ids">
+                                <option value="">Select Employment
+                                    Type
+                                </option>
                             </select>
                         </td>
                         <td class="m-0 p-0">
-                            <select name="grade_id[]" id="grade_id">
-                                <option value="">Select Grade</option>
-                            </select>
+                            <input type="text" name="emp_detail[]" id="emp_details">
                         </td>
                         <td class="m-0 p-0">
-                            <input type="text" name="talent_detail[]">
+                            <input type="text" name="post_designation[]" id="post_designations">
+                        </td>
+                        <td class="m-0 p-0"><input type="text" name="emp_remark[]" id="emp_remarks">
                         </td>
                         <td class="m-0 p-0 text-center"></td>
                     </tr>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-success btn-block" onclick="InsertTalent()"><i class="fa fa-plus-circle"></i>Add New Talent</button>
 
+            <button type="button" class="btn btn-success btn-block addEmpBtn" onclick="insertEmployment()"><i
+                    class="fa fa-plus-circle"></i>
+                Add New Employment
+            </button>
             <br />
-
-            <h4>Achievement</h4>
-            <label for="other_achievement">Other Achievement :</label>
-            <textarea name="other_achievement" id="other_achievement" placeholder="Other Achivement" rows="1"></textarea>
-            <br>
-            <label for="achievement_remarks">Remarks :</label>
-            <textarea name="achievement_remarks" id="achievement_remarks" placeholder="Remarks" rows="1"></textarea>
         </div>
 
-        <h4> Sevak Status</h4>
+        <!-- Step 3 -->
 
-        <!-- only for Admin -->
+        <h4>Family Detail</h4>
+        <div class="family_details">
+            <input type="hidden" id="current_table_row_family">
+            <table class="table table-bordered table-striped" id="familyInvoice">
+                <thead>
+                    <tr>
+                        <th>Relationship</th>
+                        <th width="30%">Name</th>
+                        <th colspan="2">Mobile</th>
+                        <th width="20%">Email</th>
+                        <th>Occupation</th>
+                        <th><i class="fa fa-flash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="m-0 p-0">
+                            <select name="relationship_id[]" id="relationship_ids">
+                                <option value="">Select Relationship</option>
+                            </select>
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="text" name="family_name[]" id="family_names">
+                        </td>
+                        <td class="m-0 p-0" width="15%">
+                            <select name="family_country_code[]" id="family_country_code">
+                                <option value="">---</option>
+                            </select>
 
-        <div>
-            <button type="button" class="btn btn-success btn-block">
-                <input type="checkbox" name="certified" id="certified"> P-Certified
-            </button>
-            <button type="button" class="btn btn-success btn-block">
-                <input type="checkbox" onclick="notCompleteDiv()" name="not_complete" id="not_complete"> A-Not Complete
-            </button>
-            <button type="button" class="btn btn-success btn-block">
-                <input type="checkbox" onclick="temporaryDiv()" name="temporary" id="temporary"> T-Temporary
-            </button>
-            <button type="button" class="btn btn-success btn-block">
-                <input type="checkbox" onclick="expiredDiv()" name="expired" id="expired">E-Expired
-            </button>
-            <button type="button" class="btn btn-success btn-block">
-                <input type="checkbox" onclick="santInBapsDiv()" name="sant_in_baps" id="sant_in_baps">S-Sant in BAPS
-            </button>
-            <br>
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="number" name="family_mobile[]" id="family_mobile"
+                                title="Please Enter Your 10 Dogit Mobile Number.">
+                            <span id="spnError" style="color: Red; display: none">*Valid
+                                characters: Numbers and space.</span>
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="email" name="family_email[]" id="family_emails">
+                        </td>
+                        <td class="m-0 p-0">
+                            <input type="text" name="family_occupation[]" id="family_occupations">
+                        </td>
+                        <td class="m-0 p-0 text-center">
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success btn-block btnAddFamily" onclick="insertFamily()"><i
+                    class="fa fa-plus-circle"></i>Add New Member</button>
         </div>
+        <br />
+
+        <!-- Step 4 -->
+        <h4>Contact</h4>
+
+        <div class="contact">
+            <label for="contact_mobile1">Mobile 1 :</label>
+            <select name="mobile1_country_code" id="mobile1_country_code"></select>
+            <input type="number" name="contact_mobile1" id="contact_mobile1"
+                title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 1">
+            <br><br>
+
+            <label for="contact_mobile2">Mobile 2 :</label>
+            <select name="mobile2_country_code" id="mobile2_country_code"></select>
+            <input type="number" name="contact_mobile2" id="contact_mobile2"
+                title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 2">
+            <br><br>
+
+            <label for="contact_phone_1">Office Phone 1 :</label>
+            <input type="text" name="contact_phone_1" id="contact_phone_1" placeholder="Office Phone 1">
+            <br><br>
+
+            <label for="contact_phone_2">Office Phone 2 :</label>
+            <input type="text" name="contact_phone_2" id="contact_phone_2" placeholder="Office Phone 2">
+            <br><br>
+
+            <label for="contact_res_phone1">Residence Phone 1 : </label>
+            <input type="text" name="contact_res_phone1" id="contact_res_phone1" placeholder="Residence Phone 1">
+            <br><br>
+
+            <label for="contact_res_phone2">Residence Phone 2 :</label>
+            <input type="text" name="contact_res_phone2" id="contact_res_phone2" placeholder="Residence Phone 2">
+            <br><br>
+
+            <label for="contact_per_mail">Personal Email :</label>
+            <input type="email" name="contact_per_mail" placeholder="Personal Email" id="contact_per_mail">
+            <br><br>
+
+            <label for="contact_bus_mail">Business Email :</label>
+            <input type="email" name="contact_bus_mail" id="contact_bus_mail" placeholder="Business Email">
+            <br><br>
+
+            <label>Whatsapp No :</label>
+            <label for="sameprimaryno">
+                <input type="checkbox" name="sameprimaryno" id="sameprimaryno">Same as Parimary
+                No</label>
+            <br><br>
+
+            <select name="whatsapp_country_code" id="whatsapp_country_code"></select>
+            <input type="number" placeholder="Whatsapp No" name="contact_whatsapp_no"
+                title="Please Enter 10 Digit Your Mobile No" id="contact_whatsapp_no">
+            <br><br>
+        </div>
+
+        <!-- step 5 satsang details -->
+        <fieldset>
+            <h4>Satsang Network</h4>
+
+            <div class="satsang_network">
+                <label for="satasangi_since">Satasangi Since</label>
+                <input type="hidden" name="hidden_satasangi_since" id="hidden_satasangi_since">
+                <select name="satasangi_since" id="satasangi_since"></select>
+                <br>
+
+                <label for="satsang_remark">Remarks</label>
+                <textarea name="satsang_remark" placeholder="Remark" id="satsang_remark"></textarea>
+                <br>
+                <label for="other_achievement">Goshthi Group</label>
+                <select name="gosthi_group_id" id="addgosthi"></select>
+                <br>
+                <label for="achievement_remarks">Goshthi Status</label>
+                <select name="gosthi_group_status">
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </select> <br>
+
+                <label for="goshthi_status_remark">Goshthi Status Remarks</label>
+                <textarea name="goshthi_status_remark" placeholder="Goshthi Status Remarks"
+                    id="goshthi_status_remark"></textarea>
+                <br>
+            </div>
+
+            <hr>
+
+            <h4>Satsang Seva</h4>
+            <div class="satsang_seva">
+                <input type="hidden" id="current_table_row_satsang">
+                <table class="table table-bordered table-striped" id="satsangInvoice">
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Designation</th>
+                            <th>Details</th>
+                            <th><i class="fa fa-flash"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="m-0 p-0">
+                                <select id="satsang_activity_id" name="satsang_activity_id[]"></select>
+                            </td>
+                            <td class="m-0 p-0">
+                                <select id="satsang_designation_id" name="satsang_designation_id[]"></select>
+                            </td>
+                            <td class="m-0 p-0"><input type="text" name="seva_details[]">
+                            </td>
+                            <td class="m-0 p-0 text-center">
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-success btn-block" onclick="insertSatsang()"><i
+                        class="fa fa-plus-circle"></i>Add New Satsang Seva</button>
+
+            </div>
+            <br />
+        </fieldset>
+
         <br>
-        <!-- only for Admin -->
 
-        <div id="not_complete_div">
-            <label for="status">Not Complete :</label>
-            <input type="date" id="not_complete_date" title="Select Not Complete" placeholder="dd-mm-yyy (Not Complete Date)" autocomplete="off" name="not_complete_date">
+        <fieldset>
+            <h4>Talent</h4>
+            <div id="talent_section">
+                <input type="hidden" id="current_table_row_talent">
+                <table class="table table-bordered table-striped" id="talentInvoice">
+                    <thead>
+                        <tr>
+                            <th>Talent</th>
+                            <th>Grade</th>
+                            <th>Detail</th>
+                            <th><i class="fa fa-flash"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="m-0 p-0">
+                                <select name="talent_id[]" id="talent_id">
+                                    <option value="">Select Talent</option>
+                                </select>
+                            </td>
+                            <td class="m-0 p-0">
+                                <select name="grade_id[]" id="grade_id">
+                                    <option value="">Select Grade</option>
+                                </select>
+                            </td>
+                            <td class="m-0 p-0">
+                                <input type="text" name="talent_detail[]">
+                            </td>
+                            <td class="m-0 p-0 text-center"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-success btn-block" onclick="InsertTalent()"><i
+                        class="fa fa-plus-circle"></i>Add New Talent</button>
 
-            <label for="status">Not Complete Remark:</label>
-            <input type="text" id="not_complete_remark" name="not_complete_remark">
-        </div>
-        <!-- only for Admin -->
+                <br />
 
-        <div id="temporary_div">
-            <label for="status">Temporary :</label>
-            <input type="date" id="temporary_date" title="Select Temporary Date" placeholder="dd-mm-yyy (Temporary Date)" autocomplete="off" name="temporary_date">
-            <label for="status">Temporary Remark:</label>
-            <input type="text" id="temporary_remark" name="temporary_remark">
-        </div>
-        <!-- only for Admin -->
+                <h4>Achievement</h4>
+                <label for="other_achievement">Other Achievement :</label>
+                <textarea name="other_achievement" id="other_achievement" placeholder="Other Achivement"
+                    rows="1"></textarea>
+                <br>
+                <label for="achievement_remarks">Remarks :</label>
+                <textarea name="achievement_remarks" id="achievement_remarks" placeholder="Remarks" rows="1"></textarea>
+            </div>
 
-        <div id="expired_div">
-            <label for="status">Expired : </label>
-            <input type="date" id="expired_date" title="Select Expired Date" placeholder="dd-mm-yyy (Expired Date)" autocomplete="off" name="expired_date">
+            <h4> Sevak Status</h4>
 
-            <label for="status">Expired Remark:</label>
-            <input type="text" id="expired_remark" name="expired_remark">
-        </div>
-        <br>
-        <!-- only for Admin -->
+            <!-- only for Admin -->
 
-        <div id="sant_in_baps_div">
-            <input type="text" placeholder="Name Of Parshad" name="name_of_parshad" id="name_of_parshad">
-            <input type="date" id="parshad_date" placeholder="dd-mm-yyy" name="parshad_date" autocomplete="off">
+            <div>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" name="certified" id="certified"> P-Certified
+                </button>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" onclick="notCompleteDiv()" name="not_complete" id="not_complete"> A-Not
+                    Complete
+                </button>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" onclick="temporaryDiv()" name="temporary" id="temporary"> T-Temporary
+                </button>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" onclick="expiredDiv()" name="expired" id="expired">E-Expired
+                </button>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" onclick="santInBapsDiv()" name="sant_in_baps" id="sant_in_baps">S-Sant in
+                    BAPS
+                </button>
+                <br>
+            </div>
             <br>
-            <input type="text" placeholder="Name Of Sant" name="name_of_sant" id="name_of_sant">
-            <input type="date" id="sant_in_baps_date" placeholder="dd-mm-yyy" name="sant_in_baps_date" autocomplete="off">
-        </div>
+            <!-- only for Admin -->
+
+            <div id="not_complete_div">
+                <label for="status">Not Complete :</label>
+                <input type="date" id="not_complete_date" title="Select Not Complete"
+                    placeholder="dd-mm-yyy (Not Complete Date)" autocomplete="off" name="not_complete_date">
+
+                <label for="status">Not Complete Remark:</label>
+                <input type="text" id="not_complete_remark" name="not_complete_remark">
+            </div>
+            <!-- only for Admin -->
+
+            <div id="temporary_div">
+                <label for="status">Temporary :</label>
+                <input type="date" id="temporary_date" title="Select Temporary Date"
+                    placeholder="dd-mm-yyy (Temporary Date)" autocomplete="off" name="temporary_date">
+                <label for="status">Temporary Remark:</label>
+                <input type="text" id="temporary_remark" name="temporary_remark">
+            </div>
+            <!-- only for Admin -->
+
+            <div id="expired_div">
+                <label for="status">Expired : </label>
+                <input type="date" id="expired_date" title="Select Expired Date" placeholder="dd-mm-yyy (Expired Date)"
+                    autocomplete="off" name="expired_date">
+
+                <label for="status">Expired Remark:</label>
+                <input type="text" id="expired_remark" name="expired_remark">
+            </div>
+            <br>
+            <!-- only for Admin -->
+
+            <div id="sant_in_baps_div">
+                <input type="text" placeholder="Name Of Parshad" name="name_of_parshad" id="name_of_parshad">
+                <input type="date" id="parshad_date" placeholder="dd-mm-yyy" name="parshad_date" autocomplete="off">
+                <br>
+                <input type="text" placeholder="Name Of Sant" name="name_of_sant" id="name_of_sant">
+                <input type="date" id="sant_in_baps_date" placeholder="dd-mm-yyy" name="sant_in_baps_date"
+                    autocomplete="off">
+            </div>
 
 
-        <div style="display: none">
-            <label for="status">Status :</label>
-            <select name="status[]" multiple id="status" title="Select Status" onchange="toggleStatus(this.value)">
-                <option value="">Select Status</option>
-                <option value="Admitted" id="Admitted">Admitted</option>
-                <option value="Certified" id="Certified">Certified</option>
-                <option value="Not Complete" id="NotComplete">Not Complete</option>
-                <option value="Expired" id="Expired">Expired</option>
-                <option value="Temporary" id="Temporary">Temporary</option>
-                <option value="Sant in BAPS" id="SantinBAPS">Sant in BAPS</option>
+            <div style="display: none">
+                <label for="status">Status :</label>
+                <select name="status[]" multiple id="status" title="Select Status" onchange="toggleStatus(this.value)">
+                    <option value="">Select Status</option>
+                    <option value="Admitted" id="Admitted">Admitted</option>
+                    <option value="Certified" id="Certified">Certified</option>
+                    <option value="Not Complete" id="NotComplete">Not Complete</option>
+                    <option value="Expired" id="Expired">Expired</option>
+                    <option value="Temporary" id="Temporary">Temporary</option>
+                    <option value="Sant in BAPS" id="SantinBAPS">Sant in BAPS</option>
+                </select>
+            </div>
+            </div>
+
+            <!-- only for Admin -->
+
+            <label for="role_id">Role *</label>
+
+            <select name="role_id" style="width: 100%" id="role_id" required title="Select Role">
+                <option value="1">Admin</option>
+                <option value="2" readonly selected style="color: red;font-weight: 600">Sevak</option>
+                <option value="3" disabled style="color: red;font-weight: 600">Sanchalak</option>
+                <option value="4" disabled style="color: red;font-weight: 600">Sah Sanchalak</option>
+                <option value="6">Sanyojak</option>
+                <option value="8">Sub Admin</option>
+                <option value="10" disabled style="color: red;font-weight: 600">Nirikshak</option>
+                <option value="12" disabled style="color: red;font-weight: 600">Followup Sahayak</option>
+                <option value="15">Database Operator</option>
             </select>
-        </div>
-        </div>
 
-        <!-- only for Admin -->
+            <label for="login_active">Login Active :</label>
+            <select name="login_active" id="login_active">
+                <option value="Y">Active</option>
+                <option value="N">In Active</option>
+            </select>
 
-        <label for="status">Role *</label>
+        </fieldset>
+        <button type="submit" value="Submit" name="submit">Submit</button>
 
-        <select name="role_id[]" multiple style="width: 100%" id="role_id" required title="Select Role">
-            <option value="1">Admin</option>
-            <option value="2" readonly selected style="color: red;font-weight: 600">Sevak</option>
-            <option value="3" disabled style="color: red;font-weight: 600">Sanchalak</option>
-            <option value="4" disabled style="color: red;font-weight: 600">Sah Sanchalak</option>
-            <option value="6">Sanyojak</option>
-            <option value="8">Sub Admin</option>
-            <option value="10" disabled style="color: red;font-weight: 600">Nirikshak</option>
-            <option value="12" disabled style="color: red;font-weight: 600">Followup Sahayak</option>
-            <option value="15">Database Operator</option>
-        </select>
 
-        <label for="status">Login Active :</label>
-        <select name="login_active" id="login_active">
-            <option value="Y">Active</option>
-            <option value="N">In Active</option>
-        </select>
-
-    </fieldset>
+    </form>
 
     <script src="addsevakregistration.js"></script>
 

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Sevaks</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 400px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Modals -->
+    <div class="modal fade" id="overAllRemarkModel" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h4 class="modal-title white">Overall Grade Remark</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="gradeRemarktb"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sevakPasswordModel" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h4 class="modal-title white">Verify Sevak Password</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="sevakPasswordtb"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="CurrentSevakModel" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h4 class="modal-title white">Sevak Detail</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="sevakDetailtb"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <form id="filterForm" name="filterForm">
+
+
+        <fieldset class="radio">
+            <label>
+                <input type="radio" name="type" value="AllSevak" onchange="operation(this.value)" checked>
+                <b>View All Sevak</b>
+            </label>
+        </fieldset>
+
+
+        <fieldset class="radio">
+            <label>
+                <input type="radio" name="type" value="Sevak" onchange="operation(this.value)">
+                <b>Filter By</b>
+            </label>
+        </fieldset>
+
+        <div id="filterSevak" style="display:none;">
+
+
+            <label><b>Talim Batch</b></label>
+            <select class="form-control" name="talim_batch_id" id="talim_batch_id"></select>
+
+
+            <label><b>Degree</b></label>
+            <select class="form-control" name="degree_id" id="degree_id"></select>
+
+            <label><b>City</b></label>
+            <select class="form-control" name="city_id" id="city_id"></select>
+
+            <label><b>District</b></label>
+            <select class="form-control" name="district_id" id="district_id"></select>
+        </div>
+
+
+        <label><b>Grade</b></label>
+        <select class="form-control" name="grade_id" id="grade_id"></select>
+
+        <label><b>Marital Status</b></label>
+        <select class="form-control" name="marital_status_id" id="marital_status_id"></select>
+
+        <label><b>Mandir</b></label>
+        <select class="form-control" name="mandir" id="mandir"></select>
+
+        <label><b>Region</b></label>
+        <select class="form-control" name="zone_id" id="zone_id"></select>
+
+
+        <label><b>Occupation</b></label>
+        <select class="form-control" name="employment_id" id="employment_id"></select>
+
+        <label><b>Satsang Activity</b></label>
+        <select class="form-control" name="satsang_activity_id" id="satsang_activity_id"></select>
+
+        <label><b>Satsang Designation</b></label>
+        <select class="form-control" name="satsang_designation_id" id="satsang_designation_id"></select>
+
+        <label><b>Kshetra</b></label>
+        <select class="form-control" name="kshetra_id" id="kshetra_id"></select>
+
+        <label><b>Specialization</b></label>
+        <select class="form-control" name="specialization_id" id="specialization_id"></select>
+
+        <label><b>Goshthi Group</b></label>
+        <select class="form-control" name="group_id" id="group_id"></select>
+        </div>
+
+        <label><b>Sevak Status</b></label>
+        <select class="form-control" name="status" id="status"></select>
+
+        <button type="button" style="margin-top: 32px" id="searchBtn" class="btn mr-1 btn-primary btn-sm">
+            <i class="fa fa-search"></i> Search
+        </button>
+    </form>
+
+    <!-- DataTables -->
+    <div id="allSevakListTb">
+        <table class="table table-striped table-bordered" id="sevak-datatable" style="width:100%">
+            <thead>
+                <tr>
+                    <th>YTK ID</th>
+                    <th>Sevak Name</th>
+                    <th>City</th>
+                    <th>City Area</th>
+                    <th>Taluka</th>
+                    <th>District</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Kshetra</th>
+                    <th>Kshetra Code</th>
+                    <th>Mandir</th>
+                    <th>Region</th>
+                    <th>Mobile 1</th>
+                    <th>Mobile 2</th>
+                    <th>Office Phone 1</th>
+                    <th>Office Phone 2</th>
+                    <th>Residence Phone 1</th>
+                    <th>Residence Phone 2</th>
+                    <th>Whatsapp No</th>
+                    <th>Birth Date</th>
+                    <th>Employment</th>
+                    <th>Employment Detail</th>
+                    <th>Post Designation</th>
+                    <th>Education</th>
+                    <th>Specialization</th>
+                    <th>Caste</th>
+                    <th>Marriage Date</th>
+                    <th>Grade</th>
+                    <th>Email</th>
+                    <th>Company Email</th>
+                    <th>Sant Nirdeshak</th>
+                    <th>Satsang Activity</th>
+                    <th>Satsang Designation</th>
+                    <th>Address</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be loaded by DataTables -->
+            </tbody>
+        </table>
+    </div>
+    </div>
+    <div id="searchingListTb">
+        <!-- Filtered results will be loaded here -->
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <script src="./viewSevak.js"></script>
+
+</body>
+
+</html>
