@@ -193,6 +193,9 @@ app.use("/AllExamMarksReport", AllExamMarksReportRoutes);
 const MyBatchmateRoutes = require("./routes/MyBatchmateRoutes.js");
 app.use("/MyBatchmate", MyBatchmateRoutes);
 
+const SevakReportsRoutes = require("./routes/SevakReportsRoutes.js");
+app.use("/SevakReports", SevakReportsRoutes);
+
 // Root route
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "view", "dashboard.html"));

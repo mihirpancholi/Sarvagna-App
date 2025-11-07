@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Sevak Registration</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <h2>Edit Sevak Registration</h2>
+
+    <form id="sevakForm">
+        <input type="hidden" id="sevak_id" name="sevak_id">
+        <fieldset>
+            <!-- Sevak Number + YTK ID -->
+            <label for="sevak_no">Sevak No:</label>
+            <input type="text" id="sevak_no" name="sevak_no" onkeyup="generateYtkID()">
+            <span id="is_sevak_duplicate" style="display:none;color:red;">Duplicate Sevak No!</span>
+            <br>
+
+            <label>Talim Batch:</label>
+            <select id="addbatch" name="talim_batch_id"></select>
+            <br>
+
+            <label for="ytk_id">YTK ID:</label>
+            <input type="text" id="ytk_id" name="ytk_id" readonly>
+            <br><br>
+
+            <label>First Name:</label>
+            <input type="text" id="first_name" name="first_name"><br>
+
+            <label>Last Name:</label>
+            <input type="text" id="last_name" name="last_name"><br>
+
+            <label>Middle Name:</label>
+            <input type="text" id="middle_name" name="middle_name"><br>
+
+            <label for="birth_date">Birth Date:</label>
+            <input type="date" id="birth_date" name="birth_date"><br>
+
+            <label for="addcaste">Caste:</label>
+            <select id="addcaste" name="caste_id"></select><br>
+
+            <label for="addcategory">Category:</label>
+            <select id="addcategory" name="category_id"></select><br>
+
+            <label for="addbloodgroup">Blood Group:</label>
+            <select id="addbloodgroup" name="blood_group_id"></select><br>
+
+            <label for="addgender">Gender:</label>
+            <select id="addgender" name="gender">
+                <option value="">-- Select --</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select><br>
+
+            <label>Marital Status:</label>
+            <select id="addmaritalstatus" name="marital_status_id"></select><br>
+
+            <div id="maritalStatusDate" style="display:none;">
+                <label for="marital_status_id" id="engagedDate">
+                    Engaged Date :
+                </label>
+                <label for="marital_status_id" id="marriedDate">
+                    Marriage Date :
+                </label>
+                <input type="date" id="marital_date" name="marital_date" autocomplete="off">
+
+            </div><br>
+
+
+            <label for="sevak_photo">Sevak Photo:</label>
+            <input type="file" id="sevak_photo" name="sevak_photo"><br>
+            <div id="sevak_photo_preview"></div>
+            <input type="hidden" name="old_sevak_photo" id="old_sevak_photo">
+
+
+            <label for="latest_photo">Latest Photo:</label>
+            <input type="file" id="latest_photo" name="latest_photo"><br>
+            <div id="latest_photo_preview"></div>
+            <input type="hidden" name="old_latest_photo" id="old_latest_photo">
+
+            <!-- City Section (Current Address) -->
+            <h3>Current Address</h3>
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address1"><br>
+
+            <label for="addcity">City:</label>
+            <select id="addcity" name="city_id"></select><br>
+
+            <label for="addcityarea">City Area:</label>
+            <select id="addcityarea" name="city_area_id"></select><br>
+
+            <label for="addpincode">Pincode:</label>
+            <select id="addpincode" name="pincode"></select><br>
+
+            <label for="taluka_name">Taluka:</label>
+            <input type="text" id="taluka_name" readonly>
+            <input type="hidden" id="taluka_id" name="taluka_id"><br>
+
+            <label for="district_name">District:</label>
+            <input type="text" id="district_name" readonly>
+            <input type="hidden" id="district_id" name="district_id"><br>
+
+            <label for="state_name">State:</label>
+            <input type="text" id="state_name" readonly>
+            <input type="hidden" id="state_id" name="state_id"><br>
+
+            <label for="country_name">Country:</label>
+            <input type="text" id="country_name" readonly>
+            <input type="hidden" id="country_id" name="country_id"><br><br>
+
+
+            <!-- Mandir Section () -->
+            <div id="withoutIndiaDiv">
+                <label for="current_kshetra_id">
+                    Shikharbaddh Mandir:
+                </label>
+                <select class="form-control" name="shikhar_mandir_id" id="shikhar_mandir_id">
+                    <option value="">Select Shikharbaddh Mandir</option>
+                </select>
+                <label for="hari_mandir_id">Hari Mandir :</label>
+                <select class="form-control" name="hari_mandir_id" id="hari_mandir_id">
+                    <option value="">Select Hari Mandir</option>
+                </select>
+                <label for="satsang_mandal_name">Satsang Mandal Name :</label>
+                <input type="text" class="form-control" name="satsang_mandal_name" id="satsang_mandal_name">
+            </div>
+            <br><br>
+
+            <div class="current_kshetra_info" id="withIndiaDiv">
+                <label for="current_kshetra">Current Kshetra:</label>
+                <select id="current_kshetra" name="current_kshetra_id"></select><br>
+                <label for="current_sant_nirdeshak">Sant Nirdeshak:</label>
+                <input type="text" id="current_sant_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="current_sant_nirdeshak" name="current_sant_nirdeshak"><br> <!-- Submit ID -->
+                <label for="current_nirdeshak">Nirdeshak:</label>
+                <input type="text" id="current_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="current_nirdeshak" name="current_nirdeshak"><br> <!-- Submit ID -->
+                <label for="current_mandir">Mandir:</label>
+                <input type="text" id="current_mandir_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="current_mandir" name="current_mandir"><br> <!-- Submit ID -->
+                <label for="current_mandir_type">Mandir Type:</label>
+                <input type="text" id="current_mandir_type" name="current_mandir_type" readonly><br><br>
+            </div>
+
+            <!-- Permanent Address -->
+            <label><input type="checkbox" id="is_perm_add" name="is_perm_add"> Is PERMANENT ADDRESS same
+                as CURRENT ADDRESS</label>
+            <div id="permanent_address">
+                <h3>Permanent Address</h3>
+                <label for="per_address">Address</label>
+                <input type="text" id="per_address" name="per_address1" autocomplete="off"><br>
+
+                <label for="per_city">City:</label>
+                <select id="per_city" name="per_city_id"></select><br>
+
+                <label for="per_city_area">City Area:</label>
+                <select id="per_city_area" name="per_city_area_id"></select><br>
+
+                <label for="per_pincode">Pincode:</label>
+                <select id="per_pincode" name="per_pincode"></select><br>
+
+                <label for="per_taluka_name">Taluka:</label>
+                <input type="text" id="per_taluka_name" readonly>
+                <input type="hidden" id="per_taluka_id" name="per_taluka_id"><br>
+
+                <label for="per_district_name">District:</label>
+                <input type="text" id="per_district_name" readonly>
+                <input type="hidden" id="per_district_id" name="per_district_id"><br>
+
+                <label for="per_state_name">State:</label>
+                <input type="text" id="per_state_name" readonly>
+                <input type="hidden" id="per_state_id" name="per_state_id"><br>
+
+                <label for="per_country_name">Country:</label>
+                <input type="text" id="per_country_name" readonly>
+                <input type="hidden" id="per_country_id" name="per_country_id"><br><br>
+            </div>
+
+            <br><br>
+
+            <!-- Talim Address -->
+            <label><input type="checkbox" id="is_talim_add" name="is_talim_add"> Is TALIM ADDRESS same as CURRENT
+                ADDRESS</label>
+            <div id="talim_address">
+                <h3>Talim Address</h3>
+                <label for="talim_address">Address</label>
+                <input type="text" id="talim_address_input" name="talim_address1"><br>
+                <label for="talim_city">City:</label>
+                <select id="talim_city" name="talim_city_id"></select><br>
+
+                <label for="talim_city_area">City Area:</label>
+                <select id="talim_city_area" name="talim_city_area_id"></select><br>
+
+                <label for="talim_pincode">Pincode:</label>
+                <select id="talim_pincode" name="talim_pincode"></select><br>
+
+                <label for="talim_taluka_name">Taluka:</label>
+                <input type="text" id="talim_taluka_name" readonly>
+                <input type="hidden" id="talim_taluka_id" name="talim_taluka_id"><br>
+
+                <label for="talim_district_name">District:</label>
+                <input type="text" id="talim_district_name" readonly>
+                <input type="hidden" id="talim_district_id" name="talim_district_id"><br>
+
+                <label for="talim_state_name">State:</label>
+                <input type="text" id="talim_state_name" readonly>
+                <input type="hidden" id="talim_state_id" name="talim_state_id"><br>
+
+                <label for="talim_country_name">Country:</label>
+                <input type="text" id="talim_country_name" readonly>
+                <input type="hidden" id="talim_country_id" name="talim_country_id"><br><br>
+            </div>
+            <hr>
+
+            <!-- Kshetra Section -->
+            <h3>Kshetra Details</h3>
+
+            <div id="permanent_kshetra_info">
+                Form submitted from <br>
+                <label for="kshetra">Permanent Kshetra:</label>
+                <select id="kshetra" name="kshetra_id"></select><br>
+                <label for="sant_nirdeshak_name">Sant Nirdeshak:</label>
+                <input type="text" id="sant_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="sant_nirdeshak" name="sant_nirdeshak"><br> <!-- Submit ID -->
+                <label for="nirdeshak_name">Nirdeshak:</label>
+                <input type="text" id="nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="nirdeshak" name="nirdeshak"><br> <!-- Submit ID -->
+                <label for="mandir_name">Mandir:</label>
+                <input type="text" id="mandir_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="mandir" name="mandir"><br> <!-- Submit ID -->
+                <label for="mandir_type">Mandir Type:</label>
+                <input type="text" id="mandir_type" readonly name="mandir_type"><br><br>
+
+            </div>
+
+            <div id="talim_kshetra_info">
+                <label for="talim_kshetra">Talim Kshetra:</label>
+                <select id="talim_kshetra" name="talim_kshetra_id"></select><br>
+                <label for="talim_sant_nirdeshak_name">Sant Nirdeshak:</label>
+                <input type="text" id="talim_sant_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="talim_sant_nirdeshak" name="talim_sant_nirdeshak"><br> <!-- Submit ID -->
+                <label for="talim_nirdeshak_name">Nirdeshak:</label>
+                <input type="text" id="talim_nirdeshak_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="talim_nirdeshak" name="talim_nirdeshak"><br> <!-- Submit ID -->
+                <label for="talim_mandir_name">Mandir:</label>
+                <input type="text" id="talim_mandir_name" readonly> <!-- Display Only -->
+                <input type="hidden" id="talim_mandir" name="talim_mandir"><br> <!-- Submit ID -->
+                <label for="talim_mandir_type">Mandir Type:</label>
+                <input type="text" id="talim_mandir_type" name="talim_mandir_type" readonly><br><br>
+            </div>
+
+
+            <div class="satsangi_referee">
+                <hr>
+                <!-- Satsangi Referee Section -->
+                <h3>Satsangi Referee</h3>
+
+                <label>
+                    <input type="checkbox" id="ytk_sevak_satsangi" name="ytk_sevak_satsangi">
+                    <span>YTK Sevak</span>
+                </label>
+
+                <div id="ytk_sevak_fields" style="display:none; margin-top:10px;">
+                    <label for="satsangi_batch_id">Batch :</label>
+                    <select name="satsangi_batch_id" id="satsangi_batch_id"></select> <br>
+
+                    <label for="satsangi_sevak_id">Sevak :</label>
+                    <select name="satsangi_sevak_id" id="satsangi_sevak_id"></select> <br>
+                </div>
+
+                <div id="ref_fields" style="margin-top:10px;">
+                    <label for="sat_ref_name">Name :</label>
+                    <input type="text" name="sat_ref_name" id="sat_ref_name" placeholder="Name"> <br>
+
+                    <label for="sat_ref_city_id">City/Village :</label>
+                    <select name="sat_ref_city_id" id="sat_ref_city_id"></select> <br>
+
+                    <label for="sat_ref_mobile">Mobile No : </label>
+                    <select name="sat_ref_mobile_country_code" id="sat_ref_mobile_country_code"></select>
+
+                    <input type="number" name="sat_ref_mobile" id="sat_ref_mobile"
+                        title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
+                </div>
+
+            </div>
+
+            <div class="inspired_by">
+                <hr>
+                <!-- Inspired By Section -->
+                <h3>Inspired By</h3>
+
+                <label>
+                    <input type="checkbox" id="ytk_sevak_inspired" name="ytk_sevak_inspired">
+                    <span>YTK Sevak</span>
+                </label>
+
+                <div id="ytk_inspired_fields" style="display:none; margin-top:10px;">
+                    <label for="inpired_batch_id">Batch :</label>
+                    <select name="inpired_batch_id" id="inpired_batch_id"></select> <br>
+
+                    <label for="inspired_sevak_id">Sevak :</label>
+                    <select name="inspired_sevak_id" id="inspired_sevak_id"></select> <br>
+                </div>
+
+                <div id="ins_ref_fields" style="margin-top:10px;">
+                    <label for="ins_by_name">Name :</label>
+                    <input type="text" name="ins_by_name" id="ins_by_name" placeholder="Name"> <br>
+
+                    <label for="ins_by_city_id">City/Village :</label>
+                    <select name="ins_by_city_id" id="ins_by_city_id"></select> <br>
+
+                    <label for="ins_by_mobile">Mobile No : </label>
+                    <select name="ins_by_country_code" id="ins_by_country_code"></select>
+
+                    <input type="number" name="ins_by_mobile" id="ins_by_mobile"
+                        title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile No">
+                </div>
+
+            </div>
+
+        </fieldset>
+        <hr>
+
+        <!-- step 2 -->
+
+        <h4>Education</h4>
+
+        <div class="education_section">
+
+            <input type="hidden" id="current_table_row_education">
+            <table class="table table-bordered table-striped" id="educationInvoice">
+                <thead>
+                    <tr>
+                        <th>Degree</th>
+                        <th>Specialization</th>
+                        <th>Remark</th>
+                        <th><i class="fa fa-flash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added dynamically -->
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success btn-block pull-right" onclick="insertEducation()"><i
+                    class="fa fa-plus-circle"></i>
+                Add New Education
+            </button>
+
+            <h4><i class="fa fa-user"></i>
+                Employment</h4>
+            <input type="hidden" id="current_table_row_employment">
+            <table class="table table-bordered table-striped" id="employmentInvoice">
+                <thead>
+                    <tr>
+                        <th>Employment Type</th>
+                        <th>Detail</th>
+                        <th>Post/Designation</th>
+                        <th>Remark</th>
+                        <th><i class="fa fa-flash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added dynamically -->
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success btn-block addEmpBtn" onclick="insertEmployment()"><i
+                    class="fa fa-plus-circle"></i>
+                Add New Employment
+            </button>
+            <br />
+        </div>
+
+        <!-- Step 3 -->
+
+        <h4>Family Detail</h4>
+        <div class="family_details">
+            <input type="hidden" id="current_table_row_family">
+            <table class="table table-bordered table-striped" id="familyInvoice">
+                <thead>
+                    <tr>
+                        <th>Relationship</th>
+                        <th width="30%">Name</th>
+                        <th colspan="2">Mobile</th>
+                        <th width="20%">Email</th>
+                        <th>Occupation</th>
+                        <th><i class="fa fa-flash"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added dynamically -->
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success btn-block btnAddFamily" onclick="insertFamily()"><i
+                    class="fa fa-plus-circle"></i>Add New Member</button>
+        </div>
+        <br />
+
+        <!-- Step 4 -->
+        <h4>Contact</h4>
+
+        <div class="contact">
+            <label for="contact_mobile1">Mobile 1 :</label>
+            <select name="mobile1_country_code" id="mobile1_country_code"></select>
+            <input type="number" name="contact_mobile1" id="contact_mobile1"
+                title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 1">
+            <br><br>
+
+            <label for="contact_mobile2">Mobile 2 :</label>
+            <select name="mobile2_country_code" id="mobile2_country_code"></select>
+            <input type="number" name="contact_mobile2" id="contact_mobile2"
+                title="Please Enter 10 Digit Your Mobile No" placeholder="Mobile 2">
+            <br><br>
+
+            <label for="contact_phone_1">Office Phone 1 :</label>
+            <input type="text" name="contact_phone_1" id="contact_phone_1" placeholder="Office Phone 1">
+            <br><br>
+
+            <label for="contact_phone_2">Office Phone 2 :</label>
+            <input type="text" name="contact_phone_2" id="contact_phone_2" placeholder="Office Phone 2">
+            <br><br>
+
+            <label for="contact_res_phone1">Residence Phone 1 : </label>
+            <input type="text" name="contact_res_phone1" id="contact_res_phone1" placeholder="Residence Phone 1">
+            <br><br>
+
+            <label for="contact_res_phone2">Residence Phone 2 :</label>
+            <input type="text" name="contact_res_phone2" id="contact_res_phone2" placeholder="Residence Phone 2">
+            <br><br>
+
+            <label for="contact_per_mail">Personal Email :</label>
+            <input type="email" name="contact_per_mail" placeholder="Personal Email" id="contact_per_mail">
+            <br><br>
+
+            <label for="contact_bus_mail">Business Email :</label>
+            <input type="email" name="contact_bus_mail" id="contact_bus_mail" placeholder="Business Email">
+            <br><br>
+
+            <label>Whatsapp No :</label>
+            <label for="sameprimaryno">
+                <input type="checkbox" name="sameprimaryno" id="sameprimaryno">Same as Parimary
+                No</label>
+            <br><br>
+
+            <select name="whatsapp_country_code" id="whatsapp_country_code"></select>
+            <input type="number" placeholder="Whatsapp No" name="contact_whatsapp_no"
+                title="Please Enter 10 Digit Your Mobile No" id="contact_whatsapp_no">
+            <br><br>
+        </div>
+
+        <!-- step 5 satsang details -->
+        <fieldset>
+            <h4>Satsang Network</h4>
+
+            <div class="satsang_network">
+                <label for="satasangi_since">Satasangi Since</label>
+                <input type="hidden" name="hidden_satasangi_since" id="hidden_satasangi_since">
+                <select name="satasangi_since" id="satasangi_since"></select>
+                <br>
+
+                <label for="satsang_remark">Remarks</label>
+                <textarea name="satsang_remark" placeholder="Remark" id="satsang_remark"></textarea>
+                <br>
+                <label for="other_achievement">Goshthi Group</label>
+                <select name="gosthi_group_id" id="addgosthi"></select>
+                <br>
+                <label for="achievement_remarks">Goshthi Status</label>
+                <select name="gosthi_group_status" id="gosthi_group_status">
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </select> <br>
+
+                <label for="goshthi_status_remark">Goshthi Status Remarks</label>
+                <textarea name="goshthi_status_remark" placeholder="Goshthi Status Remarks"
+                    id="goshthi_status_remark"></textarea>
+                <br>
+            </div>
+
+            <hr>
+
+            <h4>Satsang Seva</h4>
+            <div class="satsang_seva">
+                <input type="hidden" id="current_table_row_satsang">
+                <table class="table table-bordered table-striped" id="satsangInvoice">
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Designation</th>
+                            <th>Details</th>
+                            <th><i class="fa fa-flash"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be added dynamically -->
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-success btn-block" onclick="insertSatsang()"><i
+                        class="fa fa-plus-circle"></i>Add New Satsang Seva</button>
+
+            </div>
+            <br />
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <h4>Talent</h4>
+            <div id="talent_section">
+                <input type="hidden" id="current_table_row_talent">
+                <table class="table table-bordered table-striped" id="talentInvoice">
+                    <thead>
+                        <tr>
+                            <th>Talent</th>
+                            <th>Grade</th>
+                            <th>Detail</th>
+                            <th><i class="fa fa-flash"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be added dynamically -->
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-success btn-block" onclick="InsertTalent()"><i
+                        class="fa fa-plus-circle"></i>Add New Talent</button>
+
+                <br />
+
+                <h4>Achievement</h4>
+                <label for="other_achievement">Other Achievement :</label>
+                <textarea name="other_achievement" id="other_achievement" placeholder="Other Achivement"
+                    rows="1"></textarea>
+                <br>
+                <label for="achievement_remarks">Remarks :</label>
+                <textarea name="achievement_remarks" id="achievement_remarks" placeholder="Remarks" rows="1"></textarea>
+            </div>
+
+            <h4> Sevak Status</h4>
+
+            <!-- only for Admin -->
+
+            <div>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" name="certified" id="certified"> P-Certified
+                </button>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" onclick="notCompleteDiv()" name="not_complete" id="not_complete"> A-Not
+                    Complete
+                </button>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" onclick="temporaryDiv()" name="temporary" id="temporary"> T-Temporary
+                </button>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" onclick="expiredDiv()" name="expired" id="expired">E-Expired
+                </button>
+                <button type="button" class="btn btn-success btn-block">
+                    <input type="checkbox" onclick="santInBapsDiv()" name="sant_in_baps" id="sant_in_baps">S-Sant in
+                    BAPS
+                </button>
+                <br>
+            </div>
+            <br>
+            <!-- only for Admin -->
+
+            <div id="not_complete_div">
+                <label for="status">Not Complete :</label>
+                <input type="date" id="not_complete_date" title="Select Not Complete"
+                    placeholder="dd-mm-yyy (Not Complete Date)" autocomplete="off" name="not_complete_date">
+
+                <label for="status">Not Complete Remark:</label>
+                <input type="text" id="not_complete_remark" name="not_complete_remark">
+            </div>
+            <!-- only for Admin -->
+
+            <div id="temporary_div">
+                <label for="status">Temporary :</label>
+                <input type="date" id="temporary_date" title="Select Temporary Date"
+                    placeholder="dd-mm-yyy (Temporary Date)" autocomplete="off" name="temporary_date">
+                <label for="status">Temporary Remark:</label>
+                <input type="text" id="temporary_remark" name="temporary_remark">
+            </div>
+            <!-- only for Admin -->
+
+            <div id="expired_div">
+                <label for="status">Expired : </label>
+                <input type="date" id="expired_date" title="Select Expired Date" placeholder="dd-mm-yyy (Expired Date)"
+                    autocomplete="off" name="expired_date">
+
+                <label for="status">Expired Remark:</label>
+                <input type="text" id="expired_remark" name="expired_remark">
+            </div>
+            <br>
+            <!-- only for Admin -->
+
+            <div id="sant_in_baps_div">
+                <input type="text" placeholder="Name Of Parshad" name="name_of_parshad" id="name_of_parshad">
+                <input type="date" id="parshad_date" placeholder="dd-mm-yyy" name="parshad_date" autocomplete="off">
+                <br>
+                <input type="text" placeholder="Name Of Sant" name="name_of_sant" id="name_of_sant">
+                <input type="date" id="sant_in_baps_date" placeholder="dd-mm-yyy" name="sant_in_baps_date"
+                    autocomplete="off">
+            </div>
+
+
+            <div style="display: none">
+                <label for="status">Status :</label>
+                <select name="status[]" multiple id="status" title="Select Status" onchange="toggleStatus(this.value)">
+                    <option value="">Select Status</option>
+                    <option value="Admitted" id="Admitted">Admitted</option>
+                    <option value="Certified" id="Certified">Certified</option>
+                    <option value="Not Complete" id="NotComplete">Not Complete</option>
+                    <option value="Expired" id="Expired">Expired</option>
+                    <option value="Temporary" id="Temporary">Temporary</option>
+                    <option value="Sant in BAPS" id="SantinBAPS">Sant in BAPS</option>
+                </select>
+            </div>
+            </div>
+
+            <!-- only for Admin -->
+
+            <label for="role_id">Role *</label>
+
+            <select name="role_id[]" multiple style="width: 100%" id="role_id" required title="Select Role">
+                <option value="1">Admin</option>
+                <option value="2">Sevak</option>
+                <option value="3">Sanchalak</option>
+                <option value="4">Sah Sanchalak</option>
+                <option value="6">Sanyojak</option>
+                <option value="8">Sub Admin</option>
+                <option value="10">Nirikshak</option>
+                <option value="12">Followup Sahayak</option>
+                <option value="15">Database Operator</option>
+            </select>
+
+            <label for="login_active">Login Active :</label>
+            <select name="login_active" id="login_active">
+                <option value="Y">Active</option>
+                <option value="N">In Active</option>
+            </select>
+
+        </fieldset>
+        <button type="submit" value="Submit" name="submit">Update</button>
+
+
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sevakId = window.location.pathname.split('/').pop();
+            document.getElementById('sevak_id').value = sevakId;
+
+            // Load all dropdowns individually
+            loadBatches('addbatch');
+            loadSelect('/city/list', 'addcity', { textKey: 'city_name', valueKey: 'city_id' });
+            loadSelect('/city/list', 'per_city', { textKey: 'city_name', valueKey: 'city_id' });
+            loadSelect('/city/list', 'talim_city', { textKey: 'city_name', valueKey: 'city_id' });
+            loadSelect('/kshetra/list', 'current_kshetra', { textKey: 'kshetra_name', valueKey: 'kshetra_id' });
+            loadSelect('/kshetra/list', 'kshetra', { textKey: 'kshetra_name', valueKey: 'kshetra_id' });
+            loadSelect('/kshetra/list', 'talim_kshetra', { textKey: 'kshetra_name', valueKey: 'kshetra_id' });
+            loadSelect('/city/list', 'sat_ref_city_id', { textKey: 'city_name', valueKey: 'city_id' });
+            loadSelect('/city/list', 'ins_by_city_id', { textKey: 'city_name', valueKey: 'city_id' });
+            loadSelect('/caste/list', 'addcaste', { textKey: 'caste_name', valueKey: 'caste_id' });
+            loadSelect('/category/list', 'addcategory', { textKey: 'category_name', valueKey: 'category_id' });
+            loadSelect('/blood_group/list', 'addbloodgroup', { textKey: 'blood_group_name', valueKey: 'blood_group_id' });
+            loadSelect('/marital_status/list', 'addmaritalstatus', { textKey: 'marital_status_name', valueKey: 'marital_status_id' });
+            loadSelect('/gosthigroup/list', 'addgosthi', { textKey: ['group_code', 'group_name'], valueKey: 'group_id' });
+            loadCountryCode('sat_ref_mobile_country_code');
+            loadCountryCode('ins_by_country_code');
+            loadCountryCode('mobile1_country_code');
+            loadCountryCode('mobile2_country_code');
+            loadCountryCode('whatsapp_country_code');
+            loadBatches('satsangi_batch_id');
+            loadBatches('inpired_batch_id');
+
+            // Fetch the sevak data to populate the form.
+            // This will run concurrently with the dropdown loading.
+            fetchAndPopulateSevakData(sevakId);
+
+            // Attach event listeners
+            setupEventListeners();
+        });
+
+        function fetchAndPopulateSevakData(sevakId) {
+            fetch(`/SevakRegistration/getSevakForEdit/${sevakId}`)
+                .then(res => res.json())
+                .then(response => {
+                    if (!response.success) {
+                        alert('Failed to load sevak data.');
+                        return;
+                    }
+                    const data = response.data;
+
+                    // Populate simple fields
+                    for (const key in data) {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            if (element.type === 'checkbox') {
+                                element.checked = data[key] === 'Y';
+                            } else if (element.type === 'date' && data[key]) {
+                                element.value = data[key].split('T')[0];
+                            } else {
+                                element.value = data[key];
+                            }
+                        }
+                    }
+
+                    // Populate dropdowns
+                    document.getElementById('addbatch').value = data.talim_batch_id;
+                    document.getElementById('addcaste').value = data.caste_id;
+                    document.getElementById('addcategory').value = data.category_id;
+                    document.getElementById('addbloodgroup').value = data.blood_group_id;
+                    document.getElementById('addgender').value = data.gender;
+                    document.getElementById('addmaritalstatus').value = data.marital_status_id;
+                    $('#addmaritalstatus').trigger('change'); // Trigger change to show/hide date field
+
+                    document.getElementById('login_active').value = data.login_active;
+                    document.getElementById('addgosthi').value = data.gosthi_group_id;
+                    document.getElementById('gosthi_group_status').value = data.gosthi_group_status;
+
+                    // Photos
+                    if (data.sevak_photo) {
+                        document.getElementById('sevak_photo_preview').innerHTML = `<img src="/${data.sevak_photo}" width="100" />`;
+                        document.getElementById('old_sevak_photo').value = data.sevak_photo;
+                    }
+                    if (data.latest_photo) {
+                        document.getElementById('latest_photo_preview').innerHTML = `<img src="/${data.latest_photo}" width="100" />`;
+                        document.getElementById('old_latest_photo').value = data.latest_photo;
+                    }
+
+                    // Populate addresses and trigger changes to load sub-data
+                    if (data.city_id) {
+                        document.getElementById('addcity').value = data.city_id;
+                        handleCityChange(data.city_id, 'addcityarea', 'addpincode', '', { area: data.city_area_id, pincode: data.pincode });
+                    }
+                    if (data.is_perm_add !== 'Y' && data.per_city_id) {
+                        document.getElementById('per_city').value = data.per_city_id;
+                        handleCityChange(data.per_city_id, 'per_city_area', 'per_pincode', 'per_', { area: data.per_city_area_id, pincode: data.per_pincode });
+                    }
+                    if (data.is_talim_add !== 'Y' && data.talim_city_id) {
+                        document.getElementById('talim_city').value = data.talim_city_id;
+                        handleCityChange(data.talim_city_id, 'talim_city_area', 'talim_pincode', 'talim_', { area: data.talim_city_area_id, pincode: data.talim_pincode });
+                    }
+
+                    // Populate Kshetras and trigger changes
+                    if (data.current_kshetra_id) {
+                        $('#current_kshetra').val(data.current_kshetra_id).trigger('change');
+                    }
+                    if (data.kshetra_id) {
+                        $('#kshetra').val(data.kshetra_id).trigger('change');
+                    }
+                    if (data.talim_kshetra_id) {
+                        $('#talim_kshetra').val(data.talim_kshetra_id).trigger('change');
+                    }
+
+                    // Checkboxes
+                    $('#is_perm_add').prop('checked', data.is_perm_add === 'Y').trigger('change');
+                    $('#is_talim_add').prop('checked', data.is_talim_add === 'Y').trigger('change');
+                    $('#ytk_sevak_satsangi').prop('checked', data.ytk_sevak_satsangi === 'Y').trigger('change');
+                    $('#ytk_sevak_inspired').prop('checked', data.ytk_sevak_inspired === 'Y').trigger('change');
+                    $('#sameprimaryno').prop('checked', data.sameprimaryno === 'Y');
+
+                    // Referees
+                    if (data.ytk_sevak_satsangi === 'Y') {
+                        $('#satsangi_batch_id').val(data.satsangi_batch_id);
+                        getSatsangiSevak(data.satsangi_batch_id, 'satsangi_sevak_id', data.satsangi_sevak_id);
+                    }
+                    if (data.ytk_sevak_inspired === 'Y') {
+                        $('#inpired_batch_id').val(data.inpired_batch_id);
+                        getinspiredSevak(data.inpired_batch_id, 'inspired_sevak_id', data.inspired_sevak_id);
+                    }
+
+                    // Status checkboxes
+                    const statuses = data.status ? data.status.split(',') : [];
+                    statuses.forEach(status => {
+                        const field = status.toLowerCase().replace(' ', '_');
+                        const checkbox = document.getElementById(field);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            $(checkbox).trigger('change'); // to disable/enable others
+                            const div = document.getElementById(`${field}_div`);
+                            if (div) div.style.display = 'block';
+                        }
+                    });
+
+                    // Satsangi Since
+                    $('#hidden_satasangi_since').val(data.satasangi_since);
+                    birthdateWiseSatsangiSinceChange();
+
+                    // Roles
+                    if (data.roles && data.roles.length > 0) {
+                        $('#role_id').val(data.roles);
+                    }
+
+                    // Populate dynamic tables
+                    populateEducationTable(data.education || []);
+                    populateEmploymentTable(data.employment || []);
+                    populateFamilyTable(data.family || []);
+                    populateSatsangTable(data.satsang || []);
+                    populateTalentTable(data.talent || []);
+
+                    // Final trigger for YTK ID generation
+                    generateYtkID();
+                });
+        }
+
+        function populateEducationTable(educationData) {
+            const tbody = document.getElementById("educationInvoice").getElementsByTagName('tbody')[0];
+            tbody.innerHTML = ''; // Clear existing rows
+            if (educationData.length === 0) {
+                insertEducation(); // Add one empty row if none exist
+            } else {
+                educationData.forEach(edu => {
+                    insertEducation(edu);
+                });
+            }
+        }
+
+        function populateEmploymentTable(employmentData) {
+            const tbody = document.getElementById("employmentInvoice").getElementsByTagName('tbody')[0];
+            tbody.innerHTML = '';
+            if (employmentData.length === 0) {
+                insertEmployment();
+            } else {
+                employmentData.forEach(emp => {
+                    insertEmployment(emp);
+                });
+            }
+        }
+
+        function populateFamilyTable(familyData) {
+            const tbody = document.getElementById("familyInvoice").getElementsByTagName('tbody')[0];
+            tbody.innerHTML = '';
+            if (familyData.length === 0) {
+                insertFamily();
+            } else {
+                familyData.forEach(fam => {
+                    insertFamily(fam);
+                });
+            }
+        }
+
+        function populateSatsangTable(satsangData) {
+            const tbody = document.getElementById("satsangInvoice").getElementsByTagName('tbody')[0];
+            tbody.innerHTML = '';
+            if (satsangData.length === 0) {
+                insertSatsang();
+            } else {
+                satsangData.forEach(sat => {
+                    insertSatsang(sat);
+                });
+            }
+        }
+
+        function populateTalentTable(talentData) {
+            const tbody = document.getElementById("talentInvoice").getElementsByTagName('tbody')[0];
+            tbody.innerHTML = '';
+            if (talentData.length === 0) {
+                InsertTalent();
+            } else {
+                talentData.forEach(tal => {
+                    InsertTalent(tal);
+                });
+            }
+        }
+
+
+        function setupEventListeners() {
+            // Form Submission
+            document.getElementById('sevakForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const sevakId = document.getElementById('sevak_id').value;
+                const formData = new FormData(this);
+
+                fetch(`/SevakRegistration/update/${sevakId}`, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert('Sevak updated successfully!');
+                            window.location.href = "/SevakRegistration";
+                        } else {
+                            alert('Error: ' + result.message);
+                        }
+                    });
+            });
+
+            // Other event listeners from addsevakregistration.js
+            document.getElementById('addbatch').addEventListener('change', generateYtkID);
+            document.getElementById('sevak_no').addEventListener('keyup', generateYtkID);
+
+            document.getElementById('addcity').addEventListener('change', () => handleCityChange(document.getElementById('addcity').value, 'addcityarea', 'addpincode', ''));
+            document.getElementById('per_city').addEventListener('change', () => handleCityChange(document.getElementById('per_city').value, 'per_city_area', 'per_pincode', 'per_'));
+            document.getElementById('talim_city').addEventListener('change', () => handleCityChange(document.getElementById('talim_city').value, 'talim_city_area', 'talim_pincode', 'talim_'));
+
+            handleKshetraChange('current_kshetra', 'current_');
+            handleKshetraChange('kshetra', '');
+            handleKshetraChange('talim_kshetra', 'talim_');
+
+            $('#is_perm_add').change(function () {
+                $('#permanent_address').toggle(!this.checked);
+            }).trigger('change');
+
+            $('#is_talim_add').change(function () {
+                $('#talim_address').toggle(!this.checked);
+            }).trigger('change');
+
+            const ytkCheckbox = document.getElementById("ytk_sevak_satsangi");
+            ytkCheckbox.addEventListener("change", () => toggleRefereeFields(ytkCheckbox, "ytk_sevak_fields", "ref_fields"));
+            toggleRefereeFields(ytkCheckbox, "ytk_sevak_fields", "ref_fields");
+
+            const ytkCheckbox1 = document.getElementById("ytk_sevak_inspired");
+            ytkCheckbox1.addEventListener("change", () => toggleRefereeFields(ytkCheckbox1, "ytk_inspired_fields", "ins_ref_fields"));
+            toggleRefereeFields(ytkCheckbox1, "ytk_inspired_fields", "ins_ref_fields");
+
+            document.getElementById('educationInvoice').addEventListener('change', function (e) {
+                if (e.target && e.target.matches('select[name="degree_id[]"]')) {
+                    const degreeId = e.target.value;
+                    const row = e.target.closest('tr');
+                    const specializationSelect = row.querySelector('select[name="specialization_id[]"]');
+                    getSpecializationByDegree(degreeId, specializationSelect.id);
+                }
+            });
+
+            document.getElementById('satsangInvoice').addEventListener('change', function (e) {
+                if (e.target && e.target.matches('select[name="satsang_activity_id[]"]')) {
+                    const activityId = e.target.value;
+                    const row = e.target.closest('tr');
+                    const designationSelect = row.querySelector('select[name="satsang_designation_id[]"]');
+                    getSatsangDesignation(activityId, designationSelect.id);
+                }
+            });
+
+            $('#sameprimaryno').on('change', function () {
+                if ($(this).is(':checked')) {
+                    $('#whatsapp_country_code').val($('#mobile1_country_code').val());
+                    $('#contact_whatsapp_no').val($('#contact_mobile1').val());
+                } else {
+                    $('#whatsapp_country_code').val('');
+                    $('#contact_whatsapp_no').val('');
+                }
+            });
+
+            $('#addmaritalstatus').on('change', function () {
+                const val = $(this).val();
+                if (val === "3") { // Engaged
+                    $('#maritalStatusDate, #engagedDate').show();
+                    $('#marriedDate').hide();
+                    $('#marital_date').prop('required', true);
+                } else if (val === "2") { // Married
+                    $('#maritalStatusDate, #marriedDate').show();
+                    $('#engagedDate').hide();
+                    $('#marital_date').prop('required', true);
+                } else {
+                    $('#maritalStatusDate, #engagedDate, #marriedDate').hide();
+                    $('#marital_date').prop('required', false);
+                }
+            });
+
+            // Status checkbox logic
+            $("#certified, #not_complete, #temporary").on("change", function () {
+                // Simplified logic: just disable others if one is checked
+                const all = ["certified", "not_complete", "temporary"];
+                if (this.checked) {
+                    all.forEach(id => {
+                        if (id !== this.id) {
+                            $(`#${id}`).prop("disabled", true);
+                        }
+                    });
+                } else {
+                    all.forEach(id => $(`#${id}`).prop("disabled", false));
+                }
+            });
+
+            // Show/hide status divs
+            ['not_complete', 'temporary', 'expired', 'sant_in_baps'].forEach(id => {
+                $(`#${id}`).on('change', function () {
+                    $(`#${id}_div`).toggle(this.checked);
+                });
+            });
+
+            $('#birth_date').on('change', birthdateWiseSatsangiSinceChange);
+
+            // Initial calls for status divs based on loaded data
+            notCompleteDiv();
+            temporaryDiv();
+            expiredDiv();
+            santInBapsDiv();
+            // Also hide withoutIndiaDiv initially if it's not needed
+            $('#withoutIndiaDiv').hide();
+        }
+
+        function toggleRefereeFields(checkbox, ytkFieldsId, refFieldsId) {
+            const ytkFields = document.getElementById(ytkFieldsId);
+            const refFields = document.getElementById(refFieldsId);
+            if (checkbox.checked) {
+                ytkFields.style.display = "block";
+                refFields.style.display = "none";
+            } else {
+                ytkFields.style.display = "none";
+                refFields.style.display = "block";
+            }
+        }
+
+        // ----------------- Generic Loaders (from addsevakregistration.js) -----------------
+
+        function loadBatches(selectId, selectedValue = null) {
+            return fetch('/talim_batch/list')
+                .then(res => res.json())
+                .then(batches => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Batch --</option>';
+                    batches.forEach(batch => {
+                        const option = document.createElement('option');
+                        option.value = batch.talim_batch_id;
+                        option.textContent = batch.talim_year + ' - ' + batch.talim_batch;
+                        if (selectedValue && selectedValue == batch.talim_batch_id) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        function generateYtkID() {
+            const sevak_no = document.getElementById("sevak_no").value;
+            const talim_batch_id = document.getElementById("addbatch").value;
+            const sevak_id = document.getElementById("sevak_id").value; // Get sevak_id for edit context
+            if (!sevak_no || !talim_batch_id) return;
+
+            fetch("/SevakRegistration/generateYtkID", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sevak_no, talim_batch_id, sevak_id })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("ytk_id").value = data.ytk_id || "";
+                    document.getElementById("is_sevak_duplicate").style.display = data.is_sevak_duplicate === "Y" ? "block" : "none";
+                    document.getElementById("sevak_no").classList.toggle("border-danger", data.is_sevak_duplicate === "Y");
+                });
+        }
+
+        function loadSelect(url, selectId, options) {
+            const { textKey, valueKey, placeholder = '-- Select --', selectedValue = null, joinWith = ' - ' } = options;
+            return fetch(url)
+                .then(res => res.json())
+                .then(items => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = `<option value="">${placeholder}</option>`;
+                    items.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item[valueKey];
+                        option.textContent = Array.isArray(textKey) ? textKey.map(k => item[k]).join(joinWith) : item[textKey];
+                        if (selectedValue && selectedValue == item[valueKey]) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        function loadCountryCode(selectId, selectedValue = null) {
+            return fetch('/country/list')
+                .then(res => res.json())
+                .then(countries => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select country code --</option>';
+                    countries.forEach(country => {
+                        const option = document.createElement('option');
+                        option.value = country.dialing_code;
+                        option.textContent = country.country_name + ' - ' + country.dialing_code;
+                        if (selectedValue && selectedValue == country.dialing_code) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        function getSatsangiSevak(talim_batch_id, selectId, selectedValue = null, callback = null) {
+            if (!talim_batch_id) {
+                document.getElementById(selectId).innerHTML = '<option value="">-- Select Sevak --</option>';
+                return;
+            }
+
+            fetch(`/common/getSevakByBatch?batch_id=${talim_batch_id}`)
+                .then(res => res.json())
+                .then(sevaks => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Sevak --</option>';
+
+                    sevaks.forEach(s => {
+                        const option = document.createElement('option');
+                        option.value = s.sevak_id;
+                        option.textContent = s.first_name + " " + s.last_name;
+
+                        if (selectedValue && selectedValue == s.sevak_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+
+                    if (typeof callback === "function") callback();
+                })
+                .catch(err => console.error("Error loading Sevaks:", err));
+        }
+
+
+        function getinspiredSevak(talim_batch_id, selectId, selectedValue = null, callback = null) {
+            if (!talim_batch_id) {
+                document.getElementById(selectId).innerHTML = '<option value="">-- Select Sevak --</option>';
+                return;
+            }
+
+            fetch(`/common/getSevakByBatch?batch_id=${talim_batch_id}`)
+                .then(res => res.json())
+                .then(sevaks => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Sevak --</option>';
+
+                    sevaks.forEach(s => {
+                        const option = document.createElement('option');
+                        option.value = s.sevak_id;
+                        option.textContent = s.first_name + " " + s.last_name;
+
+                        if (selectedValue && selectedValue == s.sevak_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+
+                    if (typeof callback === "function") callback();
+                })
+                .catch(err => console.error("Error loading Sevaks:", err));
+        }
+
+        function handleCityChange(cityId, areaSelectId, pincodeSelectId, prefix = '', selected = {}) {
+            if (!cityId) return;
+
+            fetch(`/common/getcityareabycity?city_id=${cityId}`).then(res => res.json()).then(cityAreas => {
+                loadOptions(areaSelectId, cityAreas, 'city_area_id', 'area_name', '-- Select City Area --', selected.area);
+            });
+
+            fetch(`/common/getpincodebycity?city_id=${cityId}`).then(res => res.json()).then(pincodes => {
+                loadOptions(pincodeSelectId, pincodes, 'pin_id', 'pincode', '-- Select Pincode --', selected.pincode);
+            });
+
+            fetch(`/common/getcitydetails?city_id=${cityId}`)
+                .then(res => res.json())
+                .then(details => {
+                    if (!details || details.length === 0) return;
+                    const d = details[0];
+                    document.getElementById(prefix + 'taluka_name').value = d.taluka_name || "";
+                    document.getElementById(prefix + 'taluka_id').value = d.taluka_id || "";
+                    document.getElementById(prefix + 'district_name').value = d.district_name || "";
+                    document.getElementById(prefix + 'district_id').value = d.district_id || "";
+                    document.getElementById(prefix + 'state_name').value = d.state_name || "";
+                    document.getElementById(prefix + 'state_id').value = d.state_id || "";
+                    document.getElementById(prefix + 'country_name').value = d.country_name || "";
+                    document.getElementById(prefix + 'country_id').value = d.country_id || "";
+                    getMandirDiv(cityId);
+                });
+        }
+
+        function loadOptions(selectId, items, valueKey, textKey, placeholder, selectedValue) {
+            const select = document.getElementById(selectId);
+            select.innerHTML = `<option value="">${placeholder}</option>`;
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item[valueKey];
+                option.textContent = item[textKey];
+                if (selectedValue && selectedValue == item[valueKey]) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+        }
+
+        function getMandirDiv(cityId) {
+            const shikharMandirId = document.getElementById('shikhar_mandir_id').getAttribute('data-selected') || 0;
+            const hariMandirId = document.getElementById('hari_mandir_id').getAttribute('data-selected') || 0;
+
+            fetch(`/SevakRegistration/getMandir`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    city_id: cityId,
+                    shikhar_mandir_id: shikharMandirId,
+                    hari_mandir_id: hariMandirId
+                })
+            })
+                .then(res => res.json())
+                .then(obj => {
+                    if (obj.country_id == 2) { // Assuming 2 is India
+                        document.getElementById('withIndiaDiv').style.display = 'block';
+                        document.getElementById('withoutIndiaDiv').style.display = 'none';
+                    } else {
+                        document.getElementById('withIndiaDiv').style.display = 'none';
+                        document.getElementById('withoutIndiaDiv').style.display = 'block';
+                    }
+
+                    document.getElementById('shikhar_mandir_id').innerHTML = obj.shikhar_mandir || '';
+                    document.getElementById('hari_mandir_id').innerHTML = obj.hari_mandir || '';
+
+                    // Update chosen/select2 if used (assuming jQuery is available and chosen/select2 is initialized)
+                    $('#shikhar_mandir_id').trigger('chosen:updated');
+                    $('#hari_mandir_id').trigger('chosen:updated');
+                })
+                .catch(err => console.error('Error fetching mandir data:', err));
+        }
+
+        function handleKshetraChange(selectId, prefix = '') {
+            const kshetraSelect = document.getElementById(selectId);
+            // Attach event listener only if not already attached or if it's the initial load
+            if (!kshetraSelect.dataset.listenerAttached) {
+                kshetraSelect.addEventListener('change', function () {
+                    const kshetra_id = this.value;
+                    if (!kshetra_id) return;
+
+                    fetch(`/common/getkshetradetails?kshetra_id=${kshetra_id}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (!data || data.length === 0) return;
+                            const k = data[0];
+
+                            document.getElementById(prefix + 'sant_nirdeshak_name').value = k.sant_nirdeshak_name || "";
+                            document.getElementById(prefix + 'sant_nirdeshak').value = k.sant_nirdeshak_id || "";
+
+                            document.getElementById(prefix + 'nirdeshak_name').value = k.nirdeshak_name || "";
+                            document.getElementById(prefix + 'nirdeshak').value = k.nirdeshak_id || "";
+
+                            document.getElementById(prefix + 'mandir_name').value = k.mandir_name || "";
+                            document.getElementById(prefix + 'mandir').value = k.mandir_id || "";
+
+                            document.getElementById(prefix + 'mandir_type').value = k.mandir_type || "";
+                        });
+                });
+                kshetraSelect.dataset.listenerAttached = 'true'; // Mark as attached
+            }
+        }
+
+
+        function insertEducation(data = {}) {
+            let current_table_row_education = parseInt($('#current_table_row_education').val() || 0) + 1;
+            let table = document.getElementById("educationInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+
+            row.innerHTML = `
+                <td><select name="degree_id[]" id="degree_id_${current_table_row_education}" required></select></td>
+                <td><select name="specialization_id[]" id="specialization_id_${current_table_row_education}"></select></td>
+                <td><input type="text" name="edu_remark[]" value="${data.edu_remark || ''}"></td>
+                <td><a href="#" onclick="DeleteEducationRow(this, event)">Delete</a></td>
+            `;
+
+            $('#current_table_row_education').val(current_table_row_education);
+            loadSelect('/degree/list', `degree_id_${current_table_row_education}`, { textKey: 'degree', valueKey: 'degree_id', selectedValue: data.degree_id })
+                .then(() => {
+                    if (data.degree_id) {
+                        getSpecializationByDegree(data.degree_id, `specialization_id_${current_table_row_education}`, data.specialization_id);
+                    }
+                });
+        }
+
+        function DeleteEducationRow(r, e) { e.preventDefault(); r.closest('tr').remove(); }
+
+        function getSpecializationByDegree(degree_id, selectId, selectedValue = null) {
+            const select = document.getElementById(selectId);
+            if (!degree_id) {
+                select.innerHTML = '<option value="">-- Select Specialization --</option>';
+                return;
+            }
+
+            fetch(`/SevakRegistration/getSpecializationByDegree?degree_id=${degree_id}`)
+                .then(res => res.json())
+                .then(specializations => {
+                    select.innerHTML = '<option value="">-- Select Specialization --</option>';
+                    specializations.forEach(spec => {
+                        const option = document.createElement('option');
+                        option.value = spec.specialization_id;
+                        option.textContent = spec.specialization;
+                        if (selectedValue && selectedValue == spec.specialization_id) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                })
+                .catch(err => console.error("Error loading Specializations:", err));
+        }
+
+        function insertEmployment(data = {}) {
+            let current_table_row_employment = parseInt($('#current_table_row_employment').val() || 0) + 1;
+            let table = document.getElementById("employmentInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+            row.innerHTML = `
+                <td><select name="employment_id[]" id="employment_id_${current_table_row_employment}"></select></td>
+                <td><input type="text" name="emp_detail[]" value="${data.emp_detail || ''}"></td>
+                <td><input type="text" name="post_designation[]" value="${data.post_designation || ''}"></td>
+                <td><input type="text" name="emp_remark[]" value="${data.emp_remark || ''}"></td>
+                <td><a href="#" onclick="DeleteEmploymentRow(this, event)">Delete</a></td>
+            `;
+            $('#current_table_row_employment').val(current_table_row_employment);
+            loadSelect('/employment/list', `employment_id_${current_table_row_employment}`, { textKey: 'employment_name', valueKey: 'employment_id', selectedValue: data.employment_id });
+        }
+
+        function DeleteEmploymentRow(r, e) { e.preventDefault(); r.closest('tr').remove(); }
+
+        function insertFamily(data = {}) {
+            let current_table_row_family = parseInt($('#current_table_row_family').val() || 0) + 1;
+            let table = document.getElementById("familyInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+            row.innerHTML = `
+                <td><select name="relationship_id[]" id="relationship_id_${current_table_row_family}"></select></td>
+                <td><input type="text" name="family_name[]" value="${data.family_name || ''}"></td>
+                <td><select name="family_country_code[]" id="family_country_code_${current_table_row_family}"></select></td>
+                <td><input type="number" name="family_mobile[]" value="${data.family_mobile || ''}"></td>
+                <td><input type="email" name="family_email[]" value="${data.family_email || ''}"></td>
+                <td><input type="text" name="family_occupation[]" value="${data.family_occupation || ''}"></td>
+                <td><a href="#" onclick="DeleteFamilyRow(this, event)">Delete</a></td>
+            `;
+            $('#current_table_row_family').val(current_table_row_family);
+            loadSelect('/relationship/list', `relationship_id_${current_table_row_family}`, { textKey: 'relationship_name', valueKey: 'relationship_id', selectedValue: data.relationship_id });
+            loadCountryCode(`family_country_code_${current_table_row_family}`, data.family_country_code || '91');
+        }
+
+        function DeleteFamilyRow(r, e) { e.preventDefault(); r.closest('tr').remove(); }
+
+        function insertSatsang(data = {}) {
+            let current_table_row_satsang = parseInt($('#current_table_row_satsang').val() || 0) + 1;
+            let table = document.getElementById("satsangInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+            row.innerHTML = `
+                <td><select name="satsang_activity_id[]" id="satsang_activity_id_${current_table_row_satsang}"></select></td>
+                <td><select name="satsang_designation_id[]" id="satsang_designation_id_${current_table_row_satsang}"></select></td>
+                <td><input type="text" name="seva_details[]" value="${data.seva_details || ''}"></td>
+                <td><a href="#" onclick="DeleteSatsangRow(this, event)">Delete</a></td>
+            `;
+            $('#current_table_row_satsang').val(current_table_row_satsang);
+            loadSelect('/satsang_activity/list', `satsang_activity_id_${current_table_row_satsang}`, { textKey: 'satsang_activity_name', valueKey: 'satsang_activity_id', selectedValue: data.satsang_activity_id })
+                .then(() => {
+                    if (data.satsang_activity_id) {
+                        getSatsangDesignation(data.satsang_activity_id, `satsang_designation_id_${current_table_row_satsang}`, data.satsang_designation_id);
+                    }
+                });
+        }
+
+        function DeleteSatsangRow(r, e) { e.preventDefault(); r.closest('tr').remove(); }
+
+        function getSatsangDesignation(satsang_activity_id, selectId, selectedValue = null, callback = null) {
+            if (!satsang_activity_id) {
+                document.getElementById(selectId).innerHTML = '<option value="">-- Select Designation --</option>';
+                return;
+            }
+
+            fetch(`/common/getSatsangDesignation?satsang_activity_id=${satsang_activity_id}`)
+                .then(res => res.json())
+                .then(designations => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Designation --</option>';
+
+                    designations.forEach(d => {
+                        const option = document.createElement('option');
+                        option.value = d.satsang_designation_id;
+                        option.textContent = d.satsang_designation_name;
+
+                        if (selectedValue && selectedValue == d.satsang_designation_id) {
+                            option.selected = true;
+                        }
+
+                        select.appendChild(option);
+                    });
+
+                    if (typeof callback === "function") callback();
+                })
+                .catch(err => console.error("Error loading Designations:", err));
+        }
+
+        function InsertTalent(data = {}) {
+            let current_table_row_talent = parseInt($('#current_table_row_talent').val() || 0) + 1;
+            let table = document.getElementById("talentInvoice").getElementsByTagName('tbody')[0];
+            let row = table.insertRow(-1);
+            row.innerHTML = `
+                <td><select name="talent_id[]" id="talent_id_${current_table_row_talent}"></select></td>
+                <td><select name="grade_id[]" id="grade_id_${current_table_row_talent}"></select></td>
+                <td><input type="text" name="talent_detail[]" value="${data.talent_detail || ''}"></td>
+                <td><a href="#" onclick="DeleteTalentRow(this, event)">Delete</a></td>
+            `;
+            $('#current_table_row_talent').val(current_table_row_talent);
+            loadSelect('/talent/list', `talent_id_${current_table_row_talent}`, { textKey: 'talent_name', valueKey: 'talent_id', selectedValue: data.talent_id });
+            loadSelect('/grade/list', `grade_id_${current_table_row_talent}`, { textKey: 'grade_name', valueKey: 'grade_id', selectedValue: data.grade_id });
+        }
+
+        function DeleteTalentRow(r, e) { e.preventDefault(); r.closest('tr').remove(); }
+
+        function birthdateWiseSatsangiSinceChange() {
+            const birthDate = $('#birth_date').val();
+            if (!birthDate) return;
+
+            const birthYear = new Date(birthDate).getFullYear();
+            const currentYear = new Date().getFullYear();
+            const satsangSelect = $('#satasangi_since');
+
+            satsangSelect.empty();
+
+            for (let year = birthYear; year <= currentYear; year++) {
+                satsangSelect.append(`<option value="${year}">${year}</option>`);
+            }
+
+            // If there's a pre-selected value (for editing), try to set it
+            const preSelectedYear = $('#hidden_satasangi_since').val();
+            if (preSelectedYear) {
+                satsangSelect.val(preSelectedYear);
+            }
+        }
+
+        // Functions for status checkboxes (from addsevakregistration.js)
+        function notCompleteDiv() {
+            var checkbox = document.getElementById("not_complete");
+            if (checkbox && checkbox.checked) {
+                $("#not_complete_div").show();
+            } else {
+                $("#not_complete_div").hide();
+            }
+        }
+
+        function temporaryDiv() {
+            var checkbox = document.getElementById("temporary");
+            if (checkbox && checkbox.checked) {
+                $("#temporary_div").show();
+            } else {
+                $("#temporary_div").hide();
+            }
+        }
+
+        function expiredDiv() {
+            var checkbox = document.getElementById("expired");
+            if (checkbox && checkbox.checked) {
+                $("#expired_div").show();
+            } else {
+                $("#expired_div").hide();
+            }
+        }
+
+        function santInBapsDiv() {
+            var checkbox = document.getElementById("sant_in_baps");
+            if (checkbox && checkbox.checked) {
+                $("#sant_in_baps_div").show();
+            } else {
+                $("#sant_in_baps_div").hide();
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -77,7 +77,7 @@ exports.postExamSchedule = async (req, res) => {
             await fs.rename(oldPath, newPath);
 
             // Store relative path for database
-            upload_exam_paper = `src/exam_paper/${newFileName}`;
+            upload_exam_paper = `src/upload/exam_paper/${newFileName}`;
 
         }
 
@@ -156,7 +156,7 @@ exports.updateExamSchedule = async (req, res) => {
             await fs.rename(oldPath, newPath);
 
             // Store relative path for database
-            upload_exam_paper = `src/exam_paper/${newFileName}`;
+            upload_exam_paper = `src/upload/exam_paper/${newFileName}`;
         }
 
         // Update the record

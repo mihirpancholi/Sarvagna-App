@@ -46,9 +46,8 @@ function LoadGosthiSchedule() {
 <td>${schedule.satsang_designation_name || ""}</td>
 <td>${schedule.address || ""}</td>
 
-<td><a href="/SevakRegistration/edit?id=${schedule.sevak_id}" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i></a></td>
-<td><a href="#" onclick="getSevakPassword(${schedule.sevak_id})" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#sevakPasswordModel"><i class="fa fa-trash"></i></a></td>
-<td><a href="#" onclick="deleteSevakData(${schedule.sevak_id})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a></td>
+<td><a href="/SevakRegistration/edit/${schedule.sevak_id}" class="btn btn-sm btn-warning">Edit</a></td>
+<td><a href="#" onclick="deleteSevakData(${schedule.sevak_id})" class="btn btn-sm btn-danger">Delete</a></td>
 
         `;
                 tableBody.appendChild(row);
@@ -184,7 +183,7 @@ function deleteSevakData(sevak_id) {
         }).then(res => res.json()).then(response => {
             if (response.success) {
                 alert('Sevak deleted successfully.');
-                $('#sevak-datatable').DataTable().ajax.reload();
+                window.location.reload();
             } else {
                 alert('Error deleting sevak.');
             }

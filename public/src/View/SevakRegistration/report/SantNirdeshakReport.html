@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sant Nirdeshak Report</title>
+</head>
+
+<body>
+
+    <form id="report-form">
+        <label for="sant_nirdeshak_name">Sant Nirdeshak</label>
+        <div>
+            <select name="sant_nirdeshak_name" id="sant_nirdeshak_name" required>
+                <option value="">Select Sant Nirdeshak</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+
+            <button type="submit" id="generateExcelBtn">Generate Excel Report</button>
+            <button type="submit" id="generatePdfBtn">Generate PDF Report</button>
+        </div>
+
+    </form>
+
+
+    <!-- Bootstrap JS Bundle (functionality might be limited without Bootstrap CSS/HTML) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        function getSantNirdeshakList(selectId) {
+            fetch('/santnirdeshak/list')
+                .then(res => res.json())
+                .then(santNirdeshaks => {
+                    const select = document.getElementById(selectId);
+                    select.innerHTML = '<option value="">-- Select Sant Nirdeshak --</option>';
+                    // Add "All" option
+                    const allOption = document.createElement('option');
+                    allOption.value = 'All';
+                    allOption.textContent = 'All';
+                    select.appendChild(allOption);
+
+                    santNirdeshaks.forEach(santNirdeshak => {
+                        const option = document.createElement('option');
+                        option.value = santNirdeshak.sant_nirdeshak_id; // Use ID as value for filtering
+                        option.textContent = santNirdeshak.sant_nirdeshak_name;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Sant Nirdeshak list:', error));
+        }
+        getSantNirdeshakList('sant_nirdeshak_name');
+
+        function handleReportGeneration(reportType) {
+            const form = document.getElementById('report-form');
+            const santNirdeshakName = document.getElementById('sant_nirdeshak_name').value;
+
+            if (!santNirdeshakName) {
+                alert('Please select a Sant Nirdeshak.');
+                return;
+            }
+
+            const body = new URLSearchParams();
+            body.append('sant_nirdeshak_name', santNirdeshakName);
+
+            let fileName = 'SantNirdeshakReport';
+            if (reportType === 'pdf') {
+                body.append('print_pdf_report', '1');
+                fileName += '.pdf';
+            } else {
+                body.append('print_excel_report', '1');
+                fileName += '.xls'; // Corrected to match controller output
+            }
+
+            fetch('/SevakReports/SantNirdeshakReportPrint', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                })
+                .catch(error => {
+                    console.error('Error generating report:', error);
+                    alert('Failed to generate report. See console for details.');
+                });
+        }
+
+        document.getElementById('generatePdfBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            handleReportGeneration('pdf');
+        });
+
+        document.getElementById('generateExcelBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            handleReportGeneration('excel');
+        });
+
+    </script>
+
+
+
+
+
+</body>
+
+</html>

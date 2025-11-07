@@ -111,16 +111,16 @@ loadSelect('/kshetra/list', 'current_kshetra', { textKey: 'kshetra_name', valueK
 loadSelect('/kshetra/list', 'kshetra', { textKey: 'kshetra_name', valueKey: 'kshetra_id' });
 loadSelect('/kshetra/list', 'talim_kshetra', { textKey: 'kshetra_name', valueKey: 'kshetra_id' });
 loadSelect('/city/list', 'sat_ref_city_id', { textKey: 'city_name', valueKey: 'city_id' });
-loadSelect('/degree/list', 'adddegree', { textKey: 'degree', valueKey: 'degree_id' });
-loadSelect('/employment/list', 'employment_ids', { textKey: 'employment_name', valueKey: 'employment_id' });
-loadSelect('/relationship/list', 'relationship_ids', { textKey: 'relationship_name', valueKey: 'relationship_id' });
+loadSelect('/degree/list', 'adddegree', { textKey: 'degree', valueKey: 'degree_id' }); // For the first static row
+loadSelect('/employment/list', 'employment_ids', { textKey: 'employment_name', valueKey: 'employment_id' }); // For the first static row
+loadSelect('/relationship/list', 'relationship_ids', { textKey: 'relationship_name', valueKey: 'relationship_id' }); // For the first static row
 loadSelect('/caste/list', 'addcaste', { textKey: 'caste_name', valueKey: 'caste_id' });
 loadSelect('/category/list', 'addcategory', { textKey: 'category_name', valueKey: 'category_id' });
 loadSelect('/blood_group/list', 'addbloodgroup', { textKey: 'blood_group_name', valueKey: 'blood_group_id' });
 loadSelect('/marital_status/list', 'addmaritalstatus', { textKey: 'marital_status_name', valueKey: 'marital_status_id' });
-loadSelect('/satsang_activity/list', 'satsang_activity_id', { textKey: 'satsang_activity_name', valueKey: 'satsang_activity_id' });
-loadSelect('/grade/list', 'grade_id', { textKey: 'grade_name', valueKey: 'grade_id' });
-loadSelect('/talent/list', 'talent_id', { textKey: 'talent_name', valueKey: 'talent_id' });
+loadSelect('/satsang_activity/list', 'satsang_activity_id', { textKey: 'satsang_activity_name', valueKey: 'satsang_activity_id' }); // For the first static row
+loadSelect('/grade/list', 'grade_id', { textKey: 'grade_name', valueKey: 'grade_id' }); // For the first static row
+loadSelect('/talent/list', 'talent_id', { textKey: 'talent_name', valueKey: 'talent_id' }); // For the first static row
 loadSelect('/gosthigroup/list', 'addgosthi', { textKey: ['group_code', 'group_name'], valueKey: 'group_id' });
 
 function loadCountryCode(selectId) {
@@ -139,6 +139,7 @@ function loadCountryCode(selectId) {
 }
 loadCountryCode('sat_ref_mobile_country_code');
 loadCountryCode('family_country_code');
+loadCountryCode('ins_by_country_code');
 loadCountryCode('mobile1_country_code');
 loadCountryCode('mobile2_country_code');
 loadCountryCode('whatsapp_country_code');
