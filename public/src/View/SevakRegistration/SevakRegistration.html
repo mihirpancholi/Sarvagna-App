@@ -15,7 +15,7 @@
         <fieldset>
             <!-- Sevak Number + YTK ID -->
             <label for="sevak_no">Sevak No:</label>
-            <input type="text" id="sevak_no" onkeyup="generateYtkID()">
+            <input type="text" name="sevak_no" id="sevak_no" onkeyup="generateYtkID()">
             <span id="is_sevak_duplicate" style="display:none;color:red;">Duplicate Sevak No!</span>
             <br>
 
@@ -49,7 +49,7 @@
             <select id="addbloodgroup" name="blood_group_id"></select><br>
 
             <label for="addgender">Gender:</label>
-            <select id="addgender" name="gender">
+            <select id="addgender" name="gender" required>
                 <option value="">-- Select --</option>
                 <option value="M">Male</option>
                 <option value="F">Female</option>

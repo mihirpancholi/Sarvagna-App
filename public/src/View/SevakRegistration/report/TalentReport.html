@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talent Report</title>
+  </head>
+
+  <body>
+    <h3>Talent Report</h3>
+
+    <form id="report-form">
+      <div>
+        <label for="talent_id">Talent</label>
+        <select name="talent_id" id="talent_id" required>
+          <option value="">Select Talent</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+      </div>
+
+      <div>
+        <label for="grade_id">Grade</label>
+        <select name="grade_id" id="grade_id" required>
+          <option value="">Select Grade</option>
+          <!-- Options will be populated by JavaScript -->
+        </select>
+      </div>
+
+      <div>
+        <button type="submit" id="generateExcelBtn">
+          Generate Excel Report
+        </button>
+        <button type="submit" id="generatePdfBtn">Generate PDF Report</button>
+      </div>
+    </form>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        loadTalents();
+        loadGrades();
+
+        document
+          .getElementById("generatePdfBtn")
+          .addEventListener("click", (e) => {
+            e.preventDefault();
+            handleReportGeneration("pdf");
+          });
+
+        document
+          .getElementById("generateExcelBtn")
+          .addEventListener("click", (e) => {
+            e.preventDefault();
+            handleReportGeneration("excel");
+          });
+      });
+
+      function loadTalents() {
+        fetch("/talent/list")
+          .then((res) => res.json())
+          .then((talents) => {
+            const select = document.getElementById("talent_id");
+            select.innerHTML = '<option value="">-- Select Talent --</option>';
+
+            const allOption = document.createElement("option");
+            allOption.value = "All";
+            allOption.textContent = "All Talents";
+            select.appendChild(allOption);
+
+            talents.forEach((talent) => {
+              const option = document.createElement("option");
+              option.value = talent.talent_id;
+              option.textContent = talent.talent_name;
+              select.appendChild(option);
+            });
+          });
+      }
+
+      function loadGrades() {
+        fetch("/grade/list")
+          .then((res) => res.json())
+          .then((grades) => {
+            const select = document.getElementById("grade_id");
+            select.innerHTML = '<option value="">-- Select Grade --</option>';
+
+            const allOption = document.createElement("option");
+            allOption.value = "All";
+            allOption.textContent = "All Grades";
+            select.appendChild(allOption);
+
+            grades.forEach((grade) => {
+              const option = document.createElement("option");
+              option.value = grade.grade_id;
+              option.textContent = grade.grade_name;
+              select.appendChild(option);
+            });
+          });
+      }
+
+      function handleReportGeneration(reportType) {
+        const form = document.getElementById("report-form");
+        const formData = new FormData(form);
+
+        if (!formData.get("talent_id")) {
+          alert("Please select a Talent.");
+          return;
+        }
+
+        let fileName = "TalentReport";
+        if (reportType === "pdf") {
+          formData.append("print_pdf_report", "1");
+          fileName += ".pdf";
+        } else {
+          formData.append("print_excel_report", "1");
+          fileName += ".xls";
+        }
+
+        fetch("/SevakReports/TalentReportPrint", {
+          method: "POST",
+          body: new URLSearchParams(formData),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.blob();
+          })
+          .then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+          })
+          .catch((error) => {
+            console.error("Error generating report:", error);
+            alert("Failed to generate report. See console for details.");
+          });
+      }
+    </script>
+  </body>
+</html>

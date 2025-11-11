@@ -1,62 +1,69 @@
-
-function LoadGosthiSchedule() {
-    fetch("/SevakRegistration/allSevakData") // This endpoint should return an object with a 'data' property that is an array
+function LoadSevaks() {
+    fetch("/SevakRegistration/allSevakData")
         .then((res) => res.json())
         .then((data) => {
-            if (!data || !Array.isArray(data.data)) { // Check if data.data is an array
+            if (!data || !Array.isArray(data.data)) {
                 console.error("Data.data is not an array or data is null:", data);
                 return;
             }
 
             const tableBody = document.getElementById("sevak-datatable");
-            tableBody.innerHTML = "";
+
+            let tbody = tableBody.querySelector("tbody");
+            if (!tbody) {
+                tbody = document.createElement("tbody");
+                tableBody.appendChild(tbody);
+            }
+            tbody.innerHTML = ""; // Clear existing body content
 
             data.data.forEach((schedule, index) => {
-                const row = document.createElement("tr"); // Iterate over data.data
+                const row = document.createElement("tr");
+
                 row.innerHTML = `
-          <td>${schedule.ytk_id || ""}</td>
-          <td>${schedule.sevak_name || ""}</td>
-          <td>${schedule.city_name || ""}</td>
-<td>${schedule.area_name || ""}</td>
-<td>${schedule.taluka_name || ""}</td>
-<td>${schedule.district_name || ""}</td>
-<td>${schedule.country_name || ""}</td>
-<td>${schedule.kshetra_name || ""}</td>
-<td>${schedule.kshetra_code || ""}</td>
-<td>${schedule.mandir || ""}</td>
-<td>${schedule.contact_mobile1 || ""}</td>
-<td>${schedule.contact_mobile2 || ""}</td>
-<td>${schedule.contact_phone_1 || ""}</td>
-<td>${schedule.contact_phone_2 || ""}</td>
-<td>${schedule.contact_res_phone1 || ""}</td>
-<td>${schedule.contact_res_phone2 || ""}</td>
-<td>${schedule.contact_whatsapp_no || ""}</td>
-<td>${schedule.birth_date || ""}</td>
-<td>${schedule.employment_name || ""}</td>
-<td>${schedule.employment_detail || ""}</td>
-<td>${schedule.sevak_education || ""}</td>
-<td>${schedule.specialization || ""}</td>
-<td>${schedule.caste_name || ""}</td>
-<td>${schedule.marriage_date || ""}</td>
-<td>${schedule.grade_action || ""}</td>
-<td>${schedule.contact_per_mail || ""}</td>
-<td>${schedule.contact_bus_mail || ""}</td>
-<td>${schedule.sant_nirdeshak || ""}</td>
-<td>${schedule.satsang_activity_name || ""}</td>
-<td>${schedule.satsang_designation_name || ""}</td>
-<td>${schedule.address || ""}</td>
-
-<td><a href="/SevakRegistration/edit/${schedule.sevak_id}" class="btn btn-sm btn-warning">Edit</a></td>
-<td><a href="#" onclick="deleteSevakData(${schedule.sevak_id})" class="btn btn-sm btn-danger">Delete</a></td>
-
-        `;
-                tableBody.appendChild(row);
+    <td>${schedule.ytk_id || ""}</td>
+    <td>${schedule.sevak_name || ""}</td>
+    <td>${schedule.city_name || ""}</td>
+    <td>${schedule.area_name || ""}</td>
+    <td>${schedule.taluka_name || ""}</td>
+    <td>${schedule.district_name || ""}</td>
+    <td>${schedule.state_name || ""}</td>
+    <td>${schedule.country_name || ""}</td>
+    <td>${schedule.kshetra_name || ""}</td>
+    <td>${schedule.kshetra_code || ""}</td>
+    <td>${schedule.mandir || ""}</td>
+    <td>${schedule.zone_name || ""}</td>
+    <td>${schedule.contact_mobile1 || ""}</td>
+    <td>${schedule.contact_mobile2 || ""}</td>
+    <td>${schedule.contact_phone_1 || ""}</td>
+    <td>${schedule.contact_phone_2 || ""}</td>
+    <td>${schedule.contact_res_phone1 || ""}</td>
+    <td>${schedule.contact_res_phone2 || ""}</td>
+    <td>${schedule.contact_whatsapp_no || ""}</td>
+    <td>${schedule.birth_date || ""}</td>
+    <td>${schedule.employment_name || ""}</td>
+    <td>${schedule.employment_detail || ""}</td>
+    <td>${schedule.post_designation || ""}</td>
+    <td>${schedule.sevak_education || ""}</td>
+    <td>${schedule.specialization || ""}</td>
+    <td>${schedule.caste_name || ""}</td>
+    <td>${schedule.marriage_date || ""}</td>
+    <td>${schedule.grade_action || ""}</td>
+    <td>${schedule.contact_per_mail || ""}</td>
+    <td>${schedule.contact_bus_mail || ""}</td>
+    <td>${schedule.sant_nirdeshak || ""}</td>
+    <td>${schedule.satsang_activity_name || ""}</td>
+    <td>${schedule.satsang_designation_name || ""}</td>
+    <td>${schedule.address || ""}</td>
+    <td><a href="/SevakRegistration/edit/${schedule.sevak_id}" class="btn btn-sm btn-warning">Edit</a></td>
+    <td><a href="#" onclick="deleteSevakData(${schedule.sevak_id})" class="btn btn-sm btn-danger">Delete</a></td>
+                `;
+                tbody.appendChild(row); // Append row to tbody
             });
         })
-        .catch((err) => console.error("Error loading Gosthi Schedule:", err));
+        .catch((err) => console.error("Error loading Sevaks:", err)); // Changed error message
 }
 
-LoadGosthiSchedule();
+LoadSevaks();
 
 
 // Load all filter dropdowns on page load
@@ -144,34 +151,23 @@ function load_data_search() {
         })
         .catch(error => console.error('Error during search:', error));
 }
-function getSevakId(sevak_id) {
-    fetch(`/SevakRegistration/OverAllRemark`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sevak_id })
-    }).then(res => res.text()).then(data => {
-        document.getElementById('gradeRemarktb').innerHTML = data;
-    });
-}
-
-function getSevakPassword(sevak_id) {
-    fetch(`/SevakRegistration/checkSevakPassword`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sevak_id })
-    }).then(res => res.text()).then(data => {
-        document.getElementById('sevakPasswordtb').innerHTML = data;
-    });
-}
 
 function getCurrentSevakDetail(sevak_id) {
-    fetch(`/SevakRegistration/CurrentSevakDetail`, {
+    fetch(`/SevakRegistration/CurrentSevakDetails/${sevak_id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sevak_id })
-    }).then(res => res.text()).then(data => {
-        document.getElementById('sevakDetailtb').innerHTML = data;
-    });
+        body: JSON.stringify({ sevak_id: sevak_id })
+    })
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('sevakDetailtb').innerHTML = html;
+            // Use jQuery to explicitly show the modal
+            $('#CurrentSevakModel').modal('show');
+        })
+        .catch(err => {
+            console.error('Error fetching sevak details:', err);
+            document.getElementById('sevakDetailtb').innerHTML = '<p class="text-danger">Could not load details.</p>';
+        });
 }
 
 function deleteSevakData(sevak_id) {

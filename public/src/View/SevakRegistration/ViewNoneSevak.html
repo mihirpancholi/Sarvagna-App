@@ -68,50 +68,67 @@
 </head>
 
 <body>
-    <div class="col-md-12">
-        <a style="float: right;margin-right: 3px;" href="/SevakReports/registerdSevakPdfReport" target="_blank"
-            class="btn btn-add ">Pdf</a>
-        <a style="float: right;margin-right: 3px;" href="/SevakReports/registerdSevakExcelReport" target="_blank"
-            class="btn btn-add "> Excel</a>
-    </div>
-    </div>
+    <br>
+    <a href="/SevakRegistration/NoneSevak" class="btn btn-add" style="text-decoration: none;">Add Sevak</a>
+    <br><br>
+    <hr>
+
+
 
     <table>
         <thead>
             <tr>
-                <th>YTK Id</th>
                 <th>Sevak Name</th>
-                <th>City</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Active/Inactive</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
-        <tbody id="sevak-datatable"></tbody>
+        <tbody id="table-body">
+        </tbody>
     </table>
 
 
     <script>
-        function LoadSevakRegisterReport() {
-
-            fetch('/SevakReports/sevakRegisterReport/data')
+        // Fetch zone list
+        function LoadNoneSevak() {
+            fetch('/SevakRegistration/listNoneSevak')
                 .then(res => res.json())
                 .then(data => {
-                    const tableBody = document.getElementById('sevak-datatable');
+                    const tableBody = document.getElementById('table-body');
                     tableBody.innerHTML = '';
-                    data.forEach((sevakRegisterReport, index) => {
+                    data.forEach((sevak, index) => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                        <td>${sevakRegisterReport.ytk_id || ""}</td>
-                        <td>${sevakRegisterReport.sevak_name || ""}</td>
-                        <td>${sevakRegisterReport.city_name || ""}</td>
-                        <td>${sevakRegisterReport.role || ""}</td>
-                        <td>${sevakRegisterReport.status || ""}</td>
-                        <td>${sevakRegisterReport.statusRegister || ""}</td>
-          `;
+                        <td>${sevak.sevak_name}</td>
+                  <td><a href="/SevakRegistration/editNoneSevak/${sevak.sevak_id}" class="btn btn-sm btn-warning">Edit</a></td>
+                  <td><a href="#" onclick="deleteNonSevakData(${sevak.sevak_id})" class="btn btn-sm btn-danger">Delete</a></td>
+
+            `;
                         tableBody.appendChild(row);
                     });
                 });
         }
-        LoadSevakRegisterReport();
+        LoadNoneSevak();
+
+        function deleteNonSevakData(sevak_id) {
+            if (confirm("Are you sure you want to delete?")) {
+                fetch(`/SevakRegistration/deleteNonSevakData/${sevak_id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sevak_id })
+                }).then(res => res.json()).then(response => {
+                    if (response.success) {
+                        alert('Sevak deleted successfully.');
+                        window.location.reload();
+                    } else {
+                        alert('Error deleting sevak.');
+                    }
+                });
+            }
+        }
+
+
+
+
+
     </script>

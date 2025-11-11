@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sevak Registration</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Small style for visibility of the marital date section */
+        #maritalStatusDate {
+            display: flex;
+            align-items: center;
+        }
+
+        #maritalStatusDate label {
+            margin-right: 10px;
+        }
+
+        #marriedDate,
+        #engagedDate {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="nonesevakForm">
+        <input type="hidden" name="sevak_id" id="sevak_id" value="">
+        <fieldset>
+            <h2>Sevak Registration</h2>
+            <h4>Personal Information</h4>
+            <label for="first_name">First Name :<span>*</span></label>
+            <input type="text" id="first_name" title="Please Provide First Name" required name="first_name" value="">
+            <br>
+            <label for="middle_name">Middle Name :<span>*</span></label>
+            <input type="text" title="Please Provide Middle Name" id="middle_name" name="middle_name" value="">
+            <br>
+            <label for="last_name">Last Name :<span>*</span></label>
+            <input type="text" id="last_name" title="Please Provide Last Name" name="last_name" value="">
+            <br>
+            <label for="birth_date">Birth Date :<span>*</span></label>
+            <input type="date" id="birth_date" title="Select Birthdate" name="birth_date" required value="">
+            <br>
+            <label for="blood_group_id">Blood Group :</label>
+            <select name="blood_group_id" id="blood_group_id">
+                <option value="">Select Blood Group</option>
+            </select>
+            <br>
+            <label for="gender">Gender :</label>
+            <select name="gender" id="gender">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select>
+            <br>
+            <label>Marital Status:</label>
+            <select id="marital_status_id" name="marital_status_id"></select><br>
+
+            <div id="maritalStatusDate">
+                <label for="marital_date" id="engagedDate">
+                    Engaged Date :
+                </label>
+                <label for="marital_date" id="marriedDate">
+                    Marriage Date :
+                </label>
+                <input type="date" id="marital_date" name="marital_date" autocomplete="off">
+            </div>
+            <br>
+            <label for="sevak_photo">NonSevak Photo :</label>
+            <input type="file" id="sevak_photo" name="sevak_photo">
+            <br>
+
+            <h4>Current Address</h4>
+            <label for="address1">Address:</label>
+            <input type="text" name="address1" id="address1" placeholder="Enter Current Address" value="">
+            <br>
+            <label for="city_id">City/Village :</label>
+            <select name="city_id" id="city_id">
+                <option value="">Select City</option>
+            </select>
+            <br>
+            <label for="city_area_id">City Area :</label>
+            <select name="city_area_id" id="city_area_id">
+                <option value="">Select City Area</option>
+            </select>
+            <br>
+            <label for="taluka_id">Taluka :</label>
+            <input type="hidden" name="taluka_id" id="taluka_id" value="">
+            <input type="text" name="taluka_name" id="taluka_name" readonly value="">
+            <br>
+            <label for="district_id">District :</label>
+            <input type="hidden" name="district_id" id="district_id" value="">
+            <input type="text" name="district_name" id="district_name" readonly value="">
+            <br>
+            <label for="state_id">State :</label>
+            <input type="hidden" name="state_id" id="state_id" value="">
+            <input type="text" name="state_name" id="state_name" readonly value="">
+            <br>
+            <label for="country_id">Country :</label>
+            <input type="hidden" name="country_id" id="country_id" value="">
+            <input type="text" name="country_name" id="country_name" readonly value="">
+            <br>
+            <label for="pincode">Pincode :</label>
+            <select name="pincode" id="pincode">
+                <option value="">Select Pincode</option>
+            </select>
+            <br>
+
+            <h4>Contact</h4>
+            <label for="contact_mobile1">Mobile 1 :</label>
+            <select name="mobile1_country_code" id="mobile1_country_code">
+                <option value="">---</option>
+            </select>
+            <input type="text" pattern="\d*" name="contact_mobile1" id="contact_mobile1" placeholder="Mobile 1"
+                value="">
+            <br>
+            <label for="contact_mobile2">Mobile 2 :</label>
+            <select name="mobile2_country_code" id="mobile2_country_code">
+                <option value="">---</option>
+            </select>
+            <input type="text" name="contact_mobile2" id="contact_mobile2" placeholder="Mobile 2" pattern="\d*"
+                value="">
+            <br>
+            <label for="contact_phone_1">Office Phone 1 :</label>
+            <input type="text" name="contact_phone_1" id="contact_phone_1" placeholder="Office Phone 1" value="">
+            <br>
+            <label for="contact_phone_2">Office Phone 2 :</label>
+            <input type="text" name="contact_phone_2" id="contact_phone_2" placeholder="Office Phone 2" value="">
+            <br>
+            <label for="contact_res_phone1">Residence Phone 1 :</label>
+            <input type="text" name="contact_res_phone1" id="contact_res_phone1" placeholder="Residence Phone 1"
+                value="">
+            <br>
+            <label for="contact_res_phone2">Residence Phone 2 :</label>
+            <input type="text" name="contact_res_phone2" id="contact_res_phone2" placeholder="Residence Phone 2"
+                value="">
+            <br>
+            <label for="contact_per_mail">Personal Email :</label>
+            <input type="email" name="contact_per_mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                id="contact_per_mail" required value="">
+            <span><em>Personal Email is used as Login ID</em></span>
+            <br>
+            <label for="contact_bus_mail">Business Email :</label>
+            <input type="email" name="contact_bus_mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                id="contact_bus_mail" value="">
+            <br>
+            <label for="contact_whatsapp_no">Whatsapp No :</label>
+            <select name="whatsapp_country_code" id="whatsapp_country_code">
+                <option value="">---</option>
+            </select>
+            <input type="text" placeholder="Whatsapp No" name="contact_whatsapp_no" id="contact_whatsapp_no"
+                pattern="\d*" value="">
+            <br>
+
+            <h4>Role</h4>
+            <label for="role_id">Role :<span>*</span></label>
+            <select name="role_id" id="role_id" required title="Select Role">
+                <option value="">Select Role</option>
+                <option value="1">Admin</option>
+                <option value="8">Sub Admin</option>
+                <option value="15">Database Operator</option>
+            </select>
+            <br>
+            <label for="password">Password :<span>*</span></label>
+            <input name="password" id="password" value="" autocomplete="new-password">
+            <br>
+            <label for="login_active">Login Active :</label>
+            <input type="checkbox" id="login_active" name="login_active" />
+            <br> <br>
+
+            <button type="submit">Save</button>
+        </fieldset>
+    </form>
+
+    <script>
+        // ----------------- Helper Functions -----------------
+
+        /**
+         * Parses the URL path to extract a potential Sevak ID.
+         * Assumes URL structure like: /SevakRegistration/Edit/123
+         * @returns {string|null} The sevak ID or null.
+         */
+        function getSevakIdFromUrl() {
+            // Get the last segment of the path (which should be the ID)
+            const pathSegments = window.location.pathname.split('/').filter(Boolean); // filter(Boolean) removes empty strings
+            const id = pathSegments.pop();
+            // Check if the last segment is a number and not empty
+            return id && !isNaN(id) ? id : null;
+        }
+
+
+        // ----------------- Load Selects (Updated to support selectedValue and optional callback) -----------------
+        function loadSelect(url, selectId, options, callback = () => { }) {
+            const {
+                textKey,
+                valueKey,
+                placeholder = '-- Select --',
+                selectedValue = null,
+                joinWith = ' - '
+            } = options;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(items => {
+                    const select = document.getElementById(selectId);
+                    if (!select) return; // Safely exit if element doesn't exist
+
+                    select.innerHTML = `<option value="">${placeholder}</option>`;
+                    items.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item[valueKey];
+                        option.textContent = Array.isArray(textKey) ? textKey.map(k => item[k]).join(joinWith) : item[textKey];
+                        if (selectedValue && String(selectedValue) === String(item[valueKey])) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                    callback();
+                });
+        }
+
+        // Updated loadCountryCode to accept and set a selected code
+        function loadCountryCode(selectId, selectedCode = null) {
+            fetch('/country/list')
+                .then(res => res.json())
+                .then(countries => {
+                    const select = document.getElementById(selectId);
+                    if (!select) return;
+
+                    select.innerHTML = '<option value="">-- Select country code --</option>';
+                    countries.forEach(country => {
+                        const option = document.createElement('option');
+                        option.value = country.dialing_code;
+                        option.textContent = country.country_name + ' - ' + country.dialing_code;
+                        if (selectedCode && String(selectedCode) === String(country.dialing_code)) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+
+        // Updated handleCityChange to accept and set pre-selected area/pincode
+        function handleCityChange(cityId, areaSelectId, pincodeSelectId, prefix = '', selectedAreaId = null, selectedPincodeId = null, callback = () => { }) {
+            if (!cityId) return;
+
+            // Areas
+            fetch(`/common/getcityareabycity?city_id=${cityId}`)
+                .then(res => res.json())
+                .then(cityAreas => {
+                    const areaSelect = document.getElementById(areaSelectId);
+                    if (areaSelect) {
+                        areaSelect.innerHTML = '<option value="">-- Select City Area --</option>';
+                        cityAreas.forEach(ca => {
+                            const option = document.createElement('option');
+                            option.value = ca.city_area_id;
+                            option.textContent = ca.area_name;
+                            if (selectedAreaId && String(selectedAreaId) === String(ca.city_area_id)) {
+                                option.selected = true;
+                            }
+                            areaSelect.appendChild(option);
+                        });
+                    }
+                });
+
+            // Pincode
+            fetch(`/common/getpincodebycity?city_id=${cityId}`)
+                .then(res => res.json())
+                .then(pincodes => {
+                    const pincodeSelect = document.getElementById(pincodeSelectId);
+                    if (pincodeSelect) {
+                        pincodeSelect.innerHTML = '<option value="">-- Select Pincode --</option>';
+                        pincodes.forEach(pin => {
+                            const option = document.createElement('option');
+                            option.value = pin.pin_id; // Assuming pincode value is pin_id
+                            option.textContent = pin.pincode;
+                            if (selectedPincodeId && String(selectedPincodeId) === String(pin.pin_id)) {
+                                option.selected = true;
+                            }
+                            pincodeSelect.appendChild(option);
+                        });
+                    }
+                });
+
+            // Taluka/District/State/Country
+            fetch(`/common/getcitydetails?city_id=${cityId}`)
+                .then(res => res.json())
+                .then(details => {
+                    if (!details || details.length === 0) return;
+                    const d = details[0];
+
+                    document.getElementById(prefix + 'taluka_name').value = d.taluka_name || "";
+                    document.getElementById(prefix + 'taluka_id').value = d.taluka_id || "";
+
+                    document.getElementById(prefix + 'district_name').value = d.district_name || "";
+                    document.getElementById(prefix + 'district_id').value = d.district_id || "";
+
+                    document.getElementById(prefix + 'state_name').value = d.state_name || "";
+                    document.getElementById(prefix + 'state_id').value = d.state_id || "";
+
+                    document.getElementById(prefix + 'country_name').value = d.country_name || "";
+                    document.getElementById(prefix + 'country_id').value = d.country_id || "";
+                    callback();
+                });
+        }
+
+
+        // ----------------- Core Edit Function -----------------
+
+        /**
+         * Fetches the sevak data and populates the form fields.
+         * @param {string} id The sevak_id to fetch.
+         */
+        async function loadSevakDataForEdit(id) {
+            console.log("Fetching data for sevak ID:", id);
+            document.querySelector('h2').textContent = 'Edit Sevak Registration';
+
+            try {
+                const response = await fetch(`/SevakRegistration/getNoneSevakForEdit/${id}`);
+                if (!response.ok) {
+                    throw new Error(`Error fetching data: ${response.statusText}`);
+                }
+                const result = await response.json();
+
+                if (!result.success || !result.data || !result.data.sevakInfo) {
+                    throw new Error("Server returned an invalid or empty data structure.");
+                }
+
+                const sevakData = result.data.sevakInfo; // The main data object
+                const currentSevakRole = result.data.currentSevakRole; // Role array
+
+                console.log("Populating with sevakInfo:", sevakData);
+
+                // --- 1. POPULATE HIDDEN/SIMPLE FIELDS ---
+                $('#sevak_id').val(sevakData.sevak_id || id);
+                $('#first_name').val(sevakData.first_name || '');
+                $('#middle_name').val(sevakData.middle_name || '');
+                $('#last_name').val(sevakData.last_name || '');
+                // Format date for <input type="date">
+                $('#birth_date').val(sevakData.birth_date ? sevakData.birth_date.substring(0, 10) : '');
+                $('#address1').val(sevakData.address1 || '');
+
+                // Contact Fields
+                $('#contact_mobile1').val(sevakData.contact_mobile1 || '');
+                $('#contact_mobile2').val(sevakData.contact_mobile2 || '');
+                $('#contact_phone_1').val(sevakData.contact_phone_1 || '');
+                $('#contact_phone_2').val(sevakData.contact_phone_2 || '');
+                $('#contact_res_phone1').val(sevakData.contact_res_phone1 || '');
+                $('#contact_res_phone2').val(sevakData.contact_res_phone2 || '');
+                $('#contact_per_mail').val(sevakData.contact_per_mail || '');
+                $('#contact_bus_mail').val(sevakData.contact_bus_mail || '');
+                $('#contact_whatsapp_no').val(sevakData.contact_whatsapp_no || '');
+                // Note: Password field is typically left blank/handled separately in edit view
+
+                // --- 2. POPULATE SELECTS (Independent) ---
+
+                // Gender
+                $('#gender').val(sevakData.gender || '');
+
+                // Blood Group
+                loadSelect('/blood_group/list', 'blood_group_id', {
+                    textKey: 'blood_group_name',
+                    valueKey: 'blood_group_id',
+                    selectedValue: sevakData.blood_group_id
+                });
+
+                // Marital Status
+                loadSelect('/marital_status/list', 'marital_status_id', {
+                    textKey: 'marital_status_name',
+                    valueKey: 'marital_status_id',
+                    selectedValue: sevakData.marital_status_id
+                }, () => {
+                    // This callback runs after the select is populated and selected
+                    const maritalDate = sevakData.marital_date ? sevakData.marital_date.substring(0, 10) : '';
+                    $('#marital_date').val(maritalDate);
+                    // Trigger the change handler to show/hide date fields
+                    $('#marital_status_id').trigger('change');
+                });
+
+
+                // Contact Country Codes
+                loadCountryCode('mobile1_country_code', sevakData.mobile1_country_code);
+                loadCountryCode('mobile2_country_code', sevakData.mobile2_country_code);
+                loadCountryCode('whatsapp_country_code', sevakData.whatsapp_country_code);
+
+                // Role
+                // Use the role_id from sevakInfo, or the first role from the array if provided
+                const roleToSelect = sevakData.role_id || (currentSevakRole && currentSevakRole.length > 0 ? currentSevakRole[0].role_id : '');
+                $('#role_id').val(roleToSelect);
+
+                // Login Active Checkbox
+                // Assuming the database stores boolean as 'Y'/'N' or 1/0, or null/''
+                const loginActiveValue = sevakData.login_active;
+                $('#login_active').prop('checked', loginActiveValue === 'Y' || loginActiveValue === 1 || loginActiveValue === true);
+
+
+                // --- 3. POPULATE DEPENDENT FIELDS (Address) ---
+
+                // Load City and trigger dependent loads
+                loadSelect('/city/list', 'city_id', {
+                    textKey: 'city_name',
+                    valueKey: 'city_id',
+                    selectedValue: sevakData.city_id
+                }, () => {
+                    if (sevakData.city_id) {
+                        // Once the city is selected, call handleCityChange with the pre-selected Area and Pincode
+                        handleCityChange(
+                            sevakData.city_id,
+                            'city_area_id',
+                            'pincode',
+                            '',
+                            sevakData.city_area_id,
+                            sevakData.pincode // Assuming pincode is the ID/Value used in the select
+                        );
+                    }
+                });
+
+                console.log("--- Form population complete ---");
+
+            } catch (error) {
+                console.error('Error in loadSevakDataForEdit:', error);
+                alert("Could not load Sevak data for editing: " + error.message);
+            }
+        }
+
+        // ----------------- Event Listeners and Initialisation -----------------
+
+        // 1. Marital Status Change Handler (Updated selector)
+        $('#marital_status_id').on('change', function () {
+            const val = $(this).val();
+
+            if (val === "3") { // Engaged (Update IDs based on your lookup data)
+                $('#maritalStatusDate').show();
+                $('#marital_date').prop('required', true);
+                $('#engagedDate').show();
+                $('#marriedDate').hide();
+            } else if (val === "2") { // Married (Update IDs based on your lookup data)
+                $('#maritalStatusDate').show();
+                $('#marital_date').prop('required', true);
+                $('#marriedDate').show();
+                $('#engagedDate').hide();
+            } else { // Single, Divorced, etc.
+                $('#maritalStatusDate, #engagedDate, #marriedDate').hide();
+                $('#marital_date').prop('required', false);
+            }
+        });
+
+        // 2. City Change Listener (Manual Change)
+        document.getElementById('city_id').addEventListener('change', (e) =>
+            // When manually changed, we don't pass pre-selected area/pincode
+            handleCityChange(e.target.value, 'city_area_id', 'pincode', '', null, null)
+        );
+
+
+        // 3. Form Submission Handler (Unchanged)
+        document.getElementById('nonesevakForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            // Log formData for debugging
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+            // Decide between ADD or EDIT endpoint based on sevak_id presence
+            const sevakId = document.getElementById('sevak_id').value;
+            const endpoint = sevakId ? `/SevakRegistration/updateNoneSevak/${sevakId}` : '/SevakRegistration/addNoneSevak';
+            const successMessage = sevakId ? 'Sevak updated successfully!' : 'Sevak registered successfully!';
+
+            fetch(endpoint, {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        alert(successMessage);
+                        window.location.href = "/SevakRegistration/ViewNoneSevak";
+                    } else {
+                        alert('Error: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Submission error:', error);
+                    alert('An error occurred during submission.');
+                });
+        });
+
+
+        // 4. Initial Setup and Data Load on Page Ready
+        $(document).ready(function () {
+            const sevakId = getSevakIdFromUrl();
+
+            // Load all independent base selects first
+            loadSelect('/blood_group/list', 'blood_group_id', { textKey: 'blood_group_name', valueKey: 'blood_group_id' });
+            loadSelect('/marital_status/list', 'marital_status_id', { textKey: 'marital_status_name', valueKey: 'marital_status_id' });
+            loadCountryCode('mobile1_country_code');
+            loadCountryCode('mobile2_country_code');
+            loadCountryCode('whatsapp_country_code');
+            loadSelect('/city/list', 'city_id', { textKey: 'city_name', valueKey: 'city_id' }); // Load cities for initial use
+
+            if (sevakId) {
+                // EDIT MODE: Fetch data and populate fields
+                loadSevakDataForEdit(sevakId);
+            } else {
+                // NEW MODE: Initial form setup
+                document.querySelector('h2').textContent = 'Add Sevak Registration';
+                $('#maritalStatusDate').hide();
+            }
+        });
+    </script>
+</body>
+
+</html>

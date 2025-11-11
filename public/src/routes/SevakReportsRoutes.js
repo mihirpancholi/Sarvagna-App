@@ -13,6 +13,24 @@ router.get("/SantNirdeshakReport", SevakReports.SantNirdeshakReport);
 router.post("/SantNirdeshakReportPrint", SevakReports.SantNirdeshakReportPrint);
 
 
+router.get("/KshetraWiseImageReport", SevakReports.KshetraWiseImageReport);
+
+router.get("/BirthDateWiseReport", SevakReports.BirthDateWiseReport);
+router.post("/BirthDateWiseReportPrint", SevakReports.BirthDateWiseReportPrint);
+
+router.get("/TalentReport", SevakReports.TalentReport);
+router.post("/TalentReportPrint", SevakReports.TalentReportPrint);
+
+router.get("/EducationWiseImageReport", SevakReports.EducationWiseImageReport);
+
+router.get("/SantParshadImageReport", SevakReports.SantParshadImageReport);
+
+router.get("/santparshadreport", SevakReports.santparshadreport);
+router.post("/SantParshadReportPrint", SevakReports.SantParshadReportPrint);
+
+router.get("/inspiredbyreport", SevakReports.inspiredbyreport);
+router.get("/SevakIdWiseImageReport", SevakReports.SevakIdWiseImageReport);
+
 
 
 

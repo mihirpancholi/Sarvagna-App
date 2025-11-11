@@ -1,6 +1,7 @@
 const path = require("path");
 const { jsPDF } = require("jspdf");
-require('jspdf-autotable');
+require("jspdf-autotable");
+const autoTable = require('jspdf-autotable').default;
 const XLSX = require("xlsx");
 const Model = require("../model/SevakReportsModel.js");
 const multer = require('multer');
@@ -43,7 +44,7 @@ exports.registerdSevakPdfReport = async (req, res) => {
             tableRows.push(sevakData);
         });
 
-        doc.autoTable({
+        autoTable(doc, {
             head: [tableColumn],
             body: tableRows,
             startY: 20,
@@ -154,7 +155,7 @@ exports.SantNirdeshakReportPrint = [upload, async (req, res) => {
                         sevak.current_mandir,
                     ]);
 
-                    doc.autoTable({
+                    autoTable(doc, {
                         head: [tableColumn],
                         body: tableRows,
                         startY: yOffset,
@@ -269,3 +270,346 @@ exports.SantNirdeshakReportPrint = [upload, async (req, res) => {
     }
 }];
 
+
+exports.KshetraWiseImageReport = (req, res) => {
+    res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "KshetraWiseImageReport.html"));
+};
+
+exports.BirthDateWiseReport = (req, res) => {
+    res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "BirthDateWiseReport.html"));
+};
+
+exports.BirthDateWiseReportPrint = [upload, async (req, res) => {
+    try {
+        const { talim_batch_id, month, print_pdf_report, print_excel_report } = req.body;
+
+        if (!talim_batch_id || !month) {
+            return res.status(400).send('Talim Batch and Month are required.');
+        }
+
+        const reportData = await Model.getBirthDateWiseReportData(talim_batch_id, month);
+
+        if (!reportData || reportData.length === 0) {
+            // In a real app, you might want to redirect back with a message
+            // For an API, sending a 404 is appropriate.
+            return res.status(404).send('No data found for the selected criteria.');
+        }
+
+        if (print_pdf_report) {
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('॥ Shree Swaminarayano Vijayate ॥', doc.internal.pageSize.width / 2, 15, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('BAPS Yuva Talim Kendra, Sarangpur', doc.internal.pageSize.width / 2, 22, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text('Birth Date Wise Report', doc.internal.pageSize.width / 2, 29, { align: 'center' });
+
+            const tableColumn = ["No", "YTK ID", "Sevak Name", "Birth Date"];
+            const tableRows = reportData.map((row, index) => [
+                index + 1,
+                row.ytk_id,
+                row.sevakName,
+                new Date(row.birth_date).toLocaleDateString('en-GB') // Format as dd-mm-yyyy
+            ]);
+
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: 40,
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
+            });
+
+            const pdfBuffer = doc.output('arraybuffer');
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=BirthDateWiseReport.pdf');
+            res.send(Buffer.from(pdfBuffer));
+
+        } else if (print_excel_report) {
+            const workbook = XLSX.utils.book_new();
+            const worksheetData = [];
+
+            // Headers
+            worksheetData.push(['॥ Shree Swaminarayano Vijayate ॥']);
+            worksheetData.push(['BAPS Yuva Talim Kendra, Sarangpur']);
+            worksheetData.push(['Birth Date Wise Report']);
+            worksheetData.push([]); // Spacer
+
+            // Table Headers
+            worksheetData.push(["No", "YTK ID", "Sevak Name", "Birth Date"]);
+
+            // Table Body
+            reportData.forEach((row, index) => {
+                worksheetData.push([
+                    index + 1,
+                    row.ytk_id,
+                    row.sevakName,
+                    new Date(row.birth_date).toLocaleDateString('en-GB') // Format as dd-mm-yyyy
+                ]);
+            });
+
+            const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+            // Merge header cells
+            worksheet['!merges'] = [
+                { s: { r: 0, c: 0 }, e: { r: 0, c: 3 } },
+                { s: { r: 1, c: 0 }, e: { r: 1, c: 3 } },
+                { s: { r: 2, c: 0 }, e: { r: 2, c: 3 } },
+            ];
+
+            // Auto-fit columns
+            const colWidths = [{ wch: 5 }, { wch: 15 }, { wch: 30 }, { wch: 15 }];
+            worksheet['!cols'] = colWidths;
+
+
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'BirthDateWiseReport');
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xls', type: 'buffer' });
+
+            res.setHeader('Content-Type', 'application/vnd.ms-excel');
+            res.setHeader('Content-Disposition', 'attachment; filename=BirthDateWiseReport.xls');
+            res.send(excelBuffer);
+
+        } else {
+            res.status(400).send('Invalid report type specified.');
+        }
+
+    } catch (error) {
+        console.error("Error generating Birth Date Wise report:", error);
+        res.status(500).send('Error generating report');
+    }
+}];
+
+
+exports.TalentReport = (req, res) => {
+    res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "TalentReport.html"));
+};
+
+exports.TalentReportPrint = [upload, async (req, res) => {
+    try {
+        const { talent_id, grade_id, print_pdf_report, print_excel_report } = req.body;
+
+        if (!talent_id) {
+            return res.status(400).send('Talent selection is required.');
+        }
+
+        const reportData = await Model.getTalentReportData(talent_id, grade_id);
+
+        if (!reportData || reportData.length === 0) {
+            return res.status(404).send('No data found for the selected criteria.');
+        }
+
+        if (print_pdf_report) {
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('॥ Shree Swaminarayano Vijayate ॥', doc.internal.pageSize.width / 2, 15, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('BAPS Yuva Talim Kendra, Sarangpur', doc.internal.pageSize.width / 2, 22, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text('Talent Report', doc.internal.pageSize.width / 2, 29, { align: 'center' });
+
+            const tableColumn = ["No", "YTK ID", "Sevak Name", "Talent", "Grade", "Details"];
+            const tableRows = reportData.map((row, index) => [
+                index + 1,
+                row.ytk_id,
+                row.sevakName,
+                row.talent_name,
+                row.grade_name,
+                row.talent_detail
+            ]);
+
+            doc.autoTable({
+                head: [tableColumn],
+                body: tableRows,
+                startY: 40,
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
+            });
+
+            const pdfBuffer = doc.output('arraybuffer');
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=TalentReport.pdf');
+            res.send(Buffer.from(pdfBuffer));
+
+        } else if (print_excel_report) {
+            const workbook = XLSX.utils.book_new();
+            const worksheetData = [];
+
+            // Headers
+            worksheetData.push(['॥ Shree Swaminarayano Vijayate ॥']);
+            worksheetData.push(['BAPS Yuva Talim Kendra, Sarangpur']);
+            worksheetData.push(['Talent Report']);
+            worksheetData.push([]); // Spacer
+
+            // Table Headers
+            worksheetData.push(["No", "YTK ID", "Sevak Name", "Talent", "Grade", "Details"]);
+
+            // Table Body
+            reportData.forEach((row, index) => {
+                worksheetData.push([
+                    index + 1,
+                    row.ytk_id,
+                    row.sevakName,
+                    row.talent_name,
+                    row.grade_name,
+                    row.talent_detail
+                ]);
+            });
+
+            const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+            worksheet['!merges'] = [
+                { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } },
+                { s: { r: 1, c: 0 }, e: { r: 1, c: 5 } },
+                { s: { r: 2, c: 0 }, e: { r: 2, c: 5 } },
+            ];
+
+            worksheet['!cols'] = [{ wch: 5 }, { wch: 10 }, { wch: 30 }, { wch: 20 }, { wch: 15 }, { wch: 40 }];
+
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'TalentReport');
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xls', type: 'buffer' });
+
+            res.setHeader('Content-Type', 'application/vnd.ms-excel');
+            res.setHeader('Content-Disposition', 'attachment; filename=TalentReport.xls');
+            res.send(excelBuffer);
+        } else {
+            res.status(400).send('Invalid report type specified.');
+        }
+    } catch (error) {
+        console.error("Error generating Talent report:", error);
+        res.status(500).send('Error generating report');
+    }
+}];
+
+exports.SantParshadReportPrint = [upload, async (req, res) => {
+    try {
+        const { talim_batch_id, print_pdf_report, print_excel_report } = req.body;
+
+        if (!talim_batch_id) {
+            return res.status(400).send('Talim Batch ID is required.');
+        }
+
+        const reportData = await Model.getSantParshadReportData(talim_batch_id);
+
+        if (!reportData || reportData.length === 0) {
+            return res.status(404).send('No data found for the selected criteria.');
+        }
+
+        if (print_pdf_report) {
+
+            const doc = new jsPDF({ orientation: 'landscape' });
+            doc.setFontSize(16);
+            doc.text('Shree Swaminarayano Vijayate', doc.internal.pageSize.width / 2, 15, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('BAPS Yuva Talim Kendra, Sarangpur', doc.internal.pageSize.width / 2, 22, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text('Sant Parshad Report', doc.internal.pageSize.width / 2, 29, { align: 'center' });
+
+            const tableColumn = ["No", "YTK ID", "Sevak Name", "City", "Parshad Name", "Date of Parshadi Diksha", "Sant Name", "Date of Bhagvati Diksha"];
+            const tableRows = reportData.map((row, index) => [
+                index + 1,
+                row.ytk_id,
+                row.sevak_name,
+                row.city_name,
+                row.name_of_parshad,
+                row.parshad_date,
+                row.name_of_sant,
+                row.bhagvatiDikshaDate
+            ]);
+
+
+            autoTable(doc, {
+                head: [tableColumn],
+                body: tableRows,
+                startY: 40,
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
+            });
+
+            const pdfBuffer = doc.output('arraybuffer');
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=SantParshadReport.pdf');
+            res.send(Buffer.from(pdfBuffer));
+
+        } else if (print_excel_report) {
+            const workbook = XLSX.utils.book_new();
+            const worksheetData = [];
+
+            // Main Headers
+            worksheetData.push(['॥ Shree Swaminarayano Vijayate ॥']);
+            worksheetData.push(['BAPS Yuva Talim Kendra, Sarangpur']);
+            worksheetData.push(['Sant Parshad Report']);
+            worksheetData.push([]); // Spacer
+
+            // Table Headers
+            const tableColumn = [
+                "No", "YTK ID", "Sevak Name", "City", "Parshad Name",
+                "Date of Parshadi Diksha", "Sant Name", "Date of Bhagvati Diksha"
+            ];
+            worksheetData.push(tableColumn);
+
+            // Table Body
+            reportData.forEach((row, index) => {
+                worksheetData.push([
+                    index + 1,
+                    row.ytk_id,
+                    row.sevak_name,
+                    row.city_name,
+                    row.name_of_parshad || '',
+                    row.parshad_date,
+                    row.name_of_sant,
+                    row.bhagvatiDikshaDate
+                ]);
+            });
+
+            const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+            // Merge header cells
+            worksheet['!merges'] = [
+                { s: { r: 0, c: 0 }, e: { r: 0, c: 7 } },
+                { s: { r: 1, c: 0 }, e: { r: 1, c: 7 } },
+                { s: { r: 2, c: 0 }, e: { r: 2, c: 7 } },
+            ];
+
+            // Auto-fit columns
+            const colWidths = [
+                { wch: 5 }, { wch: 15 }, { wch: 30 }, { wch: 20 }, { wch: 30 },
+                { wch: 25 }, { wch: 30 }, { wch: 25 }
+            ];
+            worksheet['!cols'] = colWidths;
+
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'SantParshadReport');
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xls', type: 'buffer' });
+
+            res.setHeader('Content-Type', 'application/vnd.ms-excel');
+            res.setHeader('Content-Disposition', 'attachment; filename=SantParshadReport.xls');
+            res.send(excelBuffer);
+        } else {
+            res.status(400).send('Invalid report type specified.');
+        }
+
+    } catch (error) {
+        console.error("Error generating Sant Parshad report:", error);
+        res.status(500).send('Error generating report');
+    }
+}];
+
+
+exports.EducationWiseImageReport = (req, res) => {
+    res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "EducationWiseImageReport.html"));
+};
+
+exports.SantParshadImageReport = (req, res) => {
+    res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "SantParshadImageReport.html"));
+};
+
+exports.santparshadreport = (req, res) => {
+    res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "santparshadreport.html"));
+};
+
+exports.inspiredbyreport = (req, res) => {
+    res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "inspiredbyreport.html"));
+};
+
+exports.SevakIdWiseImageReport = (req, res) => {
+    res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "SevakIdWiseImageReport.html"));
+};

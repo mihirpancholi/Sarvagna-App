@@ -4,6 +4,7 @@ const SevakController = require("../controller/SevakRegistrationController");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const { route } = require("./GroupMemberMappingRoutes");
 
 // Pages
 router.get("/", SevakController.SevakIndex); // Changed to /view to avoid conflict
@@ -18,18 +19,27 @@ router.post("/addsevak", SevakController.addSevak);
 // Edit Sevak
 router.get("/edit/:id", SevakController.getEditSevakPage);
 router.get("/getSevakForEdit/:id", SevakController.getSevakForEdit);
-router.post("/update/:id", SevakController.updateSevak);
+router.post("/updatesevak", SevakController.updateSevak);
 
 // API endpoints for viewSevak page
 router.get("/allSevakData", SevakController.allSevakData);
 router.post("/sevakFilterData", SevakController.FilterData);
-router.post("/OverAllRemark", SevakController.OverAllRemark);
-router.post("/checkSevakPassword", SevakController.checkSevakPassword);
-router.post("/CurrentSevakDetail", SevakController.CurrentSevakDetail);
+router.post("/CurrentSevakDetails/:id", SevakController.CurrentSevakDetail);
 router.post("/delete", SevakController.deleteSevak);
 
 
 
+// Add NoneSevak
+router.get("/NoneSevak", SevakController.AddNoneSevakRegistration);
+router.post("/addNoneSevak", SevakController.addNoneSevak);
+router.get("/ViewNoneSevak", SevakController.ViewNoneSevak);
+router.get("/listNoneSevak", SevakController.listNoneSevak);
+
+
+router.get("/editNoneSevak/:id", SevakController.getEditNoneSevakPage);
+router.get("/getNoneSevakForEdit/:id", SevakController.getNoneSevakForEdit);
+router.post('/updateNoneSevak/:sevak_id', SevakController.updateNoneSevak);
+router.post('/deleteNonSevakData/:sevak_id', SevakController.deleteNonSevakData);
 
 
 
