@@ -6,6 +6,70 @@ const XLSX = require("xlsx");
 const Model = require("../model/SevakReportsModel.js");
 const multer = require('multer');
 const viewsPath = path.join(__dirname, "..", "view");
+const upload = multer().none();
+const sevakHelper = require('../helpers/sevak.helper');
+const PDFDocument = require("pdfkit");
+const fs = require('fs');
+
+const mmToPt = (mm) => mm * 2.83465;
+
+function drawHeader(doc, imgType) {
+    const headerText = (imgType === 'talim') ? 'Talim Image' : 'Current Image';
+    const logoPath = path.join(__dirname, '..', 'assets', 'backend', 'images', 'pdfheader.jpg');
+
+    // Define font paths
+    const verdanaFontPath = path.join(__dirname, '..', 'fonts', 'Verdana.ttf');
+    const verdanaBoldFontPath = path.join(__dirname, '..', 'fonts', 'Verdanab.ttf');
+
+    let regularFont = 'Helvetica'; // Default fallback
+    let boldFont = 'Helvetica-Bold'; // Default fallback
+
+    // Attempt to register fonts
+    try {
+        if (fs.existsSync(verdanaFontPath)) {
+            doc.registerFont('Verdana', verdanaFontPath);
+            regularFont = 'Verdana'; // Set to use Verdana if successful
+        } else {
+            console.error('Verdana.ttf not found at:', verdanaFontPath, '- using Helvetica.');
+        }
+
+        if (fs.existsSync(verdanaBoldFontPath)) {
+            doc.registerFont('Verdana-Bold', verdanaBoldFontPath);
+            boldFont = 'Verdana-Bold'; // Set to use Verdana-Bold if successful
+        } else {
+            console.error('Verdanab.ttf not found at:', verdanaBoldFontPath, '- using Helvetica-Bold.');
+        }
+    } catch (e) {
+        console.error("Font registration error:", e);
+        // Fonts will remain as Helvetica/Helvetica-Bold
+    }
+
+    // Draw Header Image
+    if (fs.existsSync(logoPath)) {
+        doc.image(logoPath, mmToPt(6), mmToPt(4), { width: mmToPt(220), height: mmToPt(30) });
+    }
+
+    // Draw Header Text (using the font variables)
+    doc.font(regularFont).fontSize(9).fillColor('black')
+        .text('|| Shree Swaminarayano Vijayate ||', 0, mmToPt(16), { align: 'center' })
+        .text('BAPS Yuva Talim Kendra, Sarangpur', 0, mmToPt(21), { align: 'center' });
+
+    doc.font(boldFont).fontSize(12)
+        .text(`Sevak Id Wise Image Report (${headerText})`, 0, mmToPt(26), { align: 'center' });
+
+    // Reset Y position for content
+    doc.y = mmToPt(44);
+}
+
+function drawFooter(doc) {
+    // Ensure page.count is available
+    const pageNum = doc.page ? doc.page.count : '...';
+    doc.font('Helvetica').fontSize(8).fillColor('black')
+        .text(`Page ${pageNum}`, mmToPt(10), mmToPt(268), { // Position at ~1cm from bottom
+            align: 'center',
+            width: mmToPt(210)
+        });
+}
 
 // sevak register report
 exports.sevakRegisterReport = (req, res) => {
@@ -88,7 +152,6 @@ exports.SantNirdeshakReport = (req, res) => {
     res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "SantNirdeshakReport.html"));
 };
 
-const upload = multer().none();
 
 exports.SantNirdeshakReportPrint = [upload, async (req, res) => {
     try {
@@ -161,7 +224,7 @@ exports.SantNirdeshakReportPrint = [upload, async (req, res) => {
                         startY: yOffset,
                         didDrawPage: function (data) {
                             // Header for subsequent pages in the same group
-                            if (data.pageNumber > 1 && data.settings.startY === yOffset) { // Check if it's a new page within the same group table
+                            if (data.pageNumber > 1 && data.settings.startY === yOffset) {
                                 doc.setFontSize(16);
                                 doc.text('॥ Shree Swaminarayano Vijayate ॥', doc.internal.pageSize.width / 2, 15, { align: 'center' });
                                 doc.text('BAPS Yuva Talim Kendra, Sarangpur', doc.internal.pageSize.width / 2, 22, { align: 'center' });
@@ -169,19 +232,17 @@ exports.SantNirdeshakReportPrint = [upload, async (req, res) => {
                                 doc.text('Sant Nirdeshak Report', doc.internal.pageSize.width / 2, 29, { align: 'center' });
                                 doc.setFontSize(12);
                                 doc.text(`Sant Nirdeshak: ${santNirdeshakGroup}`, 14, 44);
-                                doc.autoTable({
-                                    headStyles: { fillColor: [230, 230, 230] },
-                                    startY: 50,
-                                });
                             }
                         },
                         styles: { fontSize: 8 },
                         headStyles: { fillColor: [230, 230, 230], fontStyle: 'bold' },
                         margin: { top: 10, bottom: 10, left: 14, right: 14 },
                     });
-                    yOffset = doc.autoTable.previous.finalY + 10; // Update yOffset for next section
+                    // NEW, V3+ syntax (correct)
+                    yOffset = doc.lastAutoTable.finalY + 10;
                 }
             }
+
 
             const pdfBuffer = doc.output('arraybuffer');
             res.setHeader('Content-Type', 'application/pdf');
@@ -312,7 +373,7 @@ exports.BirthDateWiseReportPrint = [upload, async (req, res) => {
                 new Date(row.birth_date).toLocaleDateString('en-GB') // Format as dd-mm-yyyy
             ]);
 
-            doc.autoTable({
+            autoTable(doc, {
                 head: [tableColumn],
                 body: tableRows,
                 startY: 40,
@@ -417,7 +478,8 @@ exports.TalentReportPrint = [upload, async (req, res) => {
                 row.talent_detail
             ]);
 
-            doc.autoTable({
+            // NEW / CORRECT syntax
+            autoTable(doc, {
                 head: [tableColumn],
                 body: tableRows,
                 startY: 40,
@@ -593,7 +655,6 @@ exports.SantParshadReportPrint = [upload, async (req, res) => {
     }
 }];
 
-
 exports.EducationWiseImageReport = (req, res) => {
     res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "EducationWiseImageReport.html"));
 };
@@ -610,6 +671,279 @@ exports.inspiredbyreport = (req, res) => {
     res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "inspiredbyreport.html"));
 };
 
+exports.InspiredByReportPrint = [upload, async (req, res) => {
+    try {
+        const { talim_batch_id, print_pdf_report, print_excel_report } = req.body;
+
+        // 1. Get all data from the model with one query
+        const reportData = await Model.getInspiredByReportData(talim_batch_id);
+
+        if (!reportData || reportData.length === 0) {
+            return res.status(404).send('No data found for the selected criteria.');
+        }
+
+        // --- PDF REPORT ---
+        if (print_pdf_report) {
+            const doc = new jsPDF();
+            let yOffset = 40; // Initial Y position, leaving space for headers
+
+            // Group data by the inspirer
+            const groupedData = reportData.reduce((acc, curr) => {
+                const key = curr.inspirer_sevak_id; // Group by the inspirer's unique ID
+                if (!acc[key]) {
+                    acc[key] = [];
+                }
+                acc[key].push(curr);
+                return acc;
+            }, {});
+
+            // Loop through each inspirer group
+            for (const inspirerId in groupedData) {
+                const sevaksInGroup = groupedData[inspirerId];
+                const inspirer = sevaksInGroup[0]; // Get inspirer details from the first record
+
+                // Add the group header (the inspirer's info)
+                const headerString = `${inspirer.inspirer_ytk_id} | ${inspirer.inspirer_name} | ${inspirer.inspirer_city}`;
+
+                // Check for page breaks before adding group header
+                if (yOffset > doc.internal.pageSize.height - 30) {
+                    doc.addPage();
+                    yOffset = 40; // Reset Y pos on new page
+                }
+
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'bold');
+                doc.text(headerString, 14, yOffset);
+                yOffset += 7; // Move down for the table
+
+                // Prepare table for this group's inspirees
+                const tableColumn = ["No", "YTK ID", "Sevak Name", "City"];
+                const tableRows = sevaksInGroup.map((sevak, index) => [
+                    index + 1,
+                    sevak.inspiree_ytk_id,
+                    sevak.inspiree_name,
+                    sevak.inspiree_city,
+                ]);
+
+                autoTable(doc, {
+                    head: [tableColumn],
+                    body: tableRows,
+                    startY: yOffset,
+                    styles: { fontSize: 8 },
+                    headStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
+                    // This function adds the header to EVERY page
+                    didDrawPage: function (data) {
+                        // Page Header
+                        doc.setFontSize(12);
+                        doc.text('॥ Shree Swaminarayano Vijayate ॥', doc.internal.pageSize.width / 2, 15, { align: 'center' });
+                        doc.text('BAPS Yuva Talim Kendra, Sarangpur', doc.internal.pageSize.width / 2, 22, { align: 'center' });
+                        doc.setFontSize(12);
+                        doc.setFont(undefined, 'bold');
+                        doc.text('Inspired By Report', doc.internal.pageSize.width / 2, 29, { align: 'center' });
+                    },
+                    margin: { top: 40 } // Ensure table starts below header
+                });
+
+                yOffset = doc.lastAutoTable.finalY + 10; // Update Y for next group
+            }
+
+            const pdfBuffer = doc.output('arraybuffer');
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=InspiredByReport.pdf');
+            res.send(Buffer.from(pdfBuffer));
+
+            // --- EXCEL REPORT ---
+        } else if (print_excel_report) {
+            const workbook = XLSX.utils.book_new();
+            const worksheetData = [];
+
+            // Main Headers
+            worksheetData.push(['॥ Shree Swaminarayano Vijayate ॥']);
+            worksheetData.push(['BAPS Yuva Talim Kendra, Sarangpur']);
+            worksheetData.push(['Inspired By Report']);
+            worksheetData.push([]); // Spacer
+
+            // Group Headers
+            worksheetData.push(['Inspired By Sevak', '', '', 'Inspired Sevak']);
+            worksheetData.push([]); // Spacer
+
+            // Table Headers
+            worksheetData.push([
+                "YTK ID", "Sevak Name", "City", // Inspired By
+                "YTK ID", "Sevak Name", "City"  // Inspired Sevak
+            ]);
+
+            // Table Body (Data is already flat, just add it)
+            reportData.forEach(row => {
+                worksheetData.push([
+                    row.inspirer_ytk_id,
+                    row.inspirer_name,
+                    row.inspirer_city,
+                    row.inspiree_ytk_id,
+                    row.inspiree_name,
+                    row.inspiree_city,
+                ]);
+            });
+
+            const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+            // Define Merges
+            worksheet['!merges'] = [
+                { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }, // Title 1
+                { s: { r: 1, c: 0 }, e: { r: 1, c: 5 } }, // Title 2
+                { s: { r: 2, c: 0 }, e: { r: 2, c: 5 } }, // Title 3
+                { s: { r: 4, c: 0 }, e: { r: 4, c: 2 } }, // "Inspired By Sevak"
+                { s: { r: 4, c: 3 }, e: { r: 4, c: 5 } }, // "Inspired Sevak" (the one who is inspired)
+            ];
+
+            // Set Column Widths
+            worksheet['!cols'] = [
+                { wch: 10 }, { wch: 30 }, { wch: 20 }, // Inspired By
+                { wch: 10 }, { wch: 30 }, { wch: 20 }  // Inspired Sevak
+            ];
+
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'InspiredByReport');
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xls', type: 'buffer' });
+
+            res.setHeader('Content-Type', 'application/vnd.ms-excel');
+            res.setHeader('Content-Disposition', 'attachment; filename=InspiredByReport.xls');
+            res.send(excelBuffer);
+
+        } else {
+            res.status(400).send('Invalid report type specified.');
+        }
+
+    } catch (error) {
+        console.error("Error generating Inspired By report:", error);
+        res.status(500).send('Error generating report');
+    }
+}];
+
+
 exports.SevakIdWiseImageReport = (req, res) => {
     res.sendFile(path.join(viewsPath, "SevakRegistration", "report", "SevakIdWiseImageReport.html"));
 };
+
+// In SevakReportsController.js
+// ... make sure your sevakHelper import is correct at the top ...
+// const sevakHelper = require('../helpers/sevak.helper'); 
+
+exports.SevakIdWiseImageReportPrint = [upload, async (req, res) => {
+    try {
+        const { talim_batch_id: talimBatchId } = req.body;
+        const imgType = req.body.sevak_img || 'current';
+
+        if (!talimBatchId) {
+            return res.status(400).send({ message: 'Missing talim_batch_id' });
+        }
+
+        const talimInfos = await Model.getTalimBatches(talimBatchId);
+
+        if (!talimInfos || talimInfos.length === 0) {
+            return res.status(404).send('No talim batches found for this selection.');
+        }
+
+        const doc = new PDFDocument({
+            size: [mmToPt(230), mmToPt(280)],
+            margins: { top: 0, bottom: 0, left: 0, right: 0 },
+            autoFirstPage: false
+        });
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename="sevak_report.pdf"');
+        doc.pipe(res);
+
+        doc.on('pageAdded', () => {
+            drawHeader(doc, imgType);
+            drawFooter(doc);
+        });
+
+        for (const talim of talimInfos) {
+            const sevaks = await Model.getSevaksForBatch(talim.talim_batch_id);
+            if (!sevaks || !sevaks.length) continue;
+
+            doc.addPage();
+            doc.font('Verdana-Bold').fontSize(12).fillColor('black')
+                .text(`Talim Batch.: ${talim.batch}`, mmToPt(10), mmToPt(37), {
+                    align: 'center', width: mmToPt(210)
+                });
+
+            let sevakIndex = 0, itemsOnThisPage = 0;
+            let yImage_mm = 52, yYtk_mm = 49, yName_mm = 85,
+                yMobile_mm = 89, yCity_mm = 93, yGroup_mm = 97;
+
+            for (let i = 0; i < Math.ceil(sevaks.length / 6); i++) {
+                if (itemsOnThisPage >= 24) {
+                    doc.addPage();
+                    doc.font('Verdana-Bold').fontSize(12).fillColor('black')
+                        .text(`Talim Batch.: ${talim.batch}`, mmToPt(10), mmToPt(37), {
+                            align: 'center', width: mmToPt(210)
+                        });
+                    itemsOnThisPage = 0;
+                    yImage_mm = 52, yYtk_mm = 49, yName_mm = 85,
+                        yMobile_mm = 89, yCity_mm = 93, yGroup_mm = 97;
+                }
+
+                let x_mm = 10;
+
+                for (let j = 0; j < 6; j++) {
+                    const sevak = sevaks[sevakIndex];
+                    if (!sevak) break;
+
+                    // 1. Get the image BUFFER from the helper
+                    const photoBuffer = sevakHelper.getSevakPhotoBuffer(sevak, imgType);
+
+                    // 2. Check if the buffer is not null
+                    if (photoBuffer) {
+
+                        // --- THIS IS THE CRASH FIX ---
+                        try {
+                            // This is the line that is crashing.
+                            // We put it in a try...catch block.
+                            doc.image(photoBuffer, mmToPt(x_mm), mmToPt(yImage_mm), { width: mmToPt(28), height: mmToPt(30) });
+
+                        } catch (imageError) {
+                            // If it crashes, we CATCH the error here and print
+                            // a message instead of crashing the server.
+                            console.error(`Error embedding image BUFFER for sevak ${sevak.ytk_id}:`, imageError.message);
+                            doc.font('Verdana').fontSize(7.5).fillColor('black');
+                            doc.text("(Bad Img)", mmToPt(x_mm), mmToPt(yImage_mm + 10), { width: mmToPt(29), align: 'center' });
+                        }
+                        // --- END OF FIX ---
+
+                        // We print the text regardless
+                        doc.font('Verdana').fontSize(7.5).fillColor('black');
+                        doc.text(sevak.ytk_id, mmToPt(x_mm), mmToPt(yYtk_mm), { width: mmToPt(29), align: 'center' });
+                        doc.text(sevak.sevak_name, mmToPt(x_mm), mmToPt(yName_mm), { width: mmToPt(29), align: 'center' });
+                        doc.text(sevak.primaryMobileNo, mmToPt(x_mm), mmToPt(yMobile_mm), { width: mmToPt(29), align: 'center' });
+                        const cityText = `${sevak.city_name || ''}(${sevak.kshetra_name || ''})`;
+                        doc.text(cityText, mmToPt(x_mm), mmToPt(yCity_mm), { width: mmToPt(29), align: 'center' });
+                        doc.text(sevak.groupName || '', mmToPt(x_mm), mmToPt(yGroup_mm), { width: mmToPt(29), align: 'center' });
+
+                    } else {
+                        // Buffer was null (even dummy failed)
+                        doc.font('Verdana').fontSize(7.5).fillColor('black');
+                        doc.text(sevak.ytk_id, mmToPt(x_mm), mmToPt(yYtk_mm), { width: mmToPt(29), align: 'center' });
+                        doc.text(sevak.sevak_name, mmToPt(x_mm), mmToPt(yName_mm), { width: mmToPt(29), align: 'center' });
+                        doc.text("(No Img)", mmToPt(x_mm), mmToPt(yImage_mm + 10), { width: mmToPt(29), align: 'center' });
+                    }
+
+                    x_mm += 36;
+                    itemsOnThisPage++;
+                    sevakIndex++;
+                }
+
+                yImage_mm += 55; yYtk_mm += 55; yName_mm += 55;
+                yMobile_mm += 55; yCity_mm += 55; yGroup_mm += 55;
+            }
+        }
+
+        doc.end();
+
+    } catch (error) {
+        console.error('CRASH in SevakIdWiseImageReportPrint:', error);
+        if (!res.headersSent) {
+            res.status(500).send({ message: 'Internal server error' });
+        }
+    }
+}];

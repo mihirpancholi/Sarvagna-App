@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SevakWise Image Report</title>
+</head>
+
+<body>
+    <h3>SevakWise Image Report</h3>
+
+    <form id="report-form">
+        <div>
+            <label for="talim_batch_id">Talim Batch</label>
+            <select name="talim_batch_id" id="talim_batch_id" required>
+                <option value="">Select Talim Batch</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit" id="generatePdfBtn">Generate PDF Report</button>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadBatches("talim_batch_id");
+
+            document
+                .getElementById("generatePdfBtn")
+                .addEventListener("click", (e) => {
+                    e.preventDefault();
+                    handleReportGeneration(); // No longer need to pass "pdf"
+                });
+
+            // Removed the event listener for 'generateExcelBtn'
+        });
+
+        function loadBatches() {
+            fetch("/talim_batch/list")
+                .then((res) => res.json())
+                .then((batches) => {
+                    const select = document.getElementById("talim_batch_id");
+                    select.innerHTML =
+                        '<option value="">-- Select Talim Batch --</option>';
+
+                    const allOption = document.createElement("option");
+                    allOption.value = "All";
+                    allOption.textContent = "All Talim Batch";
+                    select.appendChild(allOption);
+
+                    batches.forEach((batch) => {
+                        const option = document.createElement("option");
+                        option.value = batch.talim_batch_id;
+                        option.textContent = batch.talim_year + " - " + batch.talim_batch;
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+
+        function handleReportGeneration() {
+            const form = document.getElementById("report-form");
+            const formData = new FormData(form);
+
+            if (!formData.get("talim_batch_id")) {
+                alert("Please select a Talim.");
+                return;
+            }
+
+            formData.append("print_pdf_report", "1");
+
+            fetch("/SevakReports/SevakIdWiseImageReportPrint", {
+                method: "POST",
+                body: formData,
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.blob();
+                })
+                .then((blob) => {
+                    // --- THIS IS THE FIX ---
+
+                    // 1. Create a URL for the blob
+                    const url = window.URL.createObjectURL(blob);
+
+                    // 2. Open that URL in a new tab
+                    window.open(url, '_blank');
+
+                    // 3. We are done. No need for <a> tags or .click()
+
+                    // --- END OF FIX ---
+                })
+                .catch((error) => {
+                    console.error("Error generating report:", error);
+                    alert("Failed to generate report. See console for details.");
+                });
+        }
+    </script>
+</body>
+
+</html>

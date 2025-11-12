@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inspired By Report</title>
+</head>
+
+<body>
+    <h3>Inspired By Report</h3>
+
+    <form id="report-form">
+        <div>
+            <label for="talim_batch_id">Talim Batch</label>
+            <select name="talim_batch_id" id="talim_batch_id" required>
+                <option value="">Select Talim Batch</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+
+        <div>
+            <button type="submit" id="generateExcelBtn">
+                Generate Excel Report
+            </button>
+            <button type="submit" id="generatePdfBtn">Generate PDF Report</button>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadBatches("talim_batch_id");
+
+            document
+                .getElementById("generatePdfBtn")
+                .addEventListener("click", (e) => {
+                    e.preventDefault();
+                    handleReportGeneration("pdf");
+                });
+
+            document
+                .getElementById("generateExcelBtn")
+                .addEventListener("click", (e) => {
+                    e.preventDefault();
+                    handleReportGeneration("excel");
+                });
+        });
+
+        function loadBatches() {
+            fetch("/talim_batch/list")
+                .then((res) => res.json())
+                .then((batches) => {
+                    const select = document.getElementById("talim_batch_id");
+                    select.innerHTML =
+                        '<option value="">-- Select Talim Batch --</option>';
+
+                    const allOption = document.createElement("option");
+                    allOption.value = "All";
+                    allOption.textContent = "All Talim Batch";
+                    select.appendChild(allOption);
+
+                    batches.forEach((batch) => {
+                        const option = document.createElement("option");
+                        option.value = batch.talim_batch_id;
+                        option.textContent = batch.talim_year + " - " + batch.talim_batch;
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        function handleReportGeneration(reportType) {
+            const form = document.getElementById("report-form");
+            const formData = new FormData(form);
+
+            if (!formData.get("talim_batch_id")) {
+                alert("Please select a Talim Batch.");
+                return;
+            }
+
+            let fileName = "InspiredByReport";
+            if (reportType === "pdf") {
+                formData.append("print_pdf_report", "1");
+                fileName += ".pdf";
+            } else {
+                formData.append("print_excel_report", "1");
+                fileName += ".xls";
+            }
+
+            fetch("/SevakReports/InspiredByReportPrint", {
+                method: "POST",
+                body: new URLSearchParams(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.blob();
+                })
+                .then((blob) => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.style.display = "none";
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                })
+                .catch((error) => {
+                    console.error("Error generating report:", error);
+                    alert("Failed to generate report. See console for details.");
+                });
+        }
+    </script>
+</body>
+
+</html>

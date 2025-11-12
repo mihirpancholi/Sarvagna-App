@@ -227,3 +227,122 @@ WHERE sevak_master.is_deleted = 'N' AND sevak_master.sant_in_baps_status='Y'
         throw err;
     }
 };
+
+
+
+exports.getInspiredByReportData = async (talim_batch_id) => {
+    try {
+        let batchQuery = "";
+        let orderQuery = "";
+        const params = [];
+
+        if (talim_batch_id && talim_batch_id !== 'All') {
+            batchQuery = "AND inspiree.talim_batch_id = ?";
+            params.push(talim_batch_id);
+            orderQuery = "ORDER BY inspirer.sevak_id, inspiree.ytk_id";
+        } else {
+            orderQuery = "ORDER BY inspirer.sevak_id, inspiree.ytk_id DESC";
+        }
+
+        const sql = `
+            SELECT
+                inspiree.ytk_id AS inspiree_ytk_id,
+                CONCAT(inspiree.first_name, ' ', inspiree.middle_name, ' ', inspiree.last_name) AS inspiree_name,
+                inspiree_city.city_name AS inspiree_city,
+                
+                inspirer.sevak_id AS inspirer_sevak_id,
+                inspirer.ytk_id AS inspirer_ytk_id,
+                CONCAT(inspirer.first_name, ' ', inspirer.middle_name, ' ', inspirer.last_name) AS inspirer_name,
+                inspirer_city.city_name AS inspirer_city
+
+            FROM sevak_master AS inspiree
+            
+            INNER JOIN sevak_master AS inspirer 
+                ON inspiree.inspired_sevak_id = inspirer.sevak_id
+            
+            INNER JOIN city_master AS inspiree_city 
+                ON inspiree.city_id = inspiree_city.city_id
+            
+            INNER JOIN city_master AS inspirer_city 
+                ON inspirer.city_id = inspirer_city.city_id
+
+            WHERE 
+                inspiree.is_deleted = 'N'
+                AND inspiree.ytk_sevak_inspired = 'on'
+                AND inspirer.is_deleted = 'N'
+                ${batchQuery}
+                
+            ${orderQuery}
+        `;
+
+        const [rows] = await pool.query(sql, params);
+        return rows;
+
+    } catch (error) {
+        console.error("Error in getInspiredByReportData:", error);
+        throw error;
+    }
+};
+
+
+
+
+exports.getTalimBatches = async (talimBatchId) => {
+    try {
+        let query = `
+            SELECT 
+                talim_batch_id,
+                concat(talim_year, '-', if(talim_batch = 'F', 'First', 'Second')) AS batch 
+            FROM talim_batch_master 
+            WHERE is_deleted='N'
+        `;
+        const params = [];
+
+        if (talimBatchId !== 'All') {
+            query += ` AND talim_batch_id = ?`;
+            params.push(talimBatchId);
+        }
+
+        query += ` ORDER BY talim_year ASC`;
+
+        const [rows] = await pool.query(query, params);
+        return rows;
+    } catch (err) {
+        console.error("Error in getTalimBatches model:", err);
+        throw err;
+    }
+};
+
+exports.getSevaksForBatch = async (talimBatchId) => {
+    try {
+        const sql = `
+            SELECT
+                sevak_master.sevak_id,
+                sevak_master.ytk_id,
+                concat(sevak_master.mobile1_country_code,' ',sevak_master.contact_mobile1) AS primaryMobileNo,
+                concat(sevak_master.first_name, ' ', sevak_master.middle_name, ' ', sevak_master.last_name) AS sevak_name,
+                city_master.city_name,
+                kshetra_master.kshetra_name,
+                concat(group_master.group_code,' - ',group_master.group_name) AS groupName,
+                sevak_master.sevak_photo, 
+                sevak_master.latest_photo
+            FROM sevak_master
+                LEFT JOIN kshetra_master ON kshetra_master.kshetra_id = sevak_master.current_kshetra_id
+                LEFT JOIN group_member_mapping ON group_member_mapping.sevak_id = sevak_master.sevak_id
+                LEFT JOIN group_master ON group_master.group_id = group_member_mapping.group_id
+                LEFT JOIN city_master ON city_master.city_id = sevak_master.city_id
+            WHERE sevak_master.is_deleted = 'N' 
+                AND (sevak_master.certified_status = 'Y' OR sevak_master.temporary_status = 'Y') 
+                AND (sevak_master.expired_status != 'Y' AND sevak_master.sant_in_baps_status != 'Y') 
+                AND sevak_master.talim_batch_id = ?
+            GROUP BY sevak_master.ytk_id
+            ORDER BY sevak_master.ytk_id ASC
+        `;
+
+        const [rows] = await pool.query(sql, [talimBatchId]);
+        return rows;
+    } catch (err) {
+        console.error("Error in getSevaksForBatch model:", err);
+        throw err;
+    }
+};

@@ -8,10 +8,8 @@ router.get("/sevakRegisterReport/data", SevakReports.sevakRegisterReportData);
 router.get("/registerdSevakExcelReport", SevakReports.registerdSevakExcelReport);
 router.get("/registerdSevakPdfReport", SevakReports.registerdSevakPdfReport);
 
-
 router.get("/SantNirdeshakReport", SevakReports.SantNirdeshakReport);
 router.post("/SantNirdeshakReportPrint", SevakReports.SantNirdeshakReportPrint);
-
 
 router.get("/KshetraWiseImageReport", SevakReports.KshetraWiseImageReport);
 
@@ -29,8 +27,10 @@ router.get("/santparshadreport", SevakReports.santparshadreport);
 router.post("/SantParshadReportPrint", SevakReports.SantParshadReportPrint);
 
 router.get("/inspiredbyreport", SevakReports.inspiredbyreport);
-router.get("/SevakIdWiseImageReport", SevakReports.SevakIdWiseImageReport);
+router.post("/InspiredByReportPrint", SevakReports.InspiredByReportPrint);
 
+router.get("/SevakIdWiseImageReport", SevakReports.SevakIdWiseImageReport);
+router.post("/SevakIdWiseImageReportPrint", SevakReports.SevakIdWiseImageReportPrint);
 
 
 

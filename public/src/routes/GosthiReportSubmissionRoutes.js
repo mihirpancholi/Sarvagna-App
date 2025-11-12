@@ -5,4 +5,9 @@ const GosthiReportSubmission = require("../controller/GosthiReportSubmission.js"
 // List page
 router.get("/", GosthiReportSubmission.getGosthiScheduleIndex);
 
+
+
+
+
+
 module.exports = router;
